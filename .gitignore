@@ -1,0 +1,23 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+.claude/
+data/processed/osmnx_http_cache/
+
+# Crudos: 149MB, 100% regenerables (python -m src.acquisition --real /
+# --synthetic). El issue permite "data/processed/ y data/outputs/ (o script
+# regenerador)" en vez de comprometer los crudos — nos quedamos con eso para
+# no inflar el repo con archivos descargables de portales oficiales.
+data/raw/*
+!data/raw/.gitkeep
+
+# basura de compilación LaTeX (el .tex fuente y el .pdf compilado SÍ se commitean)
+report/*.aux
+report/*.toc
+report/*.out
+report/*.log
+report/*.fls
+report/*.fdb_latexmk
+report/*.synctex.gz
