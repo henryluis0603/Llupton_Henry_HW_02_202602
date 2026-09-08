@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{caption}
+\geometry{margin=2.5cm}
+
+\title{Acceso a establecimientos de salud resolutivos en Perú:\\
+un análisis de ruteo vial en Tumbes, Huancavelica y Madre de Dios}
+\author{Henry Llupton Capunay}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+% <= 150 palabras, con números. Completar tras correr el pipeline con datos
+% reales — los números aquí son placeholders que export.py sobreescribe
+% cuando se regenera este archivo con datos frescos.
+Placeholder: completar con cifras reales del \texttt{summary.json} generado
+por \texttt{run\_pipeline.py} (población cubierta a 30/60/120 min, Gini
+ponderado, distrito con peor acceso, ratio caminar/auto).
+\end{abstract}
+
+\tableofcontents
+
+\section{Introducción y planteamiento del problema}
+% Pregunta central: ¿cuánto tiempo tarda, por carretera, la población en
+% llegar a un establecimiento con capacidad resolutiva (quirófano, cesárea)?
+
+\section{Fuentes de datos}
+% Fechas de acceso, licencias, limitaciones conocidas de RENIPRESS, SIGMED,
+% OSM Perú y polígonos administrativos.
+
+\section{Metodología}
+\subsection{Definición de "resolutivo"}
+\subsection{Reglas de validación}
+\subsection{Motor de ruteo y parámetros}
+\subsection{Definición de métricas}
+
+\section{Resultados}
+% >= 3 figuras, >= 3 tablas generadas por el pipeline (export.py), no
+% capturas de pantalla.
+\input{tables/coverage_bands.tex}
+\input{tables/critical_districts.tex}
+\input{tables/mode_comparison.tex}
+
+\section{Discusión}
+% Incluir comparativa línea recta (Haversine) vs. red vial real.
+
+\section{Limitaciones}
+% Obligatorio y calificado: qué NO prueba este análisis.
+
+\section{Conclusiones y recomendaciones}
+
+\section{Referencias}
+
+\end{document}
