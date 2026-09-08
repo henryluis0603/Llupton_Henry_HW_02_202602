@@ -1,0 +1,12 @@
+{
+  "fuente":"real",
+  "gini_t_min_ponderado":0.7257546219,
+  "n_demanda_total":2370,
+  "poblacion_total":572542,
+  "cross_analysis_altitud":{
+    "r_ponderado":null,
+    "pendiente_min_por_metro":null,
+    "n":0,
+    "interpretacion":"Sin datos de altitud suficientes para esta corrida (n=0) — no se integró una fuente de altitud real (DEM)."
+  }
+}

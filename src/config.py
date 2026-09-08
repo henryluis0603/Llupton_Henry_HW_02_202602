@@ -51,6 +51,21 @@ def bbox_for(rol: str) -> dict[str, float]:
     return CONFIG["departamentos"][rol]["bbox"]
 
 
+def utm_epsg_for_lonlat(lon: float, lat: float) -> int:
+    """EPSG UTM WGS84 correspondiente a un punto. Perú cae en las zonas
+    17S/18S/19S (EPSG 32717/32718/32719) — se usa para cualquier cálculo de
+    distancia en metros, en vez de la aproximación "1 grado ~ 111 km" (que
+    ignora que un grado de longitud se encoge con cos(latitud))."""
+    zone = int((lon + 180) / 6) + 1
+    return (32700 if lat < 0 else 32600) + zone
+
+
+def utm_epsg_for_bbox(bbox: dict[str, float]) -> int:
+    lon = (bbox["west"] + bbox["east"]) / 2
+    lat = (bbox["south"] + bbox["north"]) / 2
+    return utm_epsg_for_lonlat(lon, lat)
+
+
 def categorias_resolutivas() -> set[str]:
     return set(CONFIG["categorias_resolutivas"])
 

@@ -1,0 +1,434 @@
+2026-09-07 20:48:53,565 [INFO] === Departamento: costa ===
+2026-09-07 20:48:55,217 [INFO] Sintético generado para costa: 200 demanda, 20 facilities
+2026-09-07 20:48:57,703 [INFO] costa: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:49:23,561 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_drive.parquet (960 filas)
+2026-09-07 20:49:23,561 [INFO] costa/drive: grafo=osm, matriz=960 filas
+2026-09-07 20:49:51,898 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_walk.parquet (960 filas)
+2026-09-07 20:49:51,899 [INFO] costa/walk: grafo=osm, matriz=960 filas
+2026-09-07 20:49:57,936 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_bike.parquet (960 filas)
+2026-09-07 20:49:57,937 [INFO] costa/bike: grafo=osm, matriz=960 filas
+2026-09-07 20:49:57,945 [INFO] === Departamento: andino ===
+2026-09-07 20:49:57,955 [INFO] Sintético generado para andino: 200 demanda, 20 facilities
+2026-09-07 20:49:57,993 [INFO] andino: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:51:27,355 [WARNING] Falló descarga OSM para andino/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 20:51:27,443 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_drive.parquet (960 filas)
+2026-09-07 20:51:27,443 [INFO] andino/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 20:52:28,695 [WARNING] Falló descarga OSM para andino/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 20:52:28,781 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_walk.parquet (960 filas)
+2026-09-07 20:52:28,781 [INFO] andino/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 20:53:34,464 [WARNING] Falló descarga OSM para andino/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 20:53:34,557 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_bike.parquet (960 filas)
+2026-09-07 20:53:34,557 [INFO] andino/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 20:53:34,565 [INFO] === Departamento: amazonico ===
+2026-09-07 20:53:34,576 [INFO] Sintético generado para amazonico: 200 demanda, 20 facilities
+2026-09-07 20:53:34,614 [INFO] amazonico: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:54:48,302 [INFO] === Departamento: costa ===
+2026-09-07 20:54:48,302 [INFO] SKIP (sintético ya existe) para costa
+2026-09-07 20:54:48,474 [INFO] costa: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:54:49,077 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (osm)
+2026-09-07 20:54:49,092 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_drive.parquet
+2026-09-07 20:54:49,096 [INFO] costa/drive: grafo=osm, matriz=960 filas
+2026-09-07 20:54:49,677 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (osm)
+2026-09-07 20:54:49,693 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_walk.parquet
+2026-09-07 20:54:49,695 [INFO] costa/walk: grafo=osm, matriz=960 filas
+2026-09-07 20:54:50,213 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (osm)
+2026-09-07 20:54:50,228 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_bike.parquet
+2026-09-07 20:54:50,230 [INFO] costa/bike: grafo=osm, matriz=960 filas
+2026-09-07 20:54:50,240 [INFO] === Departamento: andino ===
+2026-09-07 20:54:50,240 [INFO] SKIP (sintético ya existe) para andino
+2026-09-07 20:54:50,274 [INFO] andino: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:54:50,293 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/drive.graphml (synthetic)
+2026-09-07 20:54:50,300 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_drive.parquet
+2026-09-07 20:54:50,302 [INFO] andino/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 20:54:50,319 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/walk.graphml (synthetic)
+2026-09-07 20:54:50,326 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_walk.parquet
+2026-09-07 20:54:50,327 [INFO] andino/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 20:54:50,346 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/bike.graphml (synthetic)
+2026-09-07 20:54:50,352 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_bike.parquet
+2026-09-07 20:54:50,354 [INFO] andino/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 20:54:50,361 [INFO] === Departamento: amazonico ===
+2026-09-07 20:54:50,361 [INFO] SKIP (sintético ya existe) para amazonico
+2026-09-07 20:54:50,395 [INFO] amazonico: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:55:55,041 [WARNING] Falló descarga OSM para amazonico/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 20:55:55,154 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_drive.parquet (960 filas)
+2026-09-07 20:55:55,154 [INFO] amazonico/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 20:56:59,706 [WARNING] Falló descarga OSM para amazonico/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 20:56:59,780 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_walk.parquet (960 filas)
+2026-09-07 20:56:59,780 [INFO] amazonico/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:01,360 [WARNING] Falló descarga OSM para amazonico/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 20:58:01,453 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_bike.parquet (960 filas)
+2026-09-07 20:58:01,453 [INFO] amazonico/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:01,462 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-07 20:58:01,517 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-07 20:58:01,517 [INFO] Pipeline completo.
+2026-09-07 20:58:24,831 [INFO] === Departamento: costa ===
+2026-09-07 20:58:24,831 [INFO] SKIP (sintético ya existe) para costa
+2026-09-07 20:58:24,997 [INFO] costa: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:58:25,566 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (osm)
+2026-09-07 20:58:25,580 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_drive.parquet
+2026-09-07 20:58:25,583 [INFO] costa/drive: grafo=osm, matriz=960 filas
+2026-09-07 20:58:26,140 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (osm)
+2026-09-07 20:58:26,156 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_walk.parquet
+2026-09-07 20:58:26,158 [INFO] costa/walk: grafo=osm, matriz=960 filas
+2026-09-07 20:58:26,644 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (osm)
+2026-09-07 20:58:26,658 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_bike.parquet
+2026-09-07 20:58:26,660 [INFO] costa/bike: grafo=osm, matriz=960 filas
+2026-09-07 20:58:26,667 [INFO] === Departamento: andino ===
+2026-09-07 20:58:26,667 [INFO] SKIP (sintético ya existe) para andino
+2026-09-07 20:58:26,698 [INFO] andino: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:58:26,716 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/drive.graphml (synthetic)
+2026-09-07 20:58:26,722 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_drive.parquet
+2026-09-07 20:58:26,724 [INFO] andino/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:26,741 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/walk.graphml (synthetic)
+2026-09-07 20:58:26,747 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_walk.parquet
+2026-09-07 20:58:26,748 [INFO] andino/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:26,764 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/bike.graphml (synthetic)
+2026-09-07 20:58:26,770 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_bike.parquet
+2026-09-07 20:58:26,771 [INFO] andino/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:26,777 [INFO] === Departamento: amazonico ===
+2026-09-07 20:58:26,777 [INFO] SKIP (sintético ya existe) para amazonico
+2026-09-07 20:58:26,809 [INFO] amazonico: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:58:26,825 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/drive.graphml (synthetic)
+2026-09-07 20:58:26,831 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_drive.parquet
+2026-09-07 20:58:26,833 [INFO] amazonico/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:26,880 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/walk.graphml (synthetic)
+2026-09-07 20:58:26,886 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_walk.parquet
+2026-09-07 20:58:26,888 [INFO] amazonico/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:26,904 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/bike.graphml (synthetic)
+2026-09-07 20:58:26,910 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_bike.parquet
+2026-09-07 20:58:26,912 [INFO] amazonico/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 20:58:26,918 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-07 20:58:27,006 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-07 20:58:27,006 [INFO] Pipeline completo.
+2026-09-07 20:59:49,868 [INFO] === Departamento: costa ===
+2026-09-07 20:59:49,868 [INFO] SKIP (sintético ya existe) para costa
+2026-09-07 20:59:49,948 [INFO] costa: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:59:50,501 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (osm)
+2026-09-07 20:59:50,515 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_drive.parquet
+2026-09-07 20:59:50,517 [INFO] costa/drive: grafo=osm, matriz=960 filas
+2026-09-07 20:59:51,074 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (osm)
+2026-09-07 20:59:51,090 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_walk.parquet
+2026-09-07 20:59:51,091 [INFO] costa/walk: grafo=osm, matriz=960 filas
+2026-09-07 20:59:51,585 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (osm)
+2026-09-07 20:59:51,600 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_bike.parquet
+2026-09-07 20:59:51,602 [INFO] costa/bike: grafo=osm, matriz=960 filas
+2026-09-07 20:59:51,608 [INFO] === Departamento: andino ===
+2026-09-07 20:59:51,608 [INFO] SKIP (sintético ya existe) para andino
+2026-09-07 20:59:51,639 [INFO] andino: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:59:51,655 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/drive.graphml (synthetic)
+2026-09-07 20:59:51,661 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_drive.parquet
+2026-09-07 20:59:51,662 [INFO] andino/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 20:59:51,678 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/walk.graphml (synthetic)
+2026-09-07 20:59:51,684 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_walk.parquet
+2026-09-07 20:59:51,685 [INFO] andino/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 20:59:51,701 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/bike.graphml (synthetic)
+2026-09-07 20:59:51,707 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_bike.parquet
+2026-09-07 20:59:51,708 [INFO] andino/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 20:59:51,714 [INFO] === Departamento: amazonico ===
+2026-09-07 20:59:51,714 [INFO] SKIP (sintético ya existe) para amazonico
+2026-09-07 20:59:51,744 [INFO] amazonico: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 20:59:51,760 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/drive.graphml (synthetic)
+2026-09-07 20:59:51,766 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_drive.parquet
+2026-09-07 20:59:51,767 [INFO] amazonico/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 20:59:51,813 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/walk.graphml (synthetic)
+2026-09-07 20:59:51,820 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_walk.parquet
+2026-09-07 20:59:51,821 [INFO] amazonico/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 20:59:51,837 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/bike.graphml (synthetic)
+2026-09-07 20:59:51,843 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_bike.parquet
+2026-09-07 20:59:51,845 [INFO] amazonico/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 20:59:51,851 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-07 20:59:51,933 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-07 20:59:51,933 [INFO] Pipeline completo.
+2026-09-07 21:02:09,932 [INFO] === Departamento: costa ===
+2026-09-07 21:02:09,932 [INFO] SKIP (sintético ya existe) para costa
+2026-09-07 21:02:10,034 [INFO] costa: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 21:02:10,596 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (osm)
+2026-09-07 21:02:10,610 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_drive.parquet
+2026-09-07 21:02:10,613 [INFO] costa/drive: grafo=osm, matriz=960 filas
+2026-09-07 21:02:11,168 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (osm)
+2026-09-07 21:02:11,184 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_walk.parquet
+2026-09-07 21:02:11,186 [INFO] costa/walk: grafo=osm, matriz=960 filas
+2026-09-07 21:02:11,677 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (osm)
+2026-09-07 21:02:11,691 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_bike.parquet
+2026-09-07 21:02:11,693 [INFO] costa/bike: grafo=osm, matriz=960 filas
+2026-09-07 21:02:12,656 [INFO] === Departamento: andino ===
+2026-09-07 21:02:12,656 [INFO] SKIP (sintético ya existe) para andino
+2026-09-07 21:02:12,689 [INFO] andino: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 21:02:12,706 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/drive.graphml (synthetic)
+2026-09-07 21:02:12,712 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_drive.parquet
+2026-09-07 21:02:12,713 [INFO] andino/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 21:02:12,730 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/walk.graphml (synthetic)
+2026-09-07 21:02:12,736 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_walk.parquet
+2026-09-07 21:02:12,737 [INFO] andino/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 21:02:12,754 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/bike.graphml (synthetic)
+2026-09-07 21:02:12,759 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_bike.parquet
+2026-09-07 21:02:12,761 [INFO] andino/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 21:02:12,773 [INFO] === Departamento: amazonico ===
+2026-09-07 21:02:12,773 [INFO] SKIP (sintético ya existe) para amazonico
+2026-09-07 21:02:12,804 [INFO] amazonico: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 21:02:12,824 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/drive.graphml (synthetic)
+2026-09-07 21:02:12,830 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_drive.parquet
+2026-09-07 21:02:12,832 [INFO] amazonico/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 21:02:12,858 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/walk.graphml (synthetic)
+2026-09-07 21:02:12,864 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_walk.parquet
+2026-09-07 21:02:12,866 [INFO] amazonico/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 21:02:12,882 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/bike.graphml (synthetic)
+2026-09-07 21:02:12,888 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_bike.parquet
+2026-09-07 21:02:12,890 [INFO] amazonico/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 21:02:12,901 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-07 21:02:12,998 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-07 21:02:12,998 [INFO] Pipeline completo.
+2026-09-07 21:03:55,327 [INFO] === Departamento: costa ===
+2026-09-07 21:03:55,327 [INFO] SKIP (sintético ya existe) para costa
+2026-09-07 21:03:55,549 [INFO] costa: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 21:03:56,163 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (osm)
+2026-09-07 21:03:56,177 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_drive.parquet
+2026-09-07 21:03:56,180 [INFO] costa/drive: grafo=osm, matriz=960 filas
+2026-09-07 21:03:56,730 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (osm)
+2026-09-07 21:03:56,746 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_walk.parquet
+2026-09-07 21:03:56,747 [INFO] costa/walk: grafo=osm, matriz=960 filas
+2026-09-07 21:03:57,223 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (osm)
+2026-09-07 21:03:57,238 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_bike.parquet
+2026-09-07 21:03:57,239 [INFO] costa/bike: grafo=osm, matriz=960 filas
+2026-09-07 21:03:58,918 [INFO] === Departamento: andino ===
+2026-09-07 21:03:58,918 [INFO] SKIP (sintético ya existe) para andino
+2026-09-07 21:03:58,950 [INFO] andino: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 21:03:58,967 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/drive.graphml (synthetic)
+2026-09-07 21:03:58,973 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_drive.parquet
+2026-09-07 21:03:58,975 [INFO] andino/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 21:03:58,992 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/walk.graphml (synthetic)
+2026-09-07 21:03:58,998 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_walk.parquet
+2026-09-07 21:03:58,999 [INFO] andino/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 21:03:59,016 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/bike.graphml (synthetic)
+2026-09-07 21:03:59,021 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_bike.parquet
+2026-09-07 21:03:59,023 [INFO] andino/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 21:03:59,035 [INFO] === Departamento: amazonico ===
+2026-09-07 21:03:59,035 [INFO] SKIP (sintético ya existe) para amazonico
+2026-09-07 21:03:59,066 [INFO] amazonico: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 21:03:59,085 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/drive.graphml (synthetic)
+2026-09-07 21:03:59,091 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_drive.parquet
+2026-09-07 21:03:59,093 [INFO] amazonico/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 21:03:59,118 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/walk.graphml (synthetic)
+2026-09-07 21:03:59,124 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_walk.parquet
+2026-09-07 21:03:59,125 [INFO] amazonico/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 21:03:59,141 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/bike.graphml (synthetic)
+2026-09-07 21:03:59,147 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_bike.parquet
+2026-09-07 21:03:59,148 [INFO] amazonico/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 21:03:59,160 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-07 21:03:59,254 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-07 21:03:59,254 [INFO] Pipeline completo.
+2026-09-07 23:05:13,025 [INFO] === Departamento: costa ===
+2026-09-07 23:05:13,088 [INFO] Sintético generado para costa: 200 demanda, 20 facilities
+2026-09-07 23:05:13,181 [INFO] costa: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 23:06:13,850 [WARNING] Falló descarga OSM para costa/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:06:13,933 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_drive.parquet (960 filas)
+2026-09-07 23:06:13,933 [INFO] costa/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 23:07:16,452 [WARNING] Falló descarga OSM para costa/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:07:16,531 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_walk.parquet (960 filas)
+2026-09-07 23:07:16,531 [INFO] costa/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 23:08:21,067 [WARNING] Falló descarga OSM para costa/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:08:21,141 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/matrix_bike.parquet (960 filas)
+2026-09-07 23:08:21,141 [INFO] costa/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 23:08:21,830 [INFO] === Departamento: andino ===
+2026-09-07 23:08:21,839 [INFO] Sintético generado para andino: 200 demanda, 20 facilities
+2026-09-07 23:08:21,874 [INFO] andino: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 23:09:22,633 [WARNING] Falló descarga OSM para andino/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:09:22,705 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_drive.parquet (960 filas)
+2026-09-07 23:09:22,706 [INFO] andino/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 23:10:24,261 [WARNING] Falló descarga OSM para andino/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:10:24,339 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_walk.parquet (960 filas)
+2026-09-07 23:10:24,340 [INFO] andino/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 23:11:25,886 [WARNING] Falló descarga OSM para andino/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:11:25,971 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/matrix_bike.parquet (960 filas)
+2026-09-07 23:11:25,971 [INFO] andino/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 23:11:25,986 [INFO] === Departamento: amazonico ===
+2026-09-07 23:11:25,995 [INFO] Sintético generado para amazonico: 200 demanda, 20 facilities
+2026-09-07 23:11:26,031 [INFO] amazonico: 192 demanda validos, 19 facilities validas, 5 resolutivas activas
+2026-09-07 23:12:26,866 [WARNING] Falló descarga OSM para amazonico/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:12:26,971 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_drive.parquet (960 filas)
+2026-09-07 23:12:26,971 [INFO] amazonico/drive: grafo=synthetic, matriz=960 filas
+2026-09-07 23:13:29,930 [WARNING] Falló descarga OSM para amazonico/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:13:30,002 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_walk.parquet (960 filas)
+2026-09-07 23:13:30,002 [INFO] amazonico/walk: grafo=synthetic, matriz=960 filas
+2026-09-07 23:14:30,822 [WARNING] Falló descarga OSM para amazonico/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-07 23:14:30,894 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/matrix_bike.parquet (960 filas)
+2026-09-07 23:14:30,894 [INFO] amazonico/bike: grafo=synthetic, matriz=960 filas
+2026-09-07 23:14:30,908 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-07 23:14:30,993 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-07 23:14:30,994 [INFO] Pipeline completo.
+2026-09-08 06:47:04,651 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/renipress.csv
+2026-09-08 06:47:04,651 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign.zip
+2026-09-08 06:47:04,651 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/poblacion_reniec.csv
+2026-09-08 06:47:04,651 [INFO] === Departamento: costa ===
+2026-09-08 06:47:04,867 [INFO] RENIPRESS real cargado para costa: 118 facilities
+2026-09-08 06:47:05,732 [INFO] Centros poblados IGN cargados para costa: 329 puntos
+2026-09-08 06:47:06,525 [WARNING] 45/329 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 06:47:06,578 [INFO] Real cargado para costa: 329 demanda ({'muestreado': False, 'n_original': 329, 'n_final': 329}), 118 facilities
+2026-09-08 06:47:06,714 [INFO] costa: 156 demanda validos, 110 facilities validas, 3 resolutivas activas
+2026-09-08 06:47:07,154 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (synthetic)
+2026-09-08 06:47:07,169 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_drive.parquet (468 filas)
+2026-09-08 06:47:07,169 [INFO] costa/drive: grafo=synthetic, matriz=468 filas
+2026-09-08 06:47:07,188 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (synthetic)
+2026-09-08 06:47:07,199 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_walk.parquet (468 filas)
+2026-09-08 06:47:07,199 [INFO] costa/walk: grafo=synthetic, matriz=468 filas
+2026-09-08 06:47:07,216 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (synthetic)
+2026-09-08 06:47:07,227 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_bike.parquet (468 filas)
+2026-09-08 06:47:07,228 [INFO] costa/bike: grafo=synthetic, matriz=468 filas
+2026-09-08 06:47:07,868 [INFO] === Departamento: andino ===
+2026-09-08 06:47:08,048 [INFO] RENIPRESS real cargado para andino: 497 facilities
+2026-09-08 06:47:08,733 [INFO] Centros poblados IGN cargados para andino: 8207 puntos
+2026-09-08 06:47:09,512 [WARNING] 1781/8207 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 06:48:27,226 [INFO] OK descarga: http://datos.susalud.gob.pe/sites/default/files/RENIPRESS_2026_v6.csv -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/renipress.csv (17685986 bytes)
+2026-09-08 06:48:37,046 [INFO] OK descarga: https://www.datosabiertos.gob.pe/sites/default/files/CCPP_0.zip -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign.zip (6019493 bytes)
+2026-09-08 06:48:37,144 [INFO] Descomprimido: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign
+2026-09-08 06:48:52,879 [INFO] OK descarga: https://www.datosabiertos.gob.pe/sites/default/files/BD_DAbiertos_16_OPP_2026_06.01.csv -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/poblacion_reniec.csv (68350255 bytes)
+2026-09-08 06:48:52,881 [INFO] === Departamento: costa ===
+2026-09-08 06:48:53,126 [INFO] RENIPRESS real cargado para costa: 118 facilities
+2026-09-08 06:48:53,965 [INFO] Centros poblados IGN cargados para costa: 329 puntos
+2026-09-08 06:48:55,054 [WARNING] 40/329 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 06:48:55,097 [INFO] Real cargado para costa: 329 demanda ({'muestreado': False, 'n_original': 329, 'n_final': 329}), 118 facilities
+2026-09-08 06:48:55,185 [INFO] costa: 156 demanda validos, 110 facilities validas, 3 resolutivas activas
+2026-09-08 06:49:20,119 [WARNING] Falló descarga OSM para costa/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Read timed out. (read timeout=10)). Usando grafo sintético.
+2026-09-08 06:49:20,193 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_drive.parquet (468 filas)
+2026-09-08 06:49:20,193 [INFO] costa/drive: grafo=synthetic, matriz=468 filas
+2026-09-08 06:50:12,320 [WARNING] Falló descarga OSM para costa/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Read timed out. (read timeout=10)). Usando grafo sintético.
+2026-09-08 06:50:12,401 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_walk.parquet (468 filas)
+2026-09-08 06:50:12,401 [INFO] costa/walk: grafo=synthetic, matriz=468 filas
+2026-09-08 06:51:06,211 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_bike.parquet (468 filas)
+2026-09-08 06:51:06,212 [INFO] costa/bike: grafo=osm, matriz=468 filas
+2026-09-08 06:51:06,807 [INFO] === Departamento: andino ===
+2026-09-08 06:51:07,001 [INFO] RENIPRESS real cargado para andino: 497 facilities
+2026-09-08 06:51:07,725 [INFO] Centros poblados IGN cargados para andino: 8207 puntos
+2026-09-08 06:51:08,844 [WARNING] 146/8207 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 06:51:08,878 [INFO] Muestreo aplicado: 8207 -> 1673 puntos (estratificado por distrito, fracción 0.203, seed 42)
+2026-09-08 06:51:08,885 [INFO] Real cargado para andino: 1673 demanda ({'muestreado': True, 'n_original': 8207, 'n_final': 1673, 'estrategia': 'estratificado por distrito, fracción 0.203, seed 42'}), 497 facilities
+2026-09-08 06:51:08,942 [INFO] andino: 662 demanda validos, 473 facilities validas, 5 resolutivas activas
+2026-09-08 06:54:33,625 [WARNING] Falló descarga OSM para andino/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Read timed out.). Usando grafo sintético.
+2026-09-08 06:54:33,797 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_drive.parquet (3310 filas)
+2026-09-08 06:54:33,797 [INFO] andino/drive: grafo=synthetic, matriz=3310 filas
+2026-09-08 06:55:46,649 [WARNING] Falló descarga OSM para andino/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Read timed out. (read timeout=10)). Usando grafo sintético.
+2026-09-08 06:55:46,748 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_walk.parquet (3310 filas)
+2026-09-08 06:55:46,748 [INFO] andino/walk: grafo=synthetic, matriz=3310 filas
+2026-09-08 06:57:55,495 [WARNING] Falló descarga OSM para andino/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 06:57:55,639 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_bike.parquet (3310 filas)
+2026-09-08 06:57:55,639 [INFO] andino/bike: grafo=synthetic, matriz=3310 filas
+2026-09-08 06:57:55,652 [INFO] === Departamento: amazonico ===
+2026-09-08 06:57:55,857 [INFO] RENIPRESS real cargado para amazonico: 241 facilities
+2026-09-08 06:57:56,538 [INFO] Centros poblados IGN cargados para amazonico: 368 puntos
+2026-09-08 06:57:57,641 [WARNING] 17/368 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 06:57:57,645 [INFO] Real cargado para amazonico: 368 demanda ({'muestreado': False, 'n_original': 368, 'n_final': 368}), 241 facilities
+2026-09-08 06:57:57,686 [INFO] amazonico: 199 demanda validos, 217 facilities validas, 2 resolutivas activas
+2026-09-08 06:58:59,295 [WARNING] Falló descarga OSM para amazonico/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 06:58:59,376 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_drive.parquet (398 filas)
+2026-09-08 06:58:59,377 [INFO] amazonico/drive: grafo=synthetic, matriz=398 filas
+2026-09-08 07:00:03,981 [WARNING] Falló descarga OSM para amazonico/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:00:04,065 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_walk.parquet (398 filas)
+2026-09-08 07:00:04,065 [INFO] amazonico/walk: grafo=synthetic, matriz=398 filas
+2026-09-08 07:01:09,899 [WARNING] Falló descarga OSM para amazonico/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:01:09,972 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_bike.parquet (398 filas)
+2026-09-08 07:01:09,972 [INFO] amazonico/bike: grafo=synthetic, matriz=398 filas
+2026-09-08 07:01:09,992 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-08 07:01:10,183 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-08 07:01:10,183 [INFO] Pipeline completo.
+2026-09-08 07:03:04,261 [INFO] OK descarga: http://datos.susalud.gob.pe/sites/default/files/RENIPRESS_2026_v6.csv -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/renipress.csv (17685986 bytes)
+2026-09-08 07:03:11,680 [INFO] OK descarga: https://www.datosabiertos.gob.pe/sites/default/files/CCPP_0.zip -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign.zip (6019493 bytes)
+2026-09-08 07:03:11,783 [INFO] Descomprimido: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign
+2026-09-08 07:05:00,554 [INFO] OK descarga: https://www.datosabiertos.gob.pe/sites/default/files/BD_DAbiertos_16_OPP_2026_06.01.csv -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/poblacion_reniec.csv (68350255 bytes)
+2026-09-08 07:05:00,561 [INFO] === Departamento: costa ===
+2026-09-08 07:05:00,825 [INFO] RENIPRESS real cargado para costa: 118 facilities
+2026-09-08 07:05:01,673 [INFO] Centros poblados IGN cargados para costa: 329 puntos
+2026-09-08 07:05:02,761 [WARNING] 40/329 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 07:05:02,803 [INFO] Real cargado para costa: 329 demanda ({'muestreado': False, 'n_original': 329, 'n_final': 329}), 118 facilities
+2026-09-08 07:05:02,908 [INFO] costa: 329 demanda validos, 110 facilities validas, 3 resolutivas activas
+2026-09-08 07:05:08,833 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_drive.parquet (987 filas)
+2026-09-08 07:05:08,835 [INFO] costa/drive: grafo=osm, matriz=987 filas
+2026-09-08 07:06:13,478 [WARNING] Falló descarga OSM para costa/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:06:13,577 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_walk.parquet (987 filas)
+2026-09-08 07:06:13,577 [INFO] costa/walk: grafo=synthetic, matriz=987 filas
+2026-09-08 07:06:19,090 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_bike.parquet (987 filas)
+2026-09-08 07:06:19,090 [INFO] costa/bike: grafo=osm, matriz=987 filas
+2026-09-08 07:06:20,081 [INFO] === Departamento: andino ===
+2026-09-08 07:06:20,265 [INFO] RENIPRESS real cargado para andino: 497 facilities
+2026-09-08 07:06:21,014 [INFO] Centros poblados IGN cargados para andino: 8207 puntos
+2026-09-08 07:06:22,242 [WARNING] 146/8207 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 07:06:22,276 [INFO] Muestreo aplicado: 8207 -> 1673 puntos (estratificado por distrito, fracción 0.203, seed 42)
+2026-09-08 07:06:22,283 [INFO] Real cargado para andino: 1673 demanda ({'muestreado': True, 'n_original': 8207, 'n_final': 1673, 'estrategia': 'estratificado por distrito, fracción 0.203, seed 42'}), 497 facilities
+2026-09-08 07:06:22,341 [INFO] andino: 1673 demanda validos, 473 facilities validas, 5 resolutivas activas
+2026-09-08 07:07:34,009 [WARNING] Falló descarga OSM para andino/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by ConnectTimeoutError(<HTTPSConnection(host='overpass-api.de', port=443) at 0x130e0f250>, 'Connection to overpass-api.de timed out. (connect timeout=10)'))). Usando grafo sintético.
+2026-09-08 07:07:34,316 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_drive.parquet (8365 filas)
+2026-09-08 07:07:34,316 [INFO] andino/drive: grafo=synthetic, matriz=8365 filas
+2026-09-08 07:08:37,604 [WARNING] Falló descarga OSM para andino/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:08:37,790 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_walk.parquet (8365 filas)
+2026-09-08 07:08:37,790 [INFO] andino/walk: grafo=synthetic, matriz=8365 filas
+2026-09-08 07:09:44,343 [WARNING] Falló descarga OSM para andino/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:09:44,550 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_bike.parquet (8365 filas)
+2026-09-08 07:09:44,550 [INFO] andino/bike: grafo=synthetic, matriz=8365 filas
+2026-09-08 07:09:44,571 [INFO] === Departamento: amazonico ===
+2026-09-08 07:09:44,764 [INFO] RENIPRESS real cargado para amazonico: 241 facilities
+2026-09-08 07:09:45,482 [INFO] Centros poblados IGN cargados para amazonico: 368 puntos
+2026-09-08 07:09:46,676 [WARNING] 17/368 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 07:09:46,682 [INFO] Real cargado para amazonico: 368 demanda ({'muestreado': False, 'n_original': 368, 'n_final': 368}), 241 facilities
+2026-09-08 07:09:46,725 [INFO] amazonico: 368 demanda validos, 217 facilities validas, 2 resolutivas activas
+2026-09-08 07:10:48,368 [WARNING] Falló descarga OSM para amazonico/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:10:48,454 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_drive.parquet (736 filas)
+2026-09-08 07:10:48,454 [INFO] amazonico/drive: grafo=synthetic, matriz=736 filas
+2026-09-08 07:11:49,057 [WARNING] Falló descarga OSM para amazonico/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:11:49,141 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_walk.parquet (736 filas)
+2026-09-08 07:11:49,141 [INFO] amazonico/walk: grafo=synthetic, matriz=736 filas
+2026-09-08 07:12:51,952 [WARNING] Falló descarga OSM para amazonico/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 07:12:52,044 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_bike.parquet (736 filas)
+2026-09-08 07:12:52,044 [INFO] amazonico/bike: grafo=synthetic, matriz=736 filas
+2026-09-08 07:12:52,056 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-08 07:12:52,198 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-08 07:12:52,198 [INFO] Pipeline completo.
+2026-09-08 08:10:14,394 [INFO] OK descarga: http://datos.susalud.gob.pe/sites/default/files/RENIPRESS_2026_v6.csv -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/renipress.csv (17685986 bytes)
+2026-09-08 08:10:18,480 [INFO] OK descarga: https://www.datosabiertos.gob.pe/sites/default/files/CCPP_0.zip -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign.zip (6019493 bytes)
+2026-09-08 08:10:18,584 [INFO] Descomprimido: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign
+2026-09-08 08:11:13,881 [INFO] OK descarga: https://www.datosabiertos.gob.pe/sites/default/files/BD_DAbiertos_16_OPP_2026_06.01.csv -> /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/poblacion_reniec.csv (68350255 bytes)
+2026-09-08 08:11:13,883 [INFO] === Departamento: costa ===
+2026-09-08 08:11:14,192 [INFO] RENIPRESS real cargado para costa: 118 facilities
+2026-09-08 08:11:15,079 [INFO] Centros poblados IGN cargados para costa: 329 puntos
+2026-09-08 08:11:16,174 [WARNING] 40/329 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 08:11:16,216 [INFO] Real cargado para costa: 329 demanda ({'muestreado': False, 'n_original': 329, 'n_final': 329}), 118 facilities
+2026-09-08 08:11:16,330 [INFO] costa: 329 demanda validos, 110 facilities validas, 3 resolutivas activas
+2026-09-08 08:11:22,231 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_drive.parquet (987 filas)
+2026-09-08 08:11:22,232 [INFO] costa/drive: grafo=osm, matriz=987 filas
+2026-09-08 08:12:24,441 [WARNING] Falló descarga OSM para costa/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 08:12:24,536 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_walk.parquet (987 filas)
+2026-09-08 08:12:24,536 [INFO] costa/walk: grafo=synthetic, matriz=987 filas
+2026-09-08 08:12:29,950 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_bike.parquet (987 filas)
+2026-09-08 08:12:29,951 [INFO] costa/bike: grafo=osm, matriz=987 filas
+2026-09-08 08:12:31,008 [INFO] === Departamento: andino ===
+2026-09-08 08:12:31,209 [INFO] RENIPRESS real cargado para andino: 497 facilities
+2026-09-08 08:12:32,026 [INFO] Centros poblados IGN cargados para andino: 8207 puntos
+2026-09-08 08:12:33,199 [WARNING] 146/8207 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 08:12:33,233 [INFO] Muestreo aplicado: 8207 -> 1673 puntos (estratificado por distrito, fracción 0.203, seed 42)
+2026-09-08 08:12:33,240 [INFO] Real cargado para andino: 1673 demanda ({'muestreado': True, 'n_original': 8207, 'n_final': 1673, 'estrategia': 'estratificado por distrito, fracción 0.203, seed 42'}), 497 facilities
+2026-09-08 08:12:33,302 [INFO] andino: 1673 demanda validos, 473 facilities validas, 5 resolutivas activas
+2026-09-08 08:13:34,213 [WARNING] Falló descarga OSM para andino/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 08:13:34,371 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_drive.parquet (8365 filas)
+2026-09-08 08:13:34,372 [INFO] andino/drive: grafo=synthetic, matriz=8365 filas
+2026-09-08 08:14:35,966 [WARNING] Falló descarga OSM para andino/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 08:14:36,065 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_walk.parquet (8365 filas)
+2026-09-08 08:14:36,066 [INFO] andino/walk: grafo=synthetic, matriz=8365 filas
+2026-09-08 08:15:46,715 [WARNING] Falló descarga OSM para andino/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 08:15:46,847 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_bike.parquet (8365 filas)
+2026-09-08 08:15:46,848 [INFO] andino/bike: grafo=synthetic, matriz=8365 filas
+2026-09-08 08:15:46,864 [INFO] === Departamento: amazonico ===
+2026-09-08 08:15:47,041 [INFO] RENIPRESS real cargado para amazonico: 241 facilities
+2026-09-08 08:15:47,726 [INFO] Centros poblados IGN cargados para amazonico: 368 puntos
+2026-09-08 08:15:48,814 [WARNING] 17/368 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-08 08:15:48,819 [INFO] Real cargado para amazonico: 368 demanda ({'muestreado': False, 'n_original': 368, 'n_final': 368}), 241 facilities
+2026-09-08 08:15:48,859 [INFO] amazonico: 368 demanda validos, 217 facilities validas, 2 resolutivas activas
+2026-09-08 08:16:50,561 [WARNING] Falló descarga OSM para amazonico/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 08:16:50,647 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_drive.parquet (736 filas)
+2026-09-08 08:16:50,647 [INFO] amazonico/drive: grafo=synthetic, matriz=736 filas
+2026-09-08 08:17:53,220 [WARNING] Falló descarga OSM para amazonico/walk (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 08:17:53,301 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_walk.parquet (736 filas)
+2026-09-08 08:17:53,301 [INFO] amazonico/walk: grafo=synthetic, matriz=736 filas
+2026-09-08 08:18:54,037 [WARNING] Falló descarga OSM para amazonico/bike (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-08 08:18:54,108 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_bike.parquet (736 filas)
+2026-09-08 08:18:54,108 [INFO] amazonico/bike: grafo=synthetic, matriz=736 filas
+2026-09-08 08:18:54,121 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-08 08:18:54,272 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-08 08:18:54,272 [INFO] Pipeline completo.

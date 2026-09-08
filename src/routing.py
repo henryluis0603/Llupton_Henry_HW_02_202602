@@ -22,6 +22,7 @@ import geopandas as gpd
 import networkx as nx
 import numpy as np
 import pandas as pd
+import pyproj
 
 from src import config
 
@@ -45,8 +46,11 @@ def _cache_dir(rol: str) -> Path:
 def _build_synthetic_graph(bbox: dict, profile: Profile, seed: int = 42, n_nodes: int = 250) -> nx.MultiDiGraph:
     """Grafo geométrico aleatorio dentro del bbox, como stand-in de la red
     vial real cuando Overpass no está disponible. Cada nodo lleva x/y en
-    grados; cada arista lleva 'length' (metros, geodésico aprox.) y
-    'travel_time' (segundos) a la velocidad constante del perfil."""
+    grados (EPSG:4326, para que sea compatible con osmnx/alphashape); cada
+    arista lleva 'length' (metros) calculado reproyectando a la zona UTM del
+    departamento (EPSG:327xx), no con la aproximación "1 grado ~ 111 km" —
+    esa aproximación ignora que un grado de longitud se encoge con
+    cos(latitud), y en Perú (entre -18° y 0° de latitud) eso pesa."""
     rng = np.random.default_rng(seed)
     G = nx.MultiDiGraph(crs="EPSG:4326")
     xs = rng.uniform(bbox["west"], bbox["east"], n_nodes)
@@ -54,14 +58,18 @@ def _build_synthetic_graph(bbox: dict, profile: Profile, seed: int = 42, n_nodes
     for i in range(n_nodes):
         G.add_node(i, x=xs[i], y=ys[i])
 
-    coords = np.column_stack([xs, ys])
+    utm_epsg = config.utm_epsg_for_bbox(bbox)
+    transformer = pyproj.Transformer.from_crs("EPSG:4326", utm_epsg, always_xy=True)
+    xs_utm, ys_utm = transformer.transform(xs, ys)
+    coords_utm = np.column_stack([xs_utm, ys_utm])
+
     speed_mps = _FALLBACK_SPEED_KMH[profile] * 1000 / 3600
     k = 5  # vecinos más cercanos por nodo -> grafo conectado y disperso, como una red vial
     for i in range(n_nodes):
-        d = np.hypot(coords[:, 0] - coords[i, 0], coords[:, 1] - coords[i, 1])
+        d = np.hypot(coords_utm[:, 0] - coords_utm[i, 0], coords_utm[:, 1] - coords_utm[i, 1])
         nearest = np.argsort(d)[1 : k + 1]
         for j in nearest:
-            length_m = float(d[j]) * 111_000  # 1 grado ~ 111 km, aproximación local
+            length_m = float(d[j])  # ya en metros, EPSG:327xx
             G.add_edge(i, int(j), length=length_m, travel_time=length_m / speed_mps)
             G.add_edge(int(j), i, length=length_m, travel_time=length_m / speed_mps)
     return G
@@ -129,22 +137,30 @@ def get_graph(rol: str, profile: Profile, force: bool = False) -> tuple[nx.Multi
 # ---------------------------------------------------------------------- #
 def snap_points(gdf: gpd.GeoDataFrame, G: nx.MultiDiGraph, id_col: str) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Asigna a cada punto el nodo más cercano del grafo. Reporta distancia de
-    snap (metros) y cuántos puntos superan el umbral de config.md."""
+    snap (metros, calculada en la zona UTM del grafo — no con "1 grado ~ 111
+    km") y cuántos puntos superan el umbral de config.md."""
     nodes_x = np.array([data["x"] for _, data in G.nodes(data=True)])
     nodes_y = np.array([data["y"] for _, data in G.nodes(data=True)])
     node_ids = np.array([n for n, _ in G.nodes(data=True)])
 
+    # Zona UTM a partir del centroide de los propios nodos del grafo — así
+    # snap_points no depende de recibir el bbox del departamento aparte.
+    utm_epsg = config.utm_epsg_for_lonlat(float(nodes_x.mean()), float(nodes_y.mean()))
+    transformer = pyproj.Transformer.from_crs("EPSG:4326", utm_epsg, always_xy=True)
+    nodes_x_utm, nodes_y_utm = transformer.transform(nodes_x, nodes_y)
+    points_x_utm, points_y_utm = transformer.transform(gdf.geometry.x.to_numpy(), gdf.geometry.y.to_numpy())
+
     rows = []
     snap_max = config.routing_cfg()["snap_max_metros"]
     n_over_threshold = 0
-    for _, row in gdf.iterrows():
-        px, py = row.geometry.x, row.geometry.y
-        d = np.hypot(nodes_x - px, nodes_y - py) * 111_000  # aprox local en metros
+    ids = gdf[id_col].to_numpy()
+    for i in range(len(gdf)):
+        d = np.hypot(nodes_x_utm - points_x_utm[i], nodes_y_utm - points_y_utm[i])
         j = int(np.argmin(d))
         dist_m = float(d[j])
         if dist_m > snap_max:
             n_over_threshold += 1
-        rows.append({id_col: row[id_col], "node_id": node_ids[j], "snap_dist_m": dist_m})
+        rows.append({id_col: ids[i], "node_id": node_ids[j], "snap_dist_m": dist_m})
 
     snapped = pd.DataFrame(rows)
     report = {

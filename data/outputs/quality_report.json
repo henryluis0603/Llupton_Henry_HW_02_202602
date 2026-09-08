@@ -1,0 +1,239 @@
+{
+  "generado_utc": "2026-09-08T13:18:54.119728+00:00",
+  "datasets": [
+    {
+      "dataset": "costa_demanda",
+      "timestamp_utc": "2026-09-08T13:11:16.321521+00:00",
+      "n_registros_inicial": 329,
+      "n_registros_final": 329,
+      "reglas": [
+        {
+          "regla": "coordenadas_nulas_o_cero",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "lat_lon_invertidos",
+          "accion": "swap_si_cae_en_bbox",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "fuera_de_bbox_peru",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "punto_fuera_de_poligono_distrital",
+          "accion": "flag",
+          "registros_afectados": 0,
+          "nota": "sin capa de polígonos disponible — regla no evaluada"
+        },
+        {
+          "regla": "codigos_duplicados",
+          "accion": "dedup_keep_mas_completo_o_reciente",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "encoding_utf8_vs_latin1",
+          "accion": "reencode_donde_aplica",
+          "registros_afectados": 0
+        }
+      ]
+    },
+    {
+      "dataset": "costa_facilities",
+      "timestamp_utc": "2026-09-08T13:11:16.325914+00:00",
+      "n_registros_inicial": 118,
+      "n_registros_final": 110,
+      "reglas": [
+        {
+          "regla": "coordenadas_nulas_o_cero",
+          "accion": "drop",
+          "registros_afectados": 8
+        },
+        {
+          "regla": "lat_lon_invertidos",
+          "accion": "swap_si_cae_en_bbox",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "fuera_de_bbox_peru",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "punto_fuera_de_poligono_distrital",
+          "accion": "flag",
+          "registros_afectados": 0,
+          "nota": "sin capa de polígonos disponible — regla no evaluada"
+        },
+        {
+          "regla": "codigos_duplicados",
+          "accion": "dedup_keep_mas_completo_o_reciente",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "encoding_utf8_vs_latin1",
+          "accion": "reencode_donde_aplica",
+          "registros_afectados": 0
+        }
+      ]
+    },
+    {
+      "dataset": "andino_demanda",
+      "timestamp_utc": "2026-09-08T13:12:33.292063+00:00",
+      "n_registros_inicial": 1673,
+      "n_registros_final": 1673,
+      "reglas": [
+        {
+          "regla": "coordenadas_nulas_o_cero",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "lat_lon_invertidos",
+          "accion": "swap_si_cae_en_bbox",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "fuera_de_bbox_peru",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "punto_fuera_de_poligono_distrital",
+          "accion": "flag",
+          "registros_afectados": 0,
+          "nota": "sin capa de polígonos disponible — regla no evaluada"
+        },
+        {
+          "regla": "codigos_duplicados",
+          "accion": "dedup_keep_mas_completo_o_reciente",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "encoding_utf8_vs_latin1",
+          "accion": "reencode_donde_aplica",
+          "registros_afectados": 0
+        }
+      ]
+    },
+    {
+      "dataset": "andino_facilities",
+      "timestamp_utc": "2026-09-08T13:12:33.300968+00:00",
+      "n_registros_inicial": 497,
+      "n_registros_final": 473,
+      "reglas": [
+        {
+          "regla": "coordenadas_nulas_o_cero",
+          "accion": "drop",
+          "registros_afectados": 24
+        },
+        {
+          "regla": "lat_lon_invertidos",
+          "accion": "swap_si_cae_en_bbox",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "fuera_de_bbox_peru",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "punto_fuera_de_poligono_distrital",
+          "accion": "flag",
+          "registros_afectados": 0,
+          "nota": "sin capa de polígonos disponible — regla no evaluada"
+        },
+        {
+          "regla": "codigos_duplicados",
+          "accion": "dedup_keep_mas_completo_o_reciente",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "encoding_utf8_vs_latin1",
+          "accion": "reencode_donde_aplica",
+          "registros_afectados": 0
+        }
+      ]
+    },
+    {
+      "dataset": "amazonico_demanda",
+      "timestamp_utc": "2026-09-08T13:15:48.852701+00:00",
+      "n_registros_inicial": 368,
+      "n_registros_final": 368,
+      "reglas": [
+        {
+          "regla": "coordenadas_nulas_o_cero",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "lat_lon_invertidos",
+          "accion": "swap_si_cae_en_bbox",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "fuera_de_bbox_peru",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "punto_fuera_de_poligono_distrital",
+          "accion": "flag",
+          "registros_afectados": 0,
+          "nota": "sin capa de polígonos disponible — regla no evaluada"
+        },
+        {
+          "regla": "codigos_duplicados",
+          "accion": "dedup_keep_mas_completo_o_reciente",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "encoding_utf8_vs_latin1",
+          "accion": "reencode_donde_aplica",
+          "registros_afectados": 0
+        }
+      ]
+    },
+    {
+      "dataset": "amazonico_facilities",
+      "timestamp_utc": "2026-09-08T13:15:48.858042+00:00",
+      "n_registros_inicial": 241,
+      "n_registros_final": 217,
+      "reglas": [
+        {
+          "regla": "coordenadas_nulas_o_cero",
+          "accion": "drop",
+          "registros_afectados": 24
+        },
+        {
+          "regla": "lat_lon_invertidos",
+          "accion": "swap_si_cae_en_bbox",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "fuera_de_bbox_peru",
+          "accion": "drop",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "punto_fuera_de_poligono_distrital",
+          "accion": "flag",
+          "registros_afectados": 0,
+          "nota": "sin capa de polígonos disponible — regla no evaluada"
+        },
+        {
+          "regla": "codigos_duplicados",
+          "accion": "dedup_keep_mas_completo_o_reciente",
+          "registros_afectados": 0
+        },
+        {
+          "regla": "encoding_utf8_vs_latin1",
+          "accion": "reencode_donde_aplica",
+          "registros_afectados": 0
+        }
+      ]
+    }
+  ]
+}

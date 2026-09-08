@@ -50,6 +50,10 @@ grafo sintético). Toda la lógica reusable sigue viviendo en `src/`.
       scripteable — documentado en `SOURCES` en `src/acquisition.py`) y
       población distrital (RENIEC, repartida a centros poblados por tipo de
       asentamiento, ver `distribute_population`). `python run_pipeline.py --real`.
+- [x] Todo cálculo de distancia en metros usa la zona UTM del departamento
+      (`config.utm_epsg_for_bbox`, EPSG 32717/32718/32719 según corresponda)
+      vía `pyproj`, no la aproximación "1 grado ~ 111 km" (que ignora que un
+      grado de longitud se encoge con cos(latitud)).
 - [ ] Polígonos administrativos — no se descargaron todavía. Sin ellos, la
       regla de validación 4 (punto fuera del polígono distrital) no se
       ejecuta contra datos reales, y el "choropleth" del dashboard sigue
