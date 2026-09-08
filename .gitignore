@@ -6,6 +6,11 @@ __pycache__/
 .claude/
 data/processed/osmnx_http_cache/
 
+# Tectonic (motor LaTeX autocontenido, ~54MB) descargado localmente para
+# compilar el PDF del reporte — no es código del proyecto, se re-descarga
+# con el comando documentado en report/README o el Makefile.
+.tools/
+
 # Crudos: 149MB, 100% regenerables (python -m src.acquisition --real /
 # --synthetic). El issue permite "data/processed/ y data/outputs/ (o script
 # regenerador)" en vez de comprometer los crudos — nos quedamos con eso para

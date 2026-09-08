@@ -6,8 +6,10 @@ pesar no es aceptable según el issue.
 """
 from __future__ import annotations
 
+import geopandas as gpd
 import numpy as np
 import pandas as pd
+import pyproj
 
 from src import config
 
@@ -183,3 +185,53 @@ def two_step_floating_catchment_area(
     out = demand_df[[demand_id_col]].merge(a_i.reset_index(), on=demand_id_col, how="left")
     out["accesibilidad_2sfca"] = out["accesibilidad_2sfca"].fillna(0.0)
     return out
+
+
+# ---------------------------------------------------------------------- #
+# Discusión — comparativa línea recta vs. red vial (issue #186, Fase 5)
+# ---------------------------------------------------------------------- #
+def straight_line_vs_network(
+    matrix: pd.DataFrame,
+    demand_gdf: gpd.GeoDataFrame,
+    facility_gdf: gpd.GeoDataFrame,
+    demand_id_col: str,
+    facility_id_col: str,
+) -> pd.DataFrame:
+    """Para cada punto de demanda, compara la facility más cercana en línea
+    recta (distancia euclidiana en la zona UTM del departamento) contra la
+    facility óptima según la matriz de red (t_min). Cuantifica el error de
+    un análisis naive que ignore la red vial: cuándo elige una facility
+    distinta, y cuántos minutos de más le tomaría llegar a la que la línea
+    recta sugiere en vez de a la óptima real."""
+    lon = pd.concat([demand_gdf.geometry.x, facility_gdf.geometry.x])
+    lat = pd.concat([demand_gdf.geometry.y, facility_gdf.geometry.y])
+    utm_epsg = config.utm_epsg_for_lonlat(float(lon.mean()), float(lat.mean()))
+    transformer = pyproj.Transformer.from_crs("EPSG:4326", utm_epsg, always_xy=True)
+
+    dx, dy = transformer.transform(demand_gdf.geometry.x.to_numpy(), demand_gdf.geometry.y.to_numpy())
+    fx, fy = transformer.transform(facility_gdf.geometry.x.to_numpy(), facility_gdf.geometry.y.to_numpy())
+    demand_ids = demand_gdf[demand_id_col].to_numpy()
+    facility_ids = facility_gdf[facility_id_col].to_numpy()
+
+    dist_m = np.hypot(dx[:, None] - fx[None, :], dy[:, None] - fy[None, :])
+    nearest_idx = dist_m.argmin(axis=1)
+    straight = pd.DataFrame({
+        demand_id_col: demand_ids,
+        "facility_recta": facility_ids[nearest_idx],
+        "dist_recta_m": dist_m[np.arange(len(demand_ids)), nearest_idx],
+    })
+
+    net = matrix.reset_index()
+    network_best = net.loc[net.groupby(demand_id_col)["t_min"].idxmin()]
+    network_best = network_best.rename(columns={facility_id_col: "facility_red", "t_min": "t_min_red"})
+    network_best = network_best[[demand_id_col, "facility_red", "t_min_red"]]
+
+    comp = straight.merge(network_best, on=demand_id_col, how="inner")
+    comp["coincide"] = comp["facility_recta"] == comp["facility_red"]
+
+    t_min_lookup = net.set_index([demand_id_col, facility_id_col])["t_min"]
+    comp["t_min_si_recta"] = [
+        t_min_lookup.get((d, f), np.nan) for d, f in zip(comp[demand_id_col], comp["facility_recta"])
+    ]
+    comp["penalidad_min"] = comp["t_min_si_recta"] - comp["t_min_red"]
+    return comp

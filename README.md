@@ -21,6 +21,11 @@ jupyter notebook walkthrough.ipynb
 
 # alternativa con datos reales (RENIPRESS, centros poblados IGN, población RENIEC)
 python run_pipeline.py --real
+
+# compilar report/main.pdf (motor LaTeX autocontenido, no requiere instalar MacTeX)
+curl -L -o /tmp/tectonic.tar.gz "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic@0.17.0/tectonic-0.17.0-$(uname -m | sed s/arm64/aarch64/)-apple-darwin.tar.gz"
+mkdir -p .tools && tar -xzf /tmp/tectonic.tar.gz -C .tools && chmod +x .tools/tectonic
+(cd report && ../.tools/tectonic main.tex)
 ```
 
 `config.md` es la única fuente de verdad: departamentos, categorías
@@ -72,10 +77,15 @@ grafo sintético). Toda la lógica reusable sigue viviendo en `src/`.
       (`raster_aplicado.ipynb`) enseña la técnica concreta para cerrar esto
       —`rasterio` + `rasterstats.zonal_stats` sobre un DEM— pendiente de
       aplicar aquí con un raster de elevación real.
-- [ ] Reporte LaTeX (`report/main.tex`) — estructura y tablas conectadas al
-      pipeline, contenido narrativo pendiente de redactar. Nota: este
-      entorno no tiene `pdflatex`/`xelatex` instalado, falta resolver el
-      toolchain para compilar el PDF.
+- [x] Reporte LaTeX (`report/main.pdf`, 10 páginas): las 9 secciones
+      obligatorias con cifras reales, 4 figuras vectoriales generadas por el
+      pipeline (`run_pipeline.generate_report_figures`, no capturas de
+      pantalla), 4 tablas regeneradas en cada corrida, comparativa línea
+      recta vs. red real (`metrics.straight_line_vs_network`, issue #186
+      Fase 5) y sección de limitaciones. Compilado con
+      [Tectonic](https://tectonic-typesetting.github.io/) (motor LaTeX
+      autocontenido, no requiere instalar MacTeX/TeX Live) — este entorno no
+      tenía `pdflatex` instalado, ver comando de compilación arriba.
 - [ ] Video de presentación.
 
 ## Decisiones frente al material de clase (sesiones 6 y 7)

@@ -106,6 +106,11 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
 
     mode_comparison = routing.compare_modes(matrices, "cp_id", "facility_id")
 
+    # Discusión (issue #186, Fase 5): línea recta vs. red vial real.
+    straight_vs_network = metrics.straight_line_vs_network(
+        matrices["drive"], demanda, facilities_resolutivas, "cp_id", "facility_id"
+    )
+
     return {
         "rol": rol,
         "demanda": demanda,
@@ -114,11 +119,91 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
         "demanda_metrics": demanda_metrics,
         "matrices": matrices,
         "mode_comparison": mode_comparison,
+        "straight_vs_network": straight_vs_network,
         "isochrones": isochrones,
         "snap_reports": snap_reports,
         "graph_sources": graph_sources,
         "reports": [rep_dem, rep_fac],
     }
+
+
+def generate_report_figures(
+    all_demanda_metrics: pd.DataFrame,
+    coverage: pd.DataFrame,
+    mode_comparisons: pd.DataFrame,
+    dep_results: list[dict],
+) -> None:
+    """Figuras vectoriales (PDF) para report/main.tex — generadas por el
+    pipeline en cada corrida, no capturas de pantalla."""
+    import matplotlib.pyplot as plt
+
+    plt.rcParams["figure.dpi"] = 110
+    plt.rcParams["axes.spines.top"] = False
+    plt.rcParams["axes.spines.right"] = False
+
+    # Fig 1 — bandas de cobertura
+    fig, ax = plt.subplots(figsize=(6, 3.5))
+    ax.bar(coverage["banda"], coverage["poblacion"], color="#4c78a8")
+    ax.set_ylabel("Población")
+    ax.set_title("Población por banda de tiempo de acceso")
+    for i, v in enumerate(coverage["pct_poblacion"]):
+        ax.text(i, coverage["poblacion"].iloc[i], f"{v:.0f}%", ha="center", va="bottom", fontsize=9)
+    plt.xticks(rotation=15)
+    plt.tight_layout()
+    export.save_figure(fig, "coverage_bands", fmt="pdf")
+    plt.close(fig)
+
+    # Fig 2 — distribución de t_min por departamento
+    fig, ax = plt.subplots(figsize=(6, 3.5))
+    for depto, grupo in all_demanda_metrics.groupby("departamento"):
+        ax.hist(grupo["t_min"].dropna(), bins=30, alpha=0.5, label=depto)
+    ax.set_xlabel("t_min (minutos)")
+    ax.set_ylabel("N. de puntos de demanda")
+    ax.set_title("Distribución de tiempo de acceso por departamento")
+    ax.legend(fontsize=8)
+    plt.tight_layout()
+    export.save_figure(fig, "distribucion_t_min", fmt="pdf")
+    plt.close(fig)
+
+    # Fig 3 — ratio modo/auto por departamento (evidencia del artefacto
+    # sintético: constante en deptos 100% sintéticos, con variación real
+    # solo donde el grafo es OSM real — ver Discusión/Limitaciones)
+    mc = mode_comparisons.merge(all_demanda_metrics[["cp_id", "departamento"]], on="cp_id", how="left")
+    resumen_ratio = mc.groupby("departamento")[["ratio_walk_drive", "ratio_bike_drive"]].median()
+    fig, ax = plt.subplots(figsize=(6, 3.5))
+    resumen_ratio.plot(kind="bar", ax=ax, color=["#4c78a8", "#f58518"])
+    ax.set_ylabel("Ratio mediano (modo / auto)")
+    ax.set_title("Ratio de tiempo modo/auto, por departamento")
+    plt.xticks(rotation=0)
+    plt.tight_layout()
+    export.save_figure(fig, "ratio_modos", fmt="pdf")
+    plt.close(fig)
+
+    # Fig 4 — isócronas de un establecimiento resolutivo de ejemplo
+    iso_frames = [r["isochrones"] for r in dep_results if "isochrones" in r and not r["isochrones"].empty]
+    if iso_frames:
+        ejemplo = iso_frames[0]
+        facility_id_col = [c for c in ejemplo.columns if c not in ("threshold_min", "geometry")][0]
+        ejemplo_id = ejemplo[facility_id_col].iloc[0]
+        sub = ejemplo[ejemplo[facility_id_col] == ejemplo_id].sort_values("threshold_min", ascending=False)
+        rol_ejemplo = next(r["rol"] for r in dep_results if r.get("isochrones") is ejemplo)
+        colors = {30: "#31a354", 60: "#fdae61", 120: "#d7191c"}
+
+        fig, ax = plt.subplots(figsize=(6, 6))
+        demanda_dept = all_demanda_metrics[all_demanda_metrics["departamento"] == config.departamentos()[rol_ejemplo]["nombre"]]
+        gpd.GeoSeries(demanda_dept.geometry).plot(ax=ax, markersize=6, color="lightgray", zorder=1)
+        for _, row in sub.iterrows():
+            gpd.GeoSeries([row.geometry]).plot(
+                ax=ax, alpha=0.35, color=colors.get(row["threshold_min"], "gray"),
+                edgecolor="black", linewidth=0.5, zorder=2, label=f"{row['threshold_min']} min",
+            )
+        ax.set_title(f"Isócronas — {ejemplo_id} ({rol_ejemplo})")
+        ax.legend()
+        plt.tight_layout()
+        export.save_figure(fig, "isocronas_ejemplo", fmt="pdf")
+        plt.close(fig)
+
+    log.info("Figuras exportadas a %s", config.ruta("report_figures"))
 
 
 def compute_and_export_metrics(dep_results: list[dict], real: bool = False) -> None:
@@ -195,6 +280,28 @@ def compute_and_export_metrics(dep_results: list[dict], real: bool = False) -> N
         caption="Ratio de tiempo de viaje (modo / auto) por perfil",
         label="mode_comparison",
     )
+
+    # Discusión: línea recta vs. red vial real, por departamento.
+    svn_frames = [r["straight_vs_network"].assign(departamento=r["rol"]) for r in dep_results if "straight_vs_network" in r]
+    if svn_frames:
+        all_svn = pd.concat(svn_frames, ignore_index=True)
+        all_svn.to_parquet(out_dir / "straight_line_vs_network.parquet")
+        svn_summary = (
+            all_svn.groupby("departamento")
+            .apply(lambda g: pd.Series({
+                "pct_facility_distinta": 100 * (~g["coincide"]).mean(),
+                "penalidad_min_mediana": g.loc[~g["coincide"], "penalidad_min"].median(),
+            }), include_groups=False)
+            .reset_index()
+        )
+        svn_summary.to_csv(out_dir / "straight_line_vs_network_summary.csv", index=False)
+        export.to_latex_table(
+            svn_summary, "straight_line_vs_network",
+            caption="Línea recta vs. red: \\% de puntos donde la facility más cercana cambia, y minutos de más si se usara la sugerida por línea recta",
+            label="straight_line_vs_network",
+        )
+
+    generate_report_figures(all_demanda_metrics, coverage, mode_comparisons, dep_results)
 
     # Innovación 2 — 2SFCA, por departamento (facilities no se comparten entre deptos)
     sfca_frames = []
