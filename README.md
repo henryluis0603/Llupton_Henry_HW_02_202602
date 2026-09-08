@@ -18,6 +18,9 @@ streamlit run app.py
 
 # guion de exposición para el video (lee data/outputs/, no recalcula nada)
 jupyter notebook walkthrough.ipynb
+
+# alternativa con datos reales (RENIPRESS, centros poblados IGN, población RENIEC)
+python run_pipeline.py --real
 ```
 
 `config.md` es la única fuente de verdad: departamentos, categorías
@@ -42,11 +45,25 @@ grafo sintético). Toda la lógica reusable sigue viviendo en `src/`.
       2SFCA (`metrics.two_step_floating_catchment_area`).
 - [x] `walkthrough.ipynb` — notebook único de exposición para el video,
       ejecutado y verificado sin errores (`jupyter nbconvert --execute`).
-- [ ] Descarga de datos reales (RENIPRESS, SIGMED) — bloqueada por red desde
-      este entorno de desarrollo; `src/acquisition.py` tiene las URLs y cae
-      a advertencia + log en vez de crashear si la fuente no responde.
+- [x] Datos reales: RENIPRESS (SUSALUD), centros poblados (IGN, sustituyendo
+      el SIGMED-MINEDU del issue, que es un geoportal sin descarga
+      scripteable — documentado en `SOURCES` en `src/acquisition.py`) y
+      población distrital (RENIEC, repartida a centros poblados por tipo de
+      asentamiento, ver `distribute_population`). `python run_pipeline.py --real`.
+- [ ] Polígonos administrativos — no se descargaron todavía. Sin ellos, la
+      regla de validación 4 (punto fuera del polígono distrital) no se
+      ejecuta contra datos reales, y el "choropleth" del dashboard sigue
+      siendo un proxy de puntos, no un choropleth real por distrito.
+- [ ] Motor de ruteo sobre red vial real: Overpass no respondió en ninguna
+      corrida reciente desde este entorno — el pipeline corre igual gracias
+      al fallback documentado, pero los tiempos de viaje siguen siendo sobre
+      el grafo sintético hasta correr esto desde una red sin ese bloqueo.
+- [ ] Altitud — sin DEM integrado; `cross_analysis_altitud` reporta n=0
+      honestamente en vez de inventar un valor.
 - [ ] Reporte LaTeX (`report/main.tex`) — estructura y tablas conectadas al
-      pipeline, contenido narrativo pendiente de redactar con datos reales.
+      pipeline, contenido narrativo pendiente de redactar. Nota: este
+      entorno no tiene `pdflatex`/`xelatex` instalado, falta resolver el
+      toolchain para compilar el PDF.
 - [ ] Video de presentación.
 
 ## Estructura

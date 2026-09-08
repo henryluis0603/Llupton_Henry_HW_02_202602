@@ -24,6 +24,14 @@ SEQ_SCALE = "Viridis"
 CATEGORICAL = px.colors.qualitative.Set2
 
 
+def _wmean_safe(g: pd.DataFrame) -> float:
+    """t_min ponderado por población, NaN (no división por cero) si el
+    grupo tiene población total 0 — pasa con centros poblados reales sin
+    match de distrito en RENIEC, ver acquisition.distribute_population."""
+    w = g["poblacion"].sum()
+    return float((g["t_min"] * g["poblacion"]).sum() / w) if w > 0 else float("nan")
+
+
 # --------------------------------------------------------------------- #
 # Carga cacheada
 # --------------------------------------------------------------------- #
@@ -44,10 +52,21 @@ def load_facilities() -> gpd.GeoDataFrame:
 def load_matrix_all() -> pd.DataFrame:
     """Matriz completa origen×facility (perfil drive), concatenada entre
     departamentos — la usa el simulador de escenario para recalcular sin
-    tocar el motor de ruteo."""
+    tocar el motor de ruteo.
+
+    La matriz cacheada vive en un subdirectorio por fuente (real/synthetic)
+    porque sus índices son los IDs de esa fuente — leer la fuente equivocada
+    mezclaría IDs de demanda/facility sin dar error. `summary.json` dice cuál
+    fue la fuente de la última corrida del pipeline.
+    """
+    summary_path = OUT / "summary.json"
+    fuente = "synthetic"
+    if summary_path.exists():
+        fuente = json.loads(summary_path.read_text(encoding="utf-8")).get("fuente", "synthetic")
+
     frames = []
     for rol in config.departamentos():
-        p = config.ruta("routing_cache_dir") / rol / "matrix_drive.parquet"
+        p = config.ruta("routing_cache_dir") / rol / fuente / "matrix_drive.parquet"
         if p.exists():
             m = pd.read_parquet(p).reset_index()
             m["departamento_rol"] = rol
@@ -139,12 +158,8 @@ st.caption("Tumbes (costa) · Huancavelica (andino) · Madre de Dios (amazónico
 pob_total = demanda_f["poblacion"].sum()
 pob_cubierta = demanda_f.loc[demanda_f["t_min"] <= threshold, "poblacion"].sum()
 pob_mas_60 = demanda_f.loc[demanda_f["t_min"] > 60, "poblacion"].sum()
-peor_distrito = (
-    demanda_f.groupby("distrito").apply(lambda g: (g["t_min"] * g["poblacion"]).sum() / g["poblacion"].sum(), include_groups=False)
-    .idxmax()
-    if demanda_f["poblacion"].sum() > 0
-    else "—"
-)
+_acceso_por_distrito = demanda_f.groupby("distrito").apply(_wmean_safe, include_groups=False).dropna()
+peor_distrito = _acceso_por_distrito.idxmax() if not _acceso_por_distrito.empty else "—"
 mediana_acceso = demanda_f["t_min"].median()
 
 c1, c2, c3, c4 = st.columns(4)
@@ -233,7 +248,7 @@ st.subheader("Distritos con peor acceso (ponderado por población)")
 critico = (
     demanda_f.groupby("distrito")
     .apply(lambda g: pd.Series({
-        "t_min_ponderado": (g["t_min"] * g["poblacion"]).sum() / g["poblacion"].sum(),
+        "t_min_ponderado": _wmean_safe(g),
         "poblacion": g["poblacion"].sum(),
     }), include_groups=False)
     .reset_index()

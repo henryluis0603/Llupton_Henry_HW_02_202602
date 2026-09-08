@@ -4,6 +4,7 @@ script solo encadena llamadas y decide qué guardar.
 
 Uso:
     python run_pipeline.py --synthetic          # pipeline completo con datos falsos
+    python run_pipeline.py --real               # pipeline completo con RENIPRESS/IGN/RENIEC reales
     python run_pipeline.py --synthetic --force  # ignora cachés y recalcula todo
 """
 from __future__ import annotations
@@ -22,9 +23,12 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 PROFILES = config.routing_cfg()["perfiles"]
 
 
-def run_department(rol: str, force: bool = False) -> dict:
+def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
     log.info("=== Departamento: %s ===", rol)
-    dem_path, fac_path = acquisition.generate_synthetic_dataset(rol, force=force)
+    if real:
+        dem_path, fac_path = acquisition.build_real_dataset(rol, force=force)
+    else:
+        dem_path, fac_path = acquisition.generate_synthetic_dataset(rol, force=force)
     demanda = gpd.read_parquet(dem_path)
     facilities = gpd.read_parquet(fac_path)
 
@@ -69,7 +73,13 @@ def run_department(rol: str, force: bool = False) -> dict:
         fac_snapped, fac_snap_report = routing.snap_points(facilities_resolutivas, G, "facility_id")
         snap_reports[profile] = {"demanda": dem_snap_report, "facilities": fac_snap_report}
 
-        cache_path = config.ruta("routing_cache_dir") / rol / f"matrix_{profile}.parquet"
+        # El grafo (data/processed/routing_cache/<rol>/<perfil>.graphml) se
+        # comparte entre sintético y real: es la misma red vial. La MATRIZ no
+        # — sus índices son los IDs de demanda/facility de cada fuente, así
+        # que va en un subdirectorio separado para no leer una matriz
+        # sintética al correr --real (o viceversa) sin --force.
+        fuente_dir = "real" if real else "synthetic"
+        cache_path = config.ruta("routing_cache_dir") / rol / fuente_dir / f"matrix_{profile}.parquet"
         matrix = routing.travel_time_matrix(
             G, dem_snapped, fac_snapped, "cp_id", "facility_id", cache_path, force=force
         )
@@ -103,7 +113,7 @@ def run_department(rol: str, force: bool = False) -> dict:
     }
 
 
-def compute_and_export_metrics(dep_results: list[dict]) -> None:
+def compute_and_export_metrics(dep_results: list[dict], real: bool = False) -> None:
     out_dir = config.ruta("outputs")
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -144,6 +154,7 @@ def compute_and_export_metrics(dep_results: list[dict]) -> None:
     altitude_cross = metrics.altitude_access_cross(all_demanda_metrics)
 
     summary = {
+        "fuente": "real" if real else "synthetic",
         "gini_t_min_ponderado": gini,
         "n_demanda_total": int(len(all_demanda_metrics)),
         "poblacion_total": int(all_demanda_metrics["poblacion"].sum()),
@@ -189,12 +200,17 @@ def compute_and_export_metrics(dep_results: list[dict]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--synthetic", action="store_true")
+    parser.add_argument("--real", action="store_true")
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
-    if not args.synthetic:
-        parser.error("por ahora solo --synthetic está implementado end-to-end en este script")
+    if not args.synthetic and not args.real:
+        parser.error("especificar --synthetic o --real")
+    if args.synthetic and args.real:
+        parser.error("usar --synthetic o --real, no ambos en la misma corrida")
 
-    dep_results = [run_department(rol, force=args.force) for rol in config.departamentos()]
+    if args.real:
+        acquisition.download_real(force=args.force)
+    dep_results = [run_department(rol, force=args.force, real=args.real) for rol in config.departamentos()]
 
     all_reports = [rep for r in dep_results for rep in r["reports"]]
     quality_path = validation.write_quality_report(all_reports)
@@ -207,7 +223,7 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    compute_and_export_metrics(dep_results)
+    compute_and_export_metrics(dep_results, real=args.real)
     log.info("Pipeline completo.")
 
 
