@@ -68,6 +68,17 @@ SOURCES = {
     "poblacion_reniec": "https://www.datosabiertos.gob.pe/sites/default/files/BD_DAbiertos_16_OPP_2026_06.01.csv",
 }
 
+# Polígonos administrativos (issue #186, Fase 1: cuarta fuente requerida,
+# no localizada como descarga directa en datosabiertos.gob.pe). Es el
+# shapefile de 1,873 distritos (columna FUENTE="INEI") que se usa en la
+# sesión 6 del curso (Geopandas1_clean.ipynb) para el choropleth de COVID
+# por distrito — mismo shapefile, mismo caso de uso (choropleth +
+# point-in-polygon). Vive en el dataset de Hugging Face del curso, no en
+# un portal gob.pe con URL propia, así que se descarga vía huggingface_hub
+# en vez de requests.
+DISTRITOS_HF_REPO = "aquiro1994/ds-python-up"
+DISTRITOS_HF_FILES = ["cpg", "dbf", "prj", "shp", "shx"]
+
 
 def _idempotent_download(url: str, dest: Path, force: bool = False) -> bool:
     """Descarga a `dest` si no existe. Devuelve True si el archivo quedó disponible."""
@@ -110,11 +121,39 @@ def download_poblacion_reniec(force: bool = False) -> bool:
     return _idempotent_download(SOURCES["poblacion_reniec"], dest, force=force)
 
 
+def download_distritos(force: bool = False) -> bool:
+    """Descarga el shapefile de distritos (INEI, vía el dataset HF del curso).
+    Idempotente igual que las demás: si ya están los 5 archivos, no baja de nuevo."""
+    dest_dir = config.ruta("raw") / "distritos_inei"
+    shp = dest_dir / "DISTRITOS.shp"
+    if shp.exists() and not force:
+        log.info("SKIP (ya existe): %s", shp)
+        return True
+    try:
+        from huggingface_hub import hf_hub_download
+    except ImportError:
+        log.warning("Falta huggingface_hub (pip install huggingface_hub). Usar --synthetic mientras se resuelve.")
+        return False
+    try:
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        for ext in DISTRITOS_HF_FILES:
+            p = hf_hub_download(
+                repo_id=DISTRITOS_HF_REPO, repo_type="dataset", filename=f"_data/Folium/DISTRITOS.{ext}"
+            )
+            (dest_dir / f"DISTRITOS.{ext}").write_bytes(Path(p).read_bytes())
+        log.info("OK descarga distritos INEI -> %s", dest_dir)
+        return True
+    except Exception as exc:
+        log.warning("FALLÓ descarga de distritos (%s). Usar --synthetic o reintentar luego.", exc)
+        return False
+
+
 def download_real(force: bool = False) -> dict[str, bool]:
     return {
         "renipress": download_renipress(force=force),
         "centros_poblados_ign": download_centros_poblados(force=force),
         "poblacion_reniec": download_poblacion_reniec(force=force),
+        "distritos_inei": download_distritos(force=force),
     }
 
 
@@ -227,6 +266,51 @@ def load_centros_poblados(rol: str) -> gpd.GeoDataFrame:
     return out
 
 
+def load_distritos(rol: str) -> gpd.GeoDataFrame:
+    """Parsea el shapefile de distritos (INEI, vía HF) para el departamento
+    `rol`. `IDDIST` ya viene en formato UBIGEO de 6 dígitos, igual que
+    RENIPRESS y RENIEC — se usa tal cual como llave de cruce."""
+    dept = config.departamentos()[rol]
+    shp = config.ruta("raw") / "distritos_inei" / "DISTRITOS.shp"
+    g = gpd.read_file(shp)
+    g = g[g["DEPARTAMEN"].apply(_norm_name) == _norm_name(dept["nombre"])].copy()
+
+    out = gpd.GeoDataFrame(
+        {
+            "ubigeo": g["IDDIST"].astype(str),
+            "departamento": g["DEPARTAMEN"],
+            "provincia": g["PROVINCIA"],
+            "distrito": g["DISTRITO"],
+            "geometry": g.geometry,
+        },
+        crs=g.crs or "EPSG:4326",
+    ).to_crs("EPSG:4326")
+    log.info("Distritos INEI cargados para %s: %d polígonos", rol, len(out))
+    return out
+
+
+def attach_ubigeo(centros: gpd.GeoDataFrame, distritos: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+    """Asigna el UBIGEO del distrito a cada centro poblado por nombre
+    (provincia + distrito normalizados) — el shapefile IGN de centros
+    poblados no trae UBIGEO propio. Necesario para la regla de validación
+    4 (punto fuera de su polígono distrital declarado) y para el choropleth
+    del dashboard."""
+    centros = centros.copy()
+    dist = distritos[["ubigeo", "provincia", "distrito"]].copy()
+    dist["_prov_n"] = dist["provincia"].apply(_norm_name)
+    dist["_dist_n"] = dist["distrito"].apply(_norm_name)
+    centros["_prov_n"] = centros["provincia"].apply(_norm_name)
+    centros["_dist_n"] = centros["distrito"].apply(_norm_name)
+
+    merged = centros.merge(
+        dist[["_prov_n", "_dist_n", "ubigeo"]], on=["_prov_n", "_dist_n"], how="left"
+    ).drop(columns=["_prov_n", "_dist_n"])
+    n_sin_match = merged["ubigeo"].isna().sum()
+    if n_sin_match:
+        log.warning("%d/%d centros poblados sin UBIGEO de distrito asignado (nombre no coincide)", n_sin_match, len(merged))
+    return merged
+
+
 def load_poblacion_distrital(deptos: list[str]) -> pd.DataFrame:
     """Agrega población RENIEC (todas las edades/sexos) a nivel distrito para
     los departamentos dados. Lee en chunks: el CSV nacional pesa ~65MB, no
@@ -309,24 +393,29 @@ def sample_demand_if_needed(
     return sampled, report
 
 
-def build_real_dataset(rol: str, force: bool = False) -> tuple[Path, Path]:
+def build_real_dataset(rol: str, force: bool = False) -> tuple[Path, Path, Path]:
     """Orquesta la carga real (facilities + demanda con población repartida
-    + muestreo si aplica) y la deja en el mismo esquema/ubicación que
-    generate_synthetic_dataset, lista para validation.py."""
+    + muestreo si aplica, más los polígonos distritales) y la deja en el
+    mismo esquema/ubicación que generate_synthetic_dataset, lista para
+    validation.py."""
     out_dir = config.ruta("raw") / "real" / rol
     demanda_path = out_dir / "demanda.parquet"
     facilities_path = out_dir / "facilities.parquet"
-    if demanda_path.exists() and facilities_path.exists() and not force:
+    distritos_path = out_dir / "distritos.parquet"
+    if demanda_path.exists() and facilities_path.exists() and distritos_path.exists() and not force:
         log.info("SKIP (real ya cargado) para %s", rol)
-        return demanda_path, facilities_path
+        return demanda_path, facilities_path, distritos_path
 
     facilities = load_renipress(rol)
     centros = load_centros_poblados(rol)
+    distritos = load_distritos(rol)
+    centros = attach_ubigeo(centros, distritos)
     poblacion = load_poblacion_distrital([config.departamentos()[rol]["nombre"]])
     demanda = distribute_population(centros, poblacion)
-    # Sin fuente de altitud integrada (requeriría un DEM) — se deja NaN de
-    # forma explícita; metrics.altitude_access_cross reporta n=0 en vez de
-    # fallar o inventar un valor.
+    # Sin fuente de altitud integrada (requeriría un DEM, ver sesión 7 del
+    # curso — rasterio + zonal_stats es la ruta concreta para cerrar esto,
+    # pendiente) — se deja NaN de forma explícita; metrics.altitude_access_cross
+    # reporta n=0 en vez de fallar o inventar un valor.
     demanda["altitud_m"] = np.nan
     demanda, sample_report = sample_demand_if_needed(
         demanda, config.demanda_max_puntos() // len(config.departamentos()), config.sintetico_cfg()["seed"]
@@ -335,11 +424,12 @@ def build_real_dataset(rol: str, force: bool = False) -> tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     demanda.to_parquet(demanda_path)
     facilities.to_parquet(facilities_path)
+    distritos.to_parquet(distritos_path)
     log.info(
-        "Real cargado para %s: %d demanda (%s), %d facilities",
-        rol, len(demanda), sample_report, len(facilities),
+        "Real cargado para %s: %d demanda (%s), %d facilities, %d distritos",
+        rol, len(demanda), sample_report, len(facilities), len(distritos),
     )
-    return demanda_path, facilities_path
+    return demanda_path, facilities_path, distritos_path
 
 
 # --------------------------------------------------------------------------

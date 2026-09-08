@@ -1,9 +1,9 @@
 {
-  "generado_utc": "2026-09-08T13:18:54.119728+00:00",
+  "generado_utc": "2026-09-08T20:56:19.799333+00:00",
   "datasets": [
     {
       "dataset": "costa_demanda",
-      "timestamp_utc": "2026-09-08T13:11:16.321521+00:00",
+      "timestamp_utc": "2026-09-08T20:56:17.164282+00:00",
       "n_registros_inicial": 329,
       "n_registros_final": 329,
       "reglas": [
@@ -25,8 +25,7 @@
         {
           "regla": "punto_fuera_de_poligono_distrital",
           "accion": "flag",
-          "registros_afectados": 0,
-          "nota": "sin capa de polígonos disponible — regla no evaluada"
+          "registros_afectados": 40
         },
         {
           "regla": "codigos_duplicados",
@@ -42,7 +41,7 @@
     },
     {
       "dataset": "costa_facilities",
-      "timestamp_utc": "2026-09-08T13:11:16.325914+00:00",
+      "timestamp_utc": "2026-09-08T20:56:17.168707+00:00",
       "n_registros_inicial": 118,
       "n_registros_final": 110,
       "reglas": [
@@ -81,7 +80,7 @@
     },
     {
       "dataset": "andino_demanda",
-      "timestamp_utc": "2026-09-08T13:12:33.292063+00:00",
+      "timestamp_utc": "2026-09-08T20:56:19.567747+00:00",
       "n_registros_inicial": 1673,
       "n_registros_final": 1673,
       "reglas": [
@@ -103,8 +102,7 @@
         {
           "regla": "punto_fuera_de_poligono_distrital",
           "accion": "flag",
-          "registros_afectados": 0,
-          "nota": "sin capa de polígonos disponible — regla no evaluada"
+          "registros_afectados": 56
         },
         {
           "regla": "codigos_duplicados",
@@ -120,7 +118,7 @@
     },
     {
       "dataset": "andino_facilities",
-      "timestamp_utc": "2026-09-08T13:12:33.300968+00:00",
+      "timestamp_utc": "2026-09-08T20:56:19.576179+00:00",
       "n_registros_inicial": 497,
       "n_registros_final": 473,
       "reglas": [
@@ -159,7 +157,7 @@
     },
     {
       "dataset": "amazonico_demanda",
-      "timestamp_utc": "2026-09-08T13:15:48.852701+00:00",
+      "timestamp_utc": "2026-09-08T20:56:19.723463+00:00",
       "n_registros_inicial": 368,
       "n_registros_final": 368,
       "reglas": [
@@ -181,8 +179,7 @@
         {
           "regla": "punto_fuera_de_poligono_distrital",
           "accion": "flag",
-          "registros_afectados": 0,
-          "nota": "sin capa de polígonos disponible — regla no evaluada"
+          "registros_afectados": 1
         },
         {
           "regla": "codigos_duplicados",
@@ -198,7 +195,7 @@
     },
     {
       "dataset": "amazonico_facilities",
-      "timestamp_utc": "2026-09-08T13:15:48.858042+00:00",
+      "timestamp_utc": "2026-09-08T20:56:19.728812+00:00",
       "n_registros_inicial": 241,
       "n_registros_final": 217,
       "reglas": [

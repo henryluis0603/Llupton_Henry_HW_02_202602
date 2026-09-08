@@ -54,21 +54,56 @@ grafo sintético). Toda la lógica reusable sigue viviendo en `src/`.
       (`config.utm_epsg_for_bbox`, EPSG 32717/32718/32719 según corresponda)
       vía `pyproj`, no la aproximación "1 grado ~ 111 km" (que ignora que un
       grado de longitud se encoge con cos(latitud)).
-- [ ] Polígonos administrativos — no se descargaron todavía. Sin ellos, la
-      regla de validación 4 (punto fuera del polígono distrital) no se
-      ejecuta contra datos reales, y el "choropleth" del dashboard sigue
-      siendo un proxy de puntos, no un choropleth real por distrito.
+- [x] Polígonos administrativos: shapefile de 1,873 distritos (INEI, columna
+      `FUENTE`) — el mismo que usa la sesión 6 del curso
+      (`Geopandas1_clean.ipynb`) para su choropleth de COVID, descargado vía
+      `huggingface_hub` desde el dataset del curso (`acquisition.download_distritos`).
+      Cierra dos huecos a la vez: la regla de validación 4 (punto fuera de su
+      polígono distrital) ahora corre de verdad contra datos reales, y el
+      dashboard pinta un **choropleth real por distrito** en vez del proxy de
+      puntos (`app.py` cae al proxy solo si no hay polígonos, p.ej. en modo
+      sintético).
 - [ ] Motor de ruteo sobre red vial real: Overpass no respondió en ninguna
       corrida reciente desde este entorno — el pipeline corre igual gracias
       al fallback documentado, pero los tiempos de viaje siguen siendo sobre
       el grafo sintético hasta correr esto desde una red sin ese bloqueo.
 - [ ] Altitud — sin DEM integrado; `cross_analysis_altitud` reporta n=0
-      honestamente en vez de inventar un valor.
+      honestamente en vez de inventar un valor. La sesión 7 del curso
+      (`raster_aplicado.ipynb`) enseña la técnica concreta para cerrar esto
+      —`rasterio` + `rasterstats.zonal_stats` sobre un DEM— pendiente de
+      aplicar aquí con un raster de elevación real.
 - [ ] Reporte LaTeX (`report/main.tex`) — estructura y tablas conectadas al
       pipeline, contenido narrativo pendiente de redactar. Nota: este
       entorno no tiene `pdflatex`/`xelatex` instalado, falta resolver el
       toolchain para compilar el PDF.
 - [ ] Video de presentación.
+
+## Decisiones frente al material de clase (sesiones 6 y 7)
+
+- **Polígonos distritales**: mismo shapefile INEI que la sesión 6
+  (`sessions/06-geoespacial/lecture-geopandas/Geopandas1_clean.ipynb`), mismo
+  caso de uso (choropleth + cruce punto-en-polígono). Se adaptó el *loader*
+  para descargarlo vía `huggingface_hub` en vez de una ruta local fija, para
+  que sea reproducible desde cero (`acquisition.download_distritos`).
+- **CRS para distancias/áreas — se optó por NO usar EPSG:24891.** La clase
+  (sesión 6 y `raster_aplicado.ipynb` de la sesión 7) usa `EPSG:24891`
+  (PSAD56 / Peru west zone) para reproyectar y calcular áreas/centroides a
+  nivel nacional. Es una elección razonable ahí: el caso de uso es una
+  variable de control de área para un panel nacional, donde un CRS "lo
+  bastante bueno" alcanza. Pero `EPSG:24891` solo es válido al oeste de 79°O
+  (franja costera norte) — verificado con `pyproj.CRS.from_epsg(24891).area_of_use`
+  — y este proyecto necesita distancias precisas de ruteo en Huancavelica
+  (sierra) y Madre de Dios (selva), fuera de esa franja. Se usa en su lugar
+  la zona UTM real de cada departamento (`config.utm_epsg_for_bbox`, EPSG
+  32717/32718/32719), calculada dinámicamente — más correcto para distancias
+  punto-a-punto que un único CRS nacional, al costo de no poder sumar áreas
+  directamente entre departamentos de zonas distintas sin reproyectar antes
+  (no es un problema aquí: cada departamento se procesa por separado).
+- **Zonal statistics** (sesión 7, `raster_aplicado.ipynb`): la técnica
+  (`rasterio.open` + `rasterstats.zonal_stats(polígonos, raster, stats=[...],
+  nodata=..., all_touched=True)`) es la ruta identificada para cerrar el
+  hueco de altitud — pendiente de aplicar con un DEM real, ver checklist
+  arriba.
 
 ## Estructura
 

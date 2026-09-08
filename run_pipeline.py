@@ -25,18 +25,25 @@ PROFILES = config.routing_cfg()["perfiles"]
 
 def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
     log.info("=== Departamento: %s ===", rol)
+    distritos = None
     if real:
-        dem_path, fac_path = acquisition.build_real_dataset(rol, force=force)
+        dem_path, fac_path, dist_path = acquisition.build_real_dataset(rol, force=force)
+        distritos = gpd.read_parquet(dist_path)
     else:
         dem_path, fac_path = acquisition.generate_synthetic_dataset(rol, force=force)
     demanda = gpd.read_parquet(dem_path)
     facilities = gpd.read_parquet(fac_path)
 
+    # Regla de validación 4 (punto fuera de su polígono distrital declarado)
+    # solo corre de verdad en modo real: los datos sintéticos no tienen
+    # UBIGEO propio ni polígonos distritales que cruzar.
     demanda, rep_dem = validation.validate_dataset(
         demanda,
         dataset_name=f"{rol}_demanda",
         id_col="cp_id",
         text_cols=["nombre", "departamento", "distrito", "provincia"],
+        point_district_col="ubigeo" if real else None,
+        polygon_gdf=distritos,
     )
     facilities, rep_fac = validation.validate_dataset(
         facilities,
@@ -55,7 +62,7 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
     if facilities_resolutivas.empty:
         log.warning("%s: 0 facilities resolutivas activas tras validación — se omite ruteo", rol)
         return {
-            "rol": rol, "demanda": demanda, "facilities": facilities,
+            "rol": rol, "demanda": demanda, "facilities": facilities, "distritos": distritos,
             "reports": [rep_dem, rep_fac], "matrices": {}, "snap_reports": {},
         }
 
@@ -103,6 +110,7 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
         "rol": rol,
         "demanda": demanda,
         "facilities": facilities,
+        "distritos": distritos,
         "demanda_metrics": demanda_metrics,
         "matrices": matrices,
         "mode_comparison": mode_comparison,
@@ -138,6 +146,20 @@ def compute_and_export_metrics(dep_results: list[dict], real: bool = False) -> N
     for group_col, fname in [("distrito", "access_by_distrito"), ("provincia", "access_by_provincia"), ("departamento", "access_by_departamento")]:
         wmean = metrics.weighted_mean_access(all_demanda_metrics, group_col)
         wmean.to_csv(out_dir / f"{fname}.csv", index=False)
+
+    # Choropleth real por distrito (sesión 6 del curso: Geopandas1_clean.ipynb
+    # usa este mismo shapefile INEI para un choropleth de COVID por distrito)
+    # — solo en modo real, donde demanda trae 'ubigeo' propio del cruce con
+    # el shapefile de distritos.
+    distritos_frames = [r["distritos"] for r in dep_results if r.get("distritos") is not None]
+    if real and distritos_frames and "ubigeo" in all_demanda_metrics.columns:
+        all_distritos = gpd.GeoDataFrame(pd.concat(distritos_frames, ignore_index=True), crs=distritos_frames[0].crs)
+        acceso_por_ubigeo = metrics.weighted_mean_access(all_demanda_metrics, "ubigeo").rename(columns={"ubigeo": "ubigeo_join"})
+        poblacion_por_ubigeo = all_demanda_metrics.groupby("ubigeo", as_index=False)["poblacion"].sum()
+        choropleth = all_distritos.merge(
+            acceso_por_ubigeo, left_on="ubigeo", right_on="ubigeo_join", how="left"
+        ).drop(columns="ubigeo_join").merge(poblacion_por_ubigeo, on="ubigeo", how="left")
+        choropleth.to_parquet(out_dir / "distritos_choropleth.parquet")
 
     critical = metrics.critical_districts(all_demanda_metrics, "distrito", top_n=10)
     critical.to_csv(out_dir / "critical_districts.csv", index=False)

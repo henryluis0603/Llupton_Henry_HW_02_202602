@@ -48905,7 +48905,7 @@
       <data key="d9">primary</data>
       <data key="d15">2</data>
       <data key="d17">80</data>
-      <data key="d18">['Panamericana Norte', 'Carretera Panamericana Norte']</data>
+      <data key="d18">['Carretera Panamericana Norte', 'Panamericana Norte']</data>
       <data key="d10">False</data>
       <data key="d16">PE-1NO</data>
       <data key="d11">False</data>
@@ -57373,7 +57373,7 @@
     <edge source="614102758" target="3905385330" id="0">
       <data key="d8">[387174009, 48344038]</data>
       <data key="d9">residential</data>
-      <data key="d18">['11 de Noviembre', 'Jose Peralta']</data>
+      <data key="d18">['Jose Peralta', '11 de Noviembre']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">138.0520041415428</data>
@@ -59120,7 +59120,7 @@
       <data key="d15">2</data>
       <data key="d18">['Carretera Panamericana Norte', 'Carretera Transversal Sur', 'Puente Internacional de la Paz']</data>
       <data key="d10">True</data>
-      <data key="d16">['PE-1N', 'PE-1N;E50', 'E50']</data>
+      <data key="d16">['PE-1N;E50', 'PE-1N', 'E50']</data>
       <data key="d11">False</data>
       <data key="d12">4745.402355360609</data>
       <data key="d19">yes</data>
@@ -59506,7 +59506,7 @@
     </edge>
     <edge source="920953125" target="920953603" id="0">
       <data key="d8">[78472484, 346843839]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d18">Calle Pinacho</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
@@ -59638,7 +59638,7 @@
     </edge>
     <edge source="920954017" target="5167843400" id="0">
       <data key="d8">[981390682, 78472499, 532592519]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">1963.7556140241466</data>
@@ -61194,7 +61194,7 @@
       <data key="d8">[48344065, 48344062]</data>
       <data key="d9">residential</data>
       <data key="d15">2</data>
-      <data key="d18">['Costa Rica', 'Chile']</data>
+      <data key="d18">['Chile', 'Costa Rica']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">272.5105336312554</data>
@@ -61796,7 +61796,7 @@
     <edge source="1167991432" target="1167975921" id="0">
       <data key="d8">[48344065, 48344062]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Costa Rica', 'Chile']</data>
+      <data key="d18">['Chile', 'Costa Rica']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">272.5105336312554</data>
@@ -66147,8 +66147,8 @@
     <edge source="1168022122" target="2431966922" id="0">
       <data key="d8">[43377186, 43377187, 891749620]</data>
       <data key="d9">primary</data>
-      <data key="d18">['Avenida de la República', 'Puente Internacional Ecuador-Perú', 'Carretera Panamericana Norte']</data>
-      <data key="d16">['E50', 'PE-1NO']</data>
+      <data key="d18">['Puente Internacional Ecuador-Perú', 'Carretera Panamericana Norte', 'Avenida de la República']</data>
+      <data key="d16">['PE-1NO', 'E50']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">104.32176471088273</data>
@@ -66767,7 +66767,7 @@
     <edge source="1168022550" target="5662544181" id="0">
       <data key="d8">[589543310, 589543311]</data>
       <data key="d9">residential</data>
-      <data key="d18">['27 de Febrero', 'Genovesa']</data>
+      <data key="d18">['Genovesa', '27 de Febrero']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">185.88831427392432</data>
@@ -68222,7 +68222,7 @@
     <edge source="1168023303" target="1168023517" id="0">
       <data key="d8">[589543769, 589543770]</data>
       <data key="d9">residential</data>
-      <data key="d18">['La Pradera', 'Las Acacias']</data>
+      <data key="d18">['Las Acacias', 'La Pradera']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">119.99245858647512</data>
@@ -68462,7 +68462,7 @@
     <edge source="1168023459" target="1168023918" id="0">
       <data key="d8">[101172206, 113987711]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pinzon', 'E Granda']</data>
+      <data key="d18">['E Granda', 'Pinzon']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">105.88964676377235</data>
@@ -68656,7 +68656,7 @@
     <edge source="1168023517" target="1168023303" id="0">
       <data key="d8">[589543769, 589543770]</data>
       <data key="d9">residential</data>
-      <data key="d18">['La Pradera', 'Las Acacias']</data>
+      <data key="d18">['Las Acacias', 'La Pradera']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">119.99245858647512</data>
@@ -69782,7 +69782,7 @@
     <edge source="1168023918" target="1168023459" id="0">
       <data key="d8">[101172206, 113987711]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pinzon', 'E Granda']</data>
+      <data key="d18">['E Granda', 'Pinzon']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">105.88964676377235</data>
@@ -72987,7 +72987,7 @@
     <edge source="1168238082" target="1168240697" id="0">
       <data key="d8">[101185681, 48344043]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Leonardo Gonzalez', '6 de Diciembre']</data>
+      <data key="d18">['6 de Diciembre', 'Leonardo Gonzalez']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">163.28801462550817</data>
@@ -78713,7 +78713,7 @@
     <edge source="1168240697" target="1168238082" id="0">
       <data key="d8">[101185681, 48344043]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Leonardo Gonzalez', '6 de Diciembre']</data>
+      <data key="d18">['6 de Diciembre', 'Leonardo Gonzalez']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">163.28801462550817</data>
@@ -86565,7 +86565,7 @@
     <edge source="1168326318" target="1168325563" id="0">
       <data key="d8">[113987708, 101196551]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Juan José Flores', 'Jose María Urbinajado']</data>
+      <data key="d18">['Jose María Urbinajado', 'Juan José Flores']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">67.71091339982962</data>
@@ -91713,7 +91713,7 @@
     </edge>
     <edge source="1169012670" target="4951632525" id="0">
       <data key="d8">[505142200, 785104281, 505142202]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">3163.7151967431932</data>
@@ -93751,7 +93751,7 @@
     <edge source="1169793236" target="4642849408" id="0">
       <data key="d8">[372293328, 101326229]</data>
       <data key="d9">secondary</data>
-      <data key="d18">['Vía Palmales - Progreso', 'Vía Progreso - Quebrada Seca']</data>
+      <data key="d18">['Vía Progreso - Quebrada Seca', 'Vía Palmales - Progreso']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">512.9339674929661</data>
@@ -94491,7 +94491,7 @@
     <edge source="1170082551" target="4175132094" id="0">
       <data key="d8">[1553223002, 101336732]</data>
       <data key="d21">permissive</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d15">1</data>
       <data key="d18">NO</data>
       <data key="d10">False</data>
@@ -98211,7 +98211,7 @@
     <edge source="1279576563" target="1279577138" id="0">
       <data key="d8">[112607840, 571081690]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Las Begonias', 'Calle Otiniano']</data>
+      <data key="d18">['Calle Otiniano', 'Calle Las Begonias']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">130.29155939245078</data>
@@ -98761,7 +98761,7 @@
     <edge source="1279576624" target="5489452859" id="0">
       <data key="d8">[571081691, 385076636]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Montero', 'Calle Miraflores']</data>
+      <data key="d18">['Calle Miraflores', 'Pasaje Montero']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">132.21670703447282</data>
@@ -103188,7 +103188,7 @@
     <edge source="1279577138" target="1279576563" id="0">
       <data key="d8">[112607840, 571081690]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Las Begonias', 'Calle Otiniano']</data>
+      <data key="d18">['Calle Otiniano', 'Calle Las Begonias']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">130.29155939245078</data>
@@ -104626,7 +104626,7 @@
     <edge source="1315483439" target="1315483477" id="0">
       <data key="d8">[117852452, 116759749]</data>
       <data key="d9">residential</data>
-      <data key="d18">['6 de Noviembre', 'Alonso Campoverde']</data>
+      <data key="d18">['Alonso Campoverde', '6 de Noviembre']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">130.81009450518613</data>
@@ -104663,7 +104663,7 @@
     <edge source="1315483477" target="1315483439" id="0">
       <data key="d8">[117852452, 116759749]</data>
       <data key="d9">residential</data>
-      <data key="d18">['6 de Noviembre', 'Alonso Campoverde']</data>
+      <data key="d18">['Alonso Campoverde', '6 de Noviembre']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">130.81009450518613</data>
@@ -105012,7 +105012,7 @@
     <edge source="1315508201" target="3915642187" id="0">
       <data key="d8">[117701416, 116762856]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Atahualpa', 'callejon 1']</data>
+      <data key="d18">['callejon 1', 'Atahualpa']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">160.07465900364784</data>
@@ -105121,7 +105121,7 @@
     <edge source="1315508232" target="3877397011" id="0">
       <data key="d8">[101167928, 48344071]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Via Ladrilleras', 'Azuay']</data>
+      <data key="d18">['Azuay', 'Via Ladrilleras']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">53.68866134145706</data>
@@ -107077,7 +107077,7 @@
     <edge source="1895694770" target="907030278" id="0">
       <data key="d8">[340530183, 340530187, 346671598, 528081203, 534474261]</data>
       <data key="d9">trunk</data>
-      <data key="d15">['2', '3']</data>
+      <data key="d15">['3', '2']</data>
       <data key="d18">Carretera Transversal Sur</data>
       <data key="d10">True</data>
       <data key="d16">E50</data>
@@ -107099,9 +107099,9 @@
       <data key="d9">trunk</data>
       <data key="d15">2</data>
       <data key="d17">['100', '80']</data>
-      <data key="d18">['Carretera Panamericana Norte', 'Carretera Transversal Sur', 'Puente Internacional de la Paz']</data>
+      <data key="d18">['Carretera Panamericana Norte', 'Puente Internacional de la Paz', 'Carretera Transversal Sur']</data>
       <data key="d10">True</data>
-      <data key="d16">['PE-1N', 'PE-1N;E50', 'E50']</data>
+      <data key="d16">['PE-1N;E50', 'PE-1N', 'E50']</data>
       <data key="d11">False</data>
       <data key="d12">3526.2190631206067</data>
       <data key="d19">yes</data>
@@ -108951,7 +108951,7 @@
     <edge source="2431966881" target="2431966869" id="0">
       <data key="d8">[235100739, 235100757]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Jirón Arequipa', 'Calle Huancavelica']</data>
+      <data key="d18">['Calle Huancavelica', 'Jirón Arequipa']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">129.70354884439354</data>
@@ -109578,8 +109578,8 @@
     <edge source="2431966922" target="1168022122" id="0">
       <data key="d8">[43377186, 43377187, 891749620]</data>
       <data key="d9">primary</data>
-      <data key="d18">['Carretera Panamericana Norte', 'Puente Internacional Ecuador-Perú', 'Avenida de la República']</data>
-      <data key="d16">['E50', 'PE-1NO']</data>
+      <data key="d18">['Puente Internacional Ecuador-Perú', 'Carretera Panamericana Norte', 'Avenida de la República']</data>
+      <data key="d16">['PE-1NO', 'E50']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">104.32176471088273</data>
@@ -110107,7 +110107,7 @@
       <data key="d11">False</data>
       <data key="d12">87.92633282077284</data>
       <data key="d19">yes</data>
-      <data key="d17">['40', '80']</data>
+      <data key="d17">['80', '40']</data>
       <data key="d22">10.40</data>
       <data key="d13">LINESTRING (-80.2477378 -3.4819846, -80.2477986 -3.4819913, -80.248463 -3.4820755, -80.2485233 -3.4820865)</data>
       <data key="d14">21.10231987698548</data>
@@ -113021,7 +113021,7 @@
     <edge source="2431967163" target="3919452663" id="0">
       <data key="d8">[235100729, 235100711]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Avenida Libertadores', 'Jirón Las Américas']</data>
+      <data key="d18">['Jirón Las Américas', 'Avenida Libertadores']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">114.8587343106045</data>
@@ -113520,7 +113520,7 @@
     <edge source="2431967199" target="3919453229" id="1">
       <data key="d8">[235100731, 235100740, 235100638]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Las Begonias', 'Jirón Atahualpa']</data>
+      <data key="d18">['Jirón Atahualpa', 'Calle Las Begonias']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">178.17538769770348</data>
@@ -114545,7 +114545,7 @@
     <edge source="2431967255" target="2431967279" id="0">
       <data key="d8">[235100755, 235100622]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Bolivia', 'Avenida Colombia']</data>
+      <data key="d18">['Avenida Colombia', 'Calle Bolivia']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">222.27309791026676</data>
@@ -117125,7 +117125,7 @@
     </edge>
     <edge source="2433597214" target="3881619708" id="0">
       <data key="d8">[384807000, 384202826]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">849.6997256993436</data>
@@ -128434,7 +128434,7 @@
       <data key="d8">[355833898, 70709300, 101336711]</data>
       <data key="d9">secondary</data>
       <data key="d15">3</data>
-      <data key="d18">['Vía Palmales', 'Puente Palmales', 'Avenida Luís Felipe Sánchez']</data>
+      <data key="d18">['Avenida Luís Felipe Sánchez', 'Vía Palmales', 'Puente Palmales']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">174.44752889404603</data>
@@ -129794,7 +129794,7 @@
     <edge source="3758311503" target="3758311522" id="0">
       <data key="d8">[372288989, 372288990]</data>
       <data key="d9">unclassified</data>
-      <data key="d18">['sin nombre', 'Sin nombre']</data>
+      <data key="d18">['Sin nombre', 'sin nombre']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">179.81730411949331</data>
@@ -129813,7 +129813,7 @@
     <edge source="3758311522" target="3758311503" id="0">
       <data key="d8">[372288989, 372288990]</data>
       <data key="d9">unclassified</data>
-      <data key="d18">['sin nombre', 'Sin nombre']</data>
+      <data key="d18">['Sin nombre', 'sin nombre']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">179.8173041194933</data>
@@ -132873,7 +132873,7 @@
     </edge>
     <edge source="3875007049" target="3875007822" id="0">
       <data key="d8">[398795882, 384205342]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">260.093213794035</data>
@@ -132908,7 +132908,7 @@
     </edge>
     <edge source="3875007070" target="3875006984" id="0">
       <data key="d8">[384205328, 384206497, 384206545]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d23">yes</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
@@ -133113,7 +133113,7 @@
     </edge>
     <edge source="3875014842" target="2631037364" id="0">
       <data key="d8">[1241245664, 257612853, 392642349, 384209119]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">649.6468311474149</data>
@@ -133188,7 +133188,7 @@
     </edge>
     <edge source="3875026784" target="3877064633" id="0">
       <data key="d8">[384349674, 384207071]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">771.2380264162916</data>
@@ -133243,7 +133243,7 @@
     </edge>
     <edge source="3875031099" target="2961788265" id="0">
       <data key="d8">[384208152, 292645169]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">422.90567969811093</data>
@@ -133406,7 +133406,7 @@
     </edge>
     <edge source="3875036881" target="3877397009" id="0">
       <data key="d8">[384451948, 384208830]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">257.90147433511453</data>
@@ -133687,7 +133687,7 @@
     </edge>
     <edge source="3875042151" target="4951595192" id="0">
       <data key="d8">[900389088, 900389087]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">1748.4945778437275</data>
@@ -134269,7 +134269,7 @@
     </edge>
     <edge source="3875089721" target="11532889461" id="0">
       <data key="d8">[513731428, 513731429, 384214704, 235275124, 1241245684]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">608.1830420553583</data>
@@ -134650,7 +134650,7 @@
     <edge source="3875307086" target="3881619681" id="0">
       <data key="d8">[571081697, 384239107]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Mariscal Sucre', 'Calle San Pedro']</data>
+      <data key="d18">['Calle San Pedro', 'Calle Mariscal Sucre']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">101.28395475887207</data>
@@ -135104,7 +135104,7 @@
     </edge>
     <edge source="3875326923" target="10977955680" id="0">
       <data key="d8">[1182138147, 1241245667, 1241245668]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">317.0580333831925</data>
@@ -135758,7 +135758,7 @@
     <edge source="3877397011" target="1315508232" id="0">
       <data key="d8">[101167928, 48344071]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Via Ladrilleras', 'Azuay']</data>
+      <data key="d18">['Azuay', 'Via Ladrilleras']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">53.68866134145706</data>
@@ -136530,7 +136530,7 @@
     </edge>
     <edge source="3878861938" target="8921559442" id="0">
       <data key="d8">[384576745, 384576100]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">350.3188262272678</data>
@@ -136548,7 +136548,7 @@
     </edge>
     <edge source="3878861938" target="1168325289" id="0">
       <data key="d8">[533786053, 533786054]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">795.5624600048855</data>
@@ -136979,7 +136979,7 @@
     <edge source="3881619681" target="3875307086" id="0">
       <data key="d8">[571081697, 384239107]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Mariscal Sucre', 'Calle San Pedro']</data>
+      <data key="d18">['Calle San Pedro', 'Calle Mariscal Sucre']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">101.28395475887207</data>
@@ -138557,7 +138557,7 @@
     <edge source="3905385330" target="614102758" id="0">
       <data key="d8">[387174009, 48344038]</data>
       <data key="d9">residential</data>
-      <data key="d18">['11 de Noviembre', 'Jose Peralta']</data>
+      <data key="d18">['Jose Peralta', '11 de Noviembre']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">138.0520041415428</data>
@@ -139147,7 +139147,7 @@
     <edge source="3908810260" target="3908810391" id="0">
       <data key="d8">[235100741, 387624591]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Avenida Portugal', 'Calle Venezuela']</data>
+      <data key="d18">['Calle Venezuela', 'Avenida Portugal']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">181.12064841870284</data>
@@ -140030,7 +140030,7 @@
     <edge source="3915642187" target="1315508201" id="0">
       <data key="d8">[116762856, 117701416]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Atahualpa', 'callejon 1']</data>
+      <data key="d18">['callejon 1', 'Atahualpa']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">160.07465900364784</data>
@@ -140142,7 +140142,7 @@
     <edge source="3917361215" target="2431966960" id="0">
       <data key="d8">[43377187, 677751386, 101162267]</data>
       <data key="d9">primary</data>
-      <data key="d17">['40', '80']</data>
+      <data key="d17">['80', '40']</data>
       <data key="d18">Carretera Panamericana Norte</data>
       <data key="d10">False</data>
       <data key="d16">PE-1NO</data>
@@ -141497,7 +141497,7 @@
     <edge source="3919452663" target="2431967163" id="0">
       <data key="d8">[235100729, 235100711]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Avenida Libertadores', 'Jirón Las Américas']</data>
+      <data key="d18">['Jirón Las Américas', 'Avenida Libertadores']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">114.85873431060449</data>
@@ -141533,7 +141533,7 @@
     <edge source="3919452680" target="2431967163" id="0">
       <data key="d8">[235100644, 235100636]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Haití', 'Jirón Brasil']</data>
+      <data key="d18">['Jirón Brasil', 'Pasaje Haití']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">105.78969773037328</data>
@@ -141677,7 +141677,7 @@
     <edge source="3919453229" target="2431967199" id="1">
       <data key="d8">[235100731, 235100740, 235100638]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Las Begonias', 'Jirón Atahualpa']</data>
+      <data key="d18">['Jirón Atahualpa', 'Calle Las Begonias']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">178.17538769770348</data>
@@ -147122,7 +147122,7 @@
     </edge>
     <edge source="4354983327" target="1279576776" id="0">
       <data key="d8">[877910097, 112549676]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">810.3366824984938</data>
@@ -147395,7 +147395,7 @@
     <edge source="4420428774" target="3613755837" id="0">
       <data key="d8">[355833898, 70709300, 101336711]</data>
       <data key="d9">secondary</data>
-      <data key="d18">['Puente Palmales', 'Vía Palmales', 'Avenida Luís Felipe Sánchez']</data>
+      <data key="d18">['Vía Palmales', 'Avenida Luís Felipe Sánchez', 'Puente Palmales']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">174.447528894046</data>
@@ -147758,7 +147758,7 @@
     <edge source="4642849408" target="1169793236" id="0">
       <data key="d8">[372293328, 101326229]</data>
       <data key="d9">secondary</data>
-      <data key="d18">['Vía Palmales - Progreso', 'Vía Progreso - Quebrada Seca']</data>
+      <data key="d18">['Vía Progreso - Quebrada Seca', 'Vía Palmales - Progreso']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">512.9339674929661</data>
@@ -148396,7 +148396,7 @@
     </edge>
     <edge source="4951632525" target="5238069487" id="0">
       <data key="d8">[901148912, 541724660]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">1553.5874325518625</data>
@@ -148665,7 +148665,7 @@
     </edge>
     <edge source="5105355058" target="5202441386" id="0">
       <data key="d8">[900389089, 537185378]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">746.3895138891177</data>
@@ -156527,7 +156527,7 @@
     <edge source="5489452859" target="1279576624" id="0">
       <data key="d8">[571081691, 385076636]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Montero', 'Calle Miraflores']</data>
+      <data key="d18">['Calle Miraflores', 'Pasaje Montero']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">132.21670703447282</data>
@@ -159348,7 +159348,7 @@
     <edge source="5662544181" target="1168022550" id="0">
       <data key="d8">[589543310, 589543311]</data>
       <data key="d9">residential</data>
-      <data key="d18">['27 de Febrero', 'Genovesa']</data>
+      <data key="d18">['Genovesa', '27 de Febrero']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">185.88831427392432</data>
@@ -164097,7 +164097,7 @@
     <edge source="8072384795" target="1279576908" id="0">
       <data key="d8">[112607851, 1474545094]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Jirón Závala', 'Jirón Pucallpa']</data>
+      <data key="d18">['Jirón Pucallpa', 'Jirón Závala']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">143.0602118578236</data>
@@ -170267,7 +170267,7 @@
     </edge>
     <edge source="8270196046" target="3908577959" id="0">
       <data key="d8">[387593378, 889570367]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">233.52615613581503</data>
@@ -170963,7 +170963,7 @@
     </edge>
     <edge source="8370647012" target="3875089863" id="0">
       <data key="d8">[561113932, 901074949]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">334.924037155552</data>
@@ -171382,7 +171382,7 @@
     </edge>
     <edge source="8370704886" target="2631120067" id="0">
       <data key="d8">[901083936, 901083937]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">3508.606235967894</data>
@@ -172372,7 +172372,7 @@
     </edge>
     <edge source="9201189156" target="2631118918" id="0">
       <data key="d8">[996491339, 257620757]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">169.96153331196834</data>
@@ -173319,7 +173319,7 @@
     </edge>
     <edge source="9569894788" target="2903429852" id="0">
       <data key="d8">[286668755, 1039216661]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">752.9198434341328</data>
@@ -173422,7 +173422,7 @@
     </edge>
     <edge source="9650537568" target="2433597432" id="0">
       <data key="d8">[384214708, 235275047]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">124.77138575614612</data>
@@ -179222,7 +179222,7 @@
     </edge>
     <edge source="11921514950" target="8164674443" id="0">
       <data key="d8">[321957267, 877522318]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">1158.82096952584</data>
@@ -182036,7 +182036,7 @@
     <edge source="2702098765" target="2702098814" id="0">
       <data key="d8">[264544200, 1530219275, 1530219276]</data>
       <data key="d9">unclassified</data>
-      <data key="d15">['2', '1']</data>
+      <data key="d15">['1', '2']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">214.94815978089133</data>
@@ -182107,7 +182107,7 @@
     <edge source="2702098814" target="2702098765" id="0">
       <data key="d8">[264544200, 1530219275, 1530219276]</data>
       <data key="d9">unclassified</data>
-      <data key="d15">['2', '1']</data>
+      <data key="d15">['1', '2']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">214.94815978089133</data>
@@ -183375,7 +183375,7 @@
     <edge source="4837751975" target="4837752012" id="0">
       <data key="d8">[491699755, 491699757]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Avenida Antonio Raimondi', 'Calle Francisco Bolognesi']</data>
+      <data key="d18">['Calle Francisco Bolognesi', 'Avenida Antonio Raimondi']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">118.33078292363416</data>
@@ -183722,7 +183722,7 @@
     <edge source="4837752012" target="4837751975" id="0">
       <data key="d8">[491699755, 491699757]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Avenida Antonio Raimondi', 'Calle Francisco Bolognesi']</data>
+      <data key="d18">['Calle Francisco Bolognesi', 'Avenida Antonio Raimondi']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">118.33078292363416</data>
@@ -184136,7 +184136,7 @@
     </edge>
     <edge source="5127493894" target="8273131680" id="0">
       <data key="d8">[527403787, 265100211]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">882.734898394097</data>
@@ -185196,7 +185196,7 @@
     </edge>
     <edge source="5480895397" target="5480895413" id="0">
       <data key="d8">[1159533166, 570032886]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">655.3502729267109</data>
@@ -188497,7 +188497,7 @@
     </edge>
     <edge source="10281785184" target="10281732683" id="0">
       <data key="d8">[1124356784, 1124356781, 1124356782, 1124356783]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">6829.098274725327</data>
@@ -188549,7 +188549,7 @@
     </edge>
     <edge source="10283179407" target="10283917812" id="0">
       <data key="d8">[1124562082, 1124562074]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">258.14793239606473</data>
@@ -189357,7 +189357,7 @@
     <edge source="495715131" target="2433597499" id="0">
       <data key="d8">[460675386, 112702701, 460675382, 1009794054]</data>
       <data key="d9">trunk</data>
-      <data key="d17">['60', '90']</data>
+      <data key="d17">['90', '60']</data>
       <data key="d18">['Carretera Panamericana Norte', 'Avenida Tumbes Norte']</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -189403,7 +189403,7 @@
       <data key="d8">[491941223, 886113729, 886113730, 438357055]</data>
       <data key="d9">trunk</data>
       <data key="d15">2</data>
-      <data key="d17">['50', '90']</data>
+      <data key="d17">['90', '50']</data>
       <data key="d18">Carretera Panamericana Norte</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -189614,7 +189614,7 @@
     <edge source="1100557317" target="4570029861" id="0">
       <data key="d8">[94811329, 94812318]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Juan Valer Sandoval', 'Calle Estela Ávila Cornejo']</data>
+      <data key="d18">['Calle Estela Ávila Cornejo', 'Calle Juan Valer Sandoval']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">279.33491746382714</data>
@@ -192118,7 +192118,7 @@
     <edge source="1100557926" target="1100561395" id="0">
       <data key="d8">[560195281, 560195279]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Abrahan Carrasco', 'Calle Vizcardo y GuzmánAbelardo Quiñones']</data>
+      <data key="d18">['Calle Vizcardo y GuzmánAbelardo Quiñones', 'Calle Abrahan Carrasco']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">153.0043678313225</data>
@@ -192260,7 +192260,7 @@
     <edge source="1100557961" target="1100561107" id="0">
       <data key="d8">[559141308, 559141311]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Jirón Diego Ferrer', 'Pasaje Lima']</data>
+      <data key="d18">['Pasaje Lima', 'Jirón Diego Ferrer']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">191.71288582506924</data>
@@ -195402,7 +195402,7 @@
     <edge source="1100558866" target="5402385347" id="0">
       <data key="d8">[560195200, 94813742]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Mafalda Lama', 'Calle Leonardo Rodríguez']</data>
+      <data key="d18">['Calle Leonardo Rodríguez', 'Calle Mafalda Lama']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">80.97092823996047</data>
@@ -198097,7 +198097,7 @@
     <edge source="1100559487" target="1100559627" id="0">
       <data key="d8">[94810876, 94812102]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Huaquillas', 'Avenida La Marina']</data>
+      <data key="d18">['Avenida La Marina', 'Calle Huaquillas']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">101.09303987462167</data>
@@ -198483,7 +198483,7 @@
     <edge source="1100559627" target="1100559487" id="0">
       <data key="d8">[94810876, 94812102]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Huaquillas', 'Avenida La Marina']</data>
+      <data key="d18">['Avenida La Marina', 'Calle Huaquillas']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">101.09303987462165</data>
@@ -202318,7 +202318,7 @@
     <edge source="1100561058" target="4570030137" id="0">
       <data key="d8">[559228338, 94811770]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Santa Rosa', 'Pasaje Ollanta']</data>
+      <data key="d18">['Pasaje Ollanta', 'Pasaje Santa Rosa']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">104.81852282167088</data>
@@ -202526,7 +202526,7 @@
     <edge source="1100561107" target="1100557961" id="0">
       <data key="d8">[559141308, 559141311]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Jirón Diego Ferrer', 'Pasaje Lima']</data>
+      <data key="d18">['Pasaje Lima', 'Jirón Diego Ferrer']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">191.7128858250692</data>
@@ -203195,7 +203195,7 @@
     <edge source="1100561371" target="4563074258" id="0">
       <data key="d8">[94813309, 94812726]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Francisco Navarrete', 'Calle Quebrada Salamanca']</data>
+      <data key="d18">['Calle Quebrada Salamanca', 'Calle Francisco Navarrete']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">215.26047319496766</data>
@@ -203260,7 +203260,7 @@
     <edge source="1100561395" target="1100557926" id="0">
       <data key="d8">[560195281, 560195279]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Abrahan Carrasco', 'Calle Vizcardo y GuzmánAbelardo Quiñones']</data>
+      <data key="d18">['Calle Vizcardo y GuzmánAbelardo Quiñones', 'Calle Abrahan Carrasco']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">153.0043678313225</data>
@@ -205735,7 +205735,7 @@
     <edge source="1278926366" target="4559685648" id="0">
       <data key="d8">[460291641, 570000943]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Rivera de Mar Norte', 'Calle Las Garzas']</data>
+      <data key="d18">['Calle Las Garzas', 'Calle Rivera de Mar Norte']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">59.61742927046598</data>
@@ -206108,7 +206108,7 @@
     </edge>
     <edge source="2430748365" target="1100562310" id="0">
       <data key="d8">[1547318026, 1546589439]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d18">['Calle Puerto El Cura', 'Calle del Canal']</data>
       <data key="d16">TU-522</data>
       <data key="d10">False</data>
@@ -208887,7 +208887,7 @@
     <edge source="2433597499" target="495715131" id="0">
       <data key="d8">[460675382, 460675386, 112702701, 1009794054]</data>
       <data key="d9">trunk</data>
-      <data key="d17">['60', '90']</data>
+      <data key="d17">['90', '60']</data>
       <data key="d18">['Carretera Panamericana Norte', 'Avenida Tumbes Norte']</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -208910,7 +208910,7 @@
     <edge source="2433597558" target="8051170338" id="0">
       <data key="d8">[235275040, 264544131, 242814950, 264544134, 242814932, 235274933, 242814938]</data>
       <data key="d9">trunk</data>
-      <data key="d17">['60', '90']</data>
+      <data key="d17">['90', '60']</data>
       <data key="d18">Carretera Panamericana Norte</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -209298,7 +209298,7 @@
     </edge>
     <edge source="2433597640" target="6283228064" id="0">
       <data key="d8">[242814944, 235274972, 242814935]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d18">Calle Atahualpa</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
@@ -219869,7 +219869,7 @@
     <edge source="2433679771" target="8234194012" id="0">
       <data key="d8">[235286216, 885498330]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Santa María', 'Calle Los Cactus']</data>
+      <data key="d18">['Calle Los Cactus', 'Calle Santa María']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">129.00200040329582</data>
@@ -221671,7 +221671,7 @@
     <edge source="2433679844" target="2433679878" id="0">
       <data key="d8">[235286211, 235286189]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Santa Elena', 'Calle Los Ceibos']</data>
+      <data key="d18">['Calle Los Ceibos', 'Calle Santa Elena']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">170.57271347270435</data>
@@ -222614,7 +222614,7 @@
     <edge source="2433679878" target="2433679844" id="0">
       <data key="d8">[235286211, 235286189]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Santa Elena', 'Calle Los Ceibos']</data>
+      <data key="d18">['Calle Los Ceibos', 'Calle Santa Elena']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">170.57271347270435</data>
@@ -224725,7 +224725,7 @@
       <data key="d8">[438357057, 242880865]</data>
       <data key="d9">trunk</data>
       <data key="d15">2</data>
-      <data key="d17">['50', '90']</data>
+      <data key="d17">['90', '50']</data>
       <data key="d18">Carretera Panamericana Norte</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -232776,7 +232776,7 @@
     </edge>
     <edge source="2702097871" target="8142667876" id="0">
       <data key="d8">[874716516, 874716518]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">1160.5746344059564</data>
@@ -236348,7 +236348,7 @@
     </edge>
     <edge source="2707896671" target="2707897028" id="0">
       <data key="d8">[1546589440, 94812628]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d18">['Calle Puerto El Cura', 'Calle del Canal']</data>
       <data key="d16">TU-522</data>
       <data key="d10">False</data>
@@ -240825,7 +240825,7 @@
       <data key="d8">[886113729, 886113730, 438357055, 491941223]</data>
       <data key="d9">trunk</data>
       <data key="d15">2</data>
-      <data key="d17">['50', '90']</data>
+      <data key="d17">['90', '50']</data>
       <data key="d18">Carretera Panamericana Norte</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -241848,7 +241848,7 @@
     <edge source="4559685339" target="5402554960" id="0">
       <data key="d8">[460291576, 1547039627, 1547039628]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Nicolás de Pierola', 'Calle Los Girasoles']</data>
+      <data key="d18">['Calle Los Girasoles', 'Calle Nicolás de Pierola']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">61.14558565974082</data>
@@ -242237,7 +242237,7 @@
     <edge source="4559685380" target="4559685422" id="0">
       <data key="d8">[460291604, 94812333]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Los Laureles', 'Calle Las Américas']</data>
+      <data key="d18">['Calle Las Américas', 'Calle Los Laureles']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">178.46543847786756</data>
@@ -242945,7 +242945,7 @@
     <edge source="4559685684" target="4559685822" id="0">
       <data key="d8">[112549230, 460291630]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Langostino', 'Calle Rivera del Mar Sur']</data>
+      <data key="d18">['Calle Rivera del Mar Sur', 'Pasaje Langostino']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">224.44444237775954</data>
@@ -243134,7 +243134,7 @@
     <edge source="4559685822" target="4559685684" id="0">
       <data key="d8">[460291630, 112549230]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Langostino', 'Calle Rivera del Mar Sur']</data>
+      <data key="d18">['Calle Rivera del Mar Sur', 'Pasaje Langostino']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">224.44444237775957</data>
@@ -245032,7 +245032,7 @@
     <edge source="4563074258" target="1100561371" id="0">
       <data key="d8">[94813309, 94812726]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Francisco Navarrete', 'Calle Quebrada Salamanca']</data>
+      <data key="d18">['Calle Quebrada Salamanca', 'Calle Francisco Navarrete']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">215.26047319496766</data>
@@ -245917,7 +245917,7 @@
     <edge source="4570029967" target="5393406601" id="0">
       <data key="d8">[559141302, 559141303]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje José Pardo', 'Jirón José Jiménez']</data>
+      <data key="d18">['Jirón José Jiménez', 'Pasaje José Pardo']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">141.34324118995397</data>
@@ -246012,7 +246012,7 @@
     <edge source="4570030057" target="5394158518" id="0">
       <data key="d8">[559228339, 559228340]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Huaylas', 'Pasaje Las Mercedes']</data>
+      <data key="d18">['Pasaje Las Mercedes', 'Pasaje Huaylas']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">143.94029690494554</data>
@@ -246107,7 +246107,7 @@
     <edge source="4570030137" target="1100561058" id="0">
       <data key="d8">[559228338, 94811770]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Santa Rosa', 'Pasaje Ollanta']</data>
+      <data key="d18">['Pasaje Ollanta', 'Pasaje Santa Rosa']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">104.81852282167088</data>
@@ -254116,7 +254116,7 @@
     <edge source="5391162183" target="4562986594" id="0">
       <data key="d8">[1242047178, 1242047179]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Miguel Grau', 'Jirón Bolívar']</data>
+      <data key="d18">['Jirón Bolívar', 'Miguel Grau']</data>
       <data key="d10">True</data>
       <data key="d11">False</data>
       <data key="d12">68.1699851850205</data>
@@ -254579,7 +254579,7 @@
     <edge source="5391162227" target="5391162229" id="0">
       <data key="d8">[94812922, 558928182]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Los Claveles', 'Calle Víctor Pajares']</data>
+      <data key="d18">['Calle Víctor Pajares', 'Calle Los Claveles']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">157.08807366739916</data>
@@ -254617,7 +254617,7 @@
     <edge source="5391162229" target="5391162227" id="0">
       <data key="d8">[94812922, 558928182]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Los Claveles', 'Calle Víctor Pajares']</data>
+      <data key="d18">['Calle Víctor Pajares', 'Calle Los Claveles']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">157.08807366739916</data>
@@ -258509,7 +258509,7 @@
     <edge source="5393674490" target="5393674508" id="0">
       <data key="d8">[559176849, 559176846]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Los Tulipanes', 'Pasaje Hernando de Luque']</data>
+      <data key="d18">['Pasaje Hernando de Luque', 'Pasaje Los Tulipanes']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">96.82788626321849</data>
@@ -258649,7 +258649,7 @@
     <edge source="5393674508" target="5393674490" id="0">
       <data key="d8">[559176849, 559176846]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Los Tulipanes', 'Pasaje Hernando de Luque']</data>
+      <data key="d18">['Pasaje Hernando de Luque', 'Pasaje Los Tulipanes']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">96.82788626321849</data>
@@ -258678,7 +258678,7 @@
     <edge source="5393674512" target="5393674621" id="0">
       <data key="d8">[559176850, 559176851, 94812566]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Jirón Inmaculada Concepción', 'Pasaje Manco Cápac', 'Calle Los Tulipanes']</data>
+      <data key="d18">['Calle Los Tulipanes', 'Pasaje Manco Cápac', 'Jirón Inmaculada Concepción']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">368.8659666136226</data>
@@ -258774,7 +258774,7 @@
     <edge source="5393674621" target="5393674512" id="0">
       <data key="d8">[559176850, 559176851, 94812566]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Jirón Inmaculada Concepción', 'Pasaje Manco Cápac', 'Calle Los Tulipanes']</data>
+      <data key="d18">['Calle Los Tulipanes', 'Pasaje Manco Cápac', 'Jirón Inmaculada Concepción']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">368.8659666136226</data>
@@ -258966,7 +258966,7 @@
     <edge source="5393674642" target="5393674651" id="0">
       <data key="d8">[559176857, 559176860]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Los Olivos', 'Pasaje Pumacahua']</data>
+      <data key="d18">['Pasaje Pumacahua', 'Pasaje Los Olivos']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">120.92242871119218</data>
@@ -258986,7 +258986,7 @@
     <edge source="5393674651" target="5393674642" id="0">
       <data key="d8">[559176857, 559176860]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Los Olivos', 'Pasaje Pumacahua']</data>
+      <data key="d18">['Pasaje Pumacahua', 'Pasaje Los Olivos']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">120.92242871119218</data>
@@ -260691,7 +260691,7 @@
     <edge source="5394158518" target="4570030057" id="0">
       <data key="d8">[559228339, 559228340]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Huaylas', 'Pasaje Las Mercedes']</data>
+      <data key="d18">['Pasaje Las Mercedes', 'Pasaje Huaylas']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">143.94029690494557</data>
@@ -261547,7 +261547,7 @@
     <edge source="5402385347" target="1100558866" id="0">
       <data key="d8">[560195200, 94813742]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Mafalda Lama', 'Calle Leonardo Rodríguez']</data>
+      <data key="d18">['Calle Leonardo Rodríguez', 'Calle Mafalda Lama']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">80.97092823996047</data>
@@ -262779,7 +262779,7 @@
     <edge source="5402385532" target="5402385538" id="0">
       <data key="d8">[560195249, 560195251, 560195197]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Jorge Chávez', 'Calle Cusco']</data>
+      <data key="d18">['Calle Cusco', 'Calle Jorge Chávez']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">265.172165011811</data>
@@ -262869,7 +262869,7 @@
     <edge source="5402385538" target="5402385532" id="0">
       <data key="d8">[560195249, 560195251, 560195197]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Jorge Chávez', 'Calle Cusco']</data>
+      <data key="d18">['Calle Cusco', 'Calle Jorge Chávez']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">265.17216501181105</data>
@@ -265459,7 +265459,7 @@
     <edge source="5402554960" target="4559685339" id="0">
       <data key="d8">[460291576, 1547039627, 1547039628]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Los Girasoles', 'Calle Nicolás de Pierola']</data>
+      <data key="d18">['Calle Nicolás de Pierola', 'Calle Los Girasoles']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">61.145585659740824</data>
@@ -267858,7 +267858,7 @@
     </edge>
     <edge source="6763341534" target="11732219566" id="0">
       <data key="d8">[1262716971, 720808131]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">506.9520815417463</data>
@@ -268361,7 +268361,7 @@
     </edge>
     <edge source="6772820030" target="2433598538" id="0">
       <data key="d8">[235274977, 722015294]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">424.4567968703903</data>
@@ -270910,7 +270910,7 @@
     </edge>
     <edge source="8051165372" target="8051170317" id="0">
       <data key="d8">[864228049, 1028540575]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">997.6842240927461</data>
@@ -271070,7 +271070,7 @@
       <data key="d8">[235275040, 264544131, 242814950, 264544134, 242814932, 235274933, 242814938]</data>
       <data key="d9">trunk</data>
       <data key="d15">2</data>
-      <data key="d17">['60', '90']</data>
+      <data key="d17">['90', '60']</data>
       <data key="d18">Carretera Panamericana Norte</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -275843,7 +275843,7 @@
     </edge>
     <edge source="8142586616" target="2702097942" id="0">
       <data key="d8">[1028461649, 1028461650, 874713049, 874713045]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">350.07755157576963</data>
@@ -276656,7 +276656,7 @@
     </edge>
     <edge source="8154030981" target="5402385615" id="0">
       <data key="d8">[876087434, 560195267]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">426.51570100938426</data>
@@ -276789,7 +276789,7 @@
     </edge>
     <edge source="8168018008" target="8168024368" id="0">
       <data key="d8">[877898634, 877898637]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">709.7613168857825</data>
@@ -279006,7 +279006,7 @@
       <data key="d8">[438357057, 242880865]</data>
       <data key="d9">trunk</data>
       <data key="d15">2</data>
-      <data key="d17">['50', '90']</data>
+      <data key="d17">['90', '50']</data>
       <data key="d18">Carretera Panamericana Norte</data>
       <data key="d16">PE-1N</data>
       <data key="d10">False</data>
@@ -281411,7 +281411,7 @@
     </edge>
     <edge source="8233999641" target="8233961482" id="0">
       <data key="d8">[885478821, 885478822]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">False</data>
       <data key="d12">532.0696726263777</data>
@@ -281928,7 +281928,7 @@
     </edge>
     <edge source="8234024102" target="9938112288" id="0">
       <data key="d8">[1084510971, 885482367]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">1427.8965656009257</data>
@@ -282675,7 +282675,7 @@
     </edge>
     <edge source="8234152247" target="8234154115" id="0">
       <data key="d8">[885494745, 885494746, 885494750]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">3861.857028738777</data>
@@ -283028,7 +283028,7 @@
     <edge source="8234194012" target="2433679771" id="0">
       <data key="d8">[235286216, 885498330]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Santa María', 'Calle Los Cactus']</data>
+      <data key="d18">['Calle Los Cactus', 'Calle Santa María']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">129.00200040329582</data>
@@ -284464,7 +284464,7 @@
     <edge source="8596768035" target="4559685855" id="1">
       <data key="d8">[926385977, 460291643, 460291644]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Pasaje Flor de Manglar', 'Calle Las Garzas']</data>
+      <data key="d18">['Calle Las Garzas', 'Pasaje Flor de Manglar']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">156.8858163311111</data>
@@ -285135,7 +285135,7 @@
     </edge>
     <edge source="9481763113" target="8272997094" id="0">
       <data key="d8">[1028461657, 1028461658, 1028461659, 1028461660, 890019903]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">528.3433299704982</data>
@@ -285163,7 +285163,7 @@
     </edge>
     <edge source="9481763119" target="2702097787" id="0">
       <data key="d8">[1028461656, 887721669, 1028461654, 1028461655]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">397.48972566087144</data>
@@ -285318,7 +285318,7 @@
     </edge>
     <edge source="9569910870" target="8051186948" id="0">
       <data key="d8">[1039216944, 1039216945]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">152.5803456309361</data>
@@ -288514,7 +288514,7 @@
     </edge>
     <edge source="10977915340" target="10977915343" id="0">
       <data key="d8">[1182136079, 1182134543]</data>
-      <data key="d9">['unclassified', 'residential']</data>
+      <data key="d9">['residential', 'unclassified']</data>
       <data key="d10">False</data>
       <data key="d11">True</data>
       <data key="d12">405.9138573852608</data>
@@ -291387,7 +291387,7 @@
     <edge source="14070979043" target="1100560620" id="0">
       <data key="d8">[94811042, 560195262, 1547011071]</data>
       <data key="d9">residential</data>
-      <data key="d18">['Calle Arroyo Mío', 'San Martín']</data>
+      <data key="d18">['San Martín', 'Calle Arroyo Mío']</data>
       <data key="d10">False</data>
       <data key="d11">[False, True]</data>
       <data key="d12">229.44756519326216</data>
@@ -292954,7 +292954,7 @@
       <data key="d13">LINESTRING (-80.4507995 -3.5780944, -80.4513761 -3.5775544, -80.4517315 -3.5772037, -80.4519272 -3.5769991)</data>
       <data key="d14">41.92038892912175</data>
     </edge>
-    <data key="d0">2026-09-08 08:12:24</data>
+    <data key="d0">2026-09-08 15:39:13</data>
     <data key="d1">OSMnx 2.1.1</data>
     <data key="d2">epsg:4326</data>
     <data key="d3">True</data>

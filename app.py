@@ -100,12 +100,33 @@ def load_isochrones() -> gpd.GeoDataFrame:
     return gpd.read_parquet(p) if p.exists() else gpd.GeoDataFrame()
 
 
+@st.cache_data
+def load_choropleth() -> gpd.GeoDataFrame:
+    """Polígonos distritales (INEI, vía sesión 6 del curso) con t_min
+    ponderado ya unido — solo existe en modo real. En modo sintético no hay
+    polígonos y el mapa cae al proxy de puntos. Se comprueba `fuente` en
+    summary.json (igual que load_matrix_all): si la última corrida fue
+    sintética, un distritos_choropleth.parquet de una corrida real anterior
+    quedaría huérfano — mostraría distritos que no corresponden a la
+    demanda actual — así que se ignora."""
+    p = OUT / "distritos_choropleth.parquet"
+    if not p.exists():
+        return gpd.GeoDataFrame()
+    summary_path = OUT / "summary.json"
+    if summary_path.exists():
+        fuente = json.loads(summary_path.read_text(encoding="utf-8")).get("fuente", "synthetic")
+        if fuente != "real":
+            return gpd.GeoDataFrame()
+    return gpd.read_parquet(p)
+
+
 demanda = load_demanda_metrics()
 facilities = load_facilities()
 quality_report = load_quality_report()
 mode_comparison = load_mode_comparison()
 sfca = load_sfca()
 isochrones = load_isochrones()
+choropleth = load_choropleth()
 
 if demanda.empty:
     st.error(
@@ -171,25 +192,49 @@ c4.metric("Mediana de acceso", f"{mediana_acceso:.1f} min")
 st.divider()
 
 # --------------------------------------------------------------------- #
-# 2) "Choropleth" — sin polígonos distritales reales en modo sintético, se
-# usa un mapa de puntos coloreado por t_min como proxy visual equivalente.
-# En producción con polígonos INEI, reemplazar por px.choropleth_mapbox.
+# 2) Choropleth por distrito (polígonos INEI, sesión 6 del curso) cuando hay
+# datos reales; si no (modo sintético, sin polígonos), cae al proxy de
+# puntos coloreados por t_min.
 # --------------------------------------------------------------------- #
+choropleth_f = (
+    choropleth[choropleth["departamento"].isin(sel_departamentos)]
+    if not choropleth.empty
+    else choropleth
+)
+
 left, right = st.columns([2, 1])
 with left:
-    st.subheader("Tiempo de acceso por centro poblado")
-    st.caption("Proxy de choropleth: sin polígonos distritales reales en modo sintético, se colorea cada punto de demanda.")
-    fig_map = px.scatter_map(
-        demanda_f,
-        lat=demanda_f.geometry.y,
-        lon=demanda_f.geometry.x,
-        color="t_min",
-        size="poblacion",
-        color_continuous_scale=SEQ_SCALE,
-        hover_data=["distrito", "poblacion", "t_min"],
-        zoom=6,
-        height=500,
-    )
+    if not choropleth_f.empty and choropleth_f["t_min_ponderado"].notna().any():
+        st.subheader("Tiempo de acceso ponderado por distrito")
+        bounds = choropleth_f.total_bounds  # minx, miny, maxx, maxy
+        center = {"lat": (bounds[1] + bounds[3]) / 2, "lon": (bounds[0] + bounds[2]) / 2}
+        fig_map = px.choropleth_map(
+            choropleth_f,
+            geojson=json.loads(choropleth_f.to_json()),
+            locations="ubigeo",
+            featureidkey="properties.ubigeo",
+            color="t_min_ponderado",
+            color_continuous_scale=SEQ_SCALE,
+            hover_data=["distrito", "provincia", "poblacion", "t_min_ponderado"],
+            center=center,
+            zoom=6,
+            opacity=0.75,
+            height=500,
+        )
+    else:
+        st.subheader("Tiempo de acceso por centro poblado")
+        st.caption("Proxy de choropleth: sin polígonos distritales reales en modo sintético, se colorea cada punto de demanda.")
+        fig_map = px.scatter_map(
+            demanda_f,
+            lat=demanda_f.geometry.y,
+            lon=demanda_f.geometry.x,
+            color="t_min",
+            size="poblacion",
+            color_continuous_scale=SEQ_SCALE,
+            hover_data=["distrito", "poblacion", "t_min"],
+            zoom=6,
+            height=500,
+        )
     if not facilities_f.empty:
         fac_show = st.checkbox("Mostrar establecimientos de salud", value=True)
         if fac_show:
