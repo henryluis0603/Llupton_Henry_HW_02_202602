@@ -1,0 +1,328 @@
+"""Fase 4 — Dashboard Streamlit. Solo LEE data/outputs/ precomputado por
+run_pipeline.py: cero llamadas a motores de ruteo ni a APIs externas al
+cargar. `streamlit run app.py` después de `pip install -r requirements.txt`.
+"""
+from __future__ import annotations
+
+import json
+
+import geopandas as gpd
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
+
+from src import config
+
+st.set_page_config(page_title="Acceso a salud resolutiva — Perú", layout="wide")
+
+OUT = config.ruta("outputs")
+
+# Paleta: secuencial de un solo hue (Viridis, colorblind-safe) para magnitud
+# de tiempo de acceso; categórica de orden fijo para institución/categoría.
+SEQ_SCALE = "Viridis"
+CATEGORICAL = px.colors.qualitative.Set2
+
+
+# --------------------------------------------------------------------- #
+# Carga cacheada
+# --------------------------------------------------------------------- #
+@st.cache_data
+def load_demanda_metrics() -> gpd.GeoDataFrame:
+    return gpd.read_parquet(OUT / "demanda_metrics.parquet")
+
+
+@st.cache_data
+def load_facilities() -> gpd.GeoDataFrame:
+    """Facilities YA validadas y normalizadas por Fase 1 (columna
+    'resolutivo' incluida) — nunca se lee data/raw directo desde el dashboard."""
+    path = OUT / "facilities_validated.parquet"
+    return gpd.read_parquet(path) if path.exists() else gpd.GeoDataFrame()
+
+
+@st.cache_data
+def load_matrix_all() -> pd.DataFrame:
+    """Matriz completa origen×facility (perfil drive), concatenada entre
+    departamentos — la usa el simulador de escenario para recalcular sin
+    tocar el motor de ruteo."""
+    frames = []
+    for rol in config.departamentos():
+        p = config.ruta("routing_cache_dir") / rol / "matrix_drive.parquet"
+        if p.exists():
+            m = pd.read_parquet(p).reset_index()
+            m["departamento_rol"] = rol
+            frames.append(m)
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+@st.cache_data
+def load_quality_report() -> dict:
+    path = config.ruta("quality_report")
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    return {}
+
+
+@st.cache_data
+def load_mode_comparison() -> pd.DataFrame:
+    p = OUT / "mode_comparison.parquet"
+    return pd.read_parquet(p) if p.exists() else pd.DataFrame()
+
+
+@st.cache_data
+def load_sfca() -> pd.DataFrame:
+    p = OUT / "sfca_2step.parquet"
+    return pd.read_parquet(p) if p.exists() else pd.DataFrame()
+
+
+@st.cache_data
+def load_isochrones() -> gpd.GeoDataFrame:
+    p = OUT / "isochrones.parquet"
+    return gpd.read_parquet(p) if p.exists() else gpd.GeoDataFrame()
+
+
+demanda = load_demanda_metrics()
+facilities = load_facilities()
+quality_report = load_quality_report()
+mode_comparison = load_mode_comparison()
+sfca = load_sfca()
+isochrones = load_isochrones()
+
+if demanda.empty:
+    st.error(
+        "No hay datos precomputados en data/outputs/. Corre primero:\n\n"
+        "`python run_pipeline.py --synthetic`"
+    )
+    st.stop()
+
+# --------------------------------------------------------------------- #
+# Sidebar — filtros
+# --------------------------------------------------------------------- #
+st.sidebar.header("Filtros")
+departamentos_disp = sorted(demanda["departamento"].dropna().unique())
+sel_departamentos = st.sidebar.multiselect("Departamento", departamentos_disp, default=departamentos_disp)
+
+provincias_disp = sorted(demanda.loc[demanda["departamento"].isin(sel_departamentos), "provincia"].dropna().unique())
+sel_provincias = st.sidebar.multiselect("Provincia", provincias_disp, default=provincias_disp)
+
+categorias_disp = sorted(facilities["categoria"].dropna().unique()) if not facilities.empty else []
+sel_categorias = st.sidebar.multiselect("Categoría de establecimiento", categorias_disp, default=categorias_disp)
+
+instituciones_disp = sorted(facilities["institucion"].dropna().unique()) if not facilities.empty else []
+sel_instituciones = st.sidebar.multiselect("Institución", instituciones_disp, default=instituciones_disp)
+
+threshold = st.sidebar.slider("Umbral de acceso (min)", min_value=10, max_value=180, value=60, step=10)
+
+# Selección vacía no debe crashear: si el usuario deselecciona todo, mostramos
+# un aviso y detenemos el render en vez de operar sobre DataFrames vacíos.
+if not sel_departamentos or not sel_provincias:
+    st.warning("Selecciona al menos un departamento y una provincia en la barra lateral para ver el dashboard.")
+    st.stop()
+
+demanda_f = demanda[demanda["departamento"].isin(sel_departamentos) & demanda["provincia"].isin(sel_provincias)]
+facilities_f = (
+    facilities[facilities["categoria"].isin(sel_categorias) & facilities["institucion"].isin(sel_instituciones)]
+    if not facilities.empty
+    else facilities
+)
+
+if demanda_f.empty:
+    st.warning("No hay puntos de demanda para esta combinación de filtros.")
+    st.stop()
+
+# --------------------------------------------------------------------- #
+# 1) KPI header
+# --------------------------------------------------------------------- #
+st.title("Acceso a establecimientos de salud resolutivos")
+st.caption("Tumbes (costa) · Huancavelica (andino) · Madre de Dios (amazónico) — HW_02_202602")
+
+pob_total = demanda_f["poblacion"].sum()
+pob_cubierta = demanda_f.loc[demanda_f["t_min"] <= threshold, "poblacion"].sum()
+pob_mas_60 = demanda_f.loc[demanda_f["t_min"] > 60, "poblacion"].sum()
+peor_distrito = (
+    demanda_f.groupby("distrito").apply(lambda g: (g["t_min"] * g["poblacion"]).sum() / g["poblacion"].sum(), include_groups=False)
+    .idxmax()
+    if demanda_f["poblacion"].sum() > 0
+    else "—"
+)
+mediana_acceso = demanda_f["t_min"].median()
+
+c1, c2, c3, c4 = st.columns(4)
+c1.metric(f"Población cubierta (≤{threshold} min)", f"{pob_cubierta:,.0f}", f"{pob_cubierta / pob_total * 100:.1f}% del total")
+c2.metric("Población a > 60 min", f"{pob_mas_60:,.0f}", f"{pob_mas_60 / pob_total * 100:.1f}% del total")
+c3.metric("Distrito con peor acceso", str(peor_distrito))
+c4.metric("Mediana de acceso", f"{mediana_acceso:.1f} min")
+
+st.divider()
+
+# --------------------------------------------------------------------- #
+# 2) "Choropleth" — sin polígonos distritales reales en modo sintético, se
+# usa un mapa de puntos coloreado por t_min como proxy visual equivalente.
+# En producción con polígonos INEI, reemplazar por px.choropleth_mapbox.
+# --------------------------------------------------------------------- #
+left, right = st.columns([2, 1])
+with left:
+    st.subheader("Tiempo de acceso por centro poblado")
+    st.caption("Proxy de choropleth: sin polígonos distritales reales en modo sintético, se colorea cada punto de demanda.")
+    fig_map = px.scatter_map(
+        demanda_f,
+        lat=demanda_f.geometry.y,
+        lon=demanda_f.geometry.x,
+        color="t_min",
+        size="poblacion",
+        color_continuous_scale=SEQ_SCALE,
+        hover_data=["distrito", "poblacion", "t_min"],
+        zoom=6,
+        height=500,
+    )
+    if not facilities_f.empty:
+        fac_show = st.checkbox("Mostrar establecimientos de salud", value=True)
+        if fac_show:
+            fig_fac = px.scatter_map(
+                facilities_f,
+                lat=facilities_f.geometry.y,
+                lon=facilities_f.geometry.x,
+                color="resolutivo",
+                color_discrete_sequence=["#d62728", "#2ca02c"],
+                hover_data=["nombre", "categoria", "institucion", "activo"],
+            )
+            for trace in fig_fac.data:
+                fig_map.add_trace(trace)
+
+    # Innovación 1 — isócronas: reutilizan el mismo grafo/matriz de Fase 2,
+    # solo se dibujan como polígonos sobre el mapa ya construido.
+    iso_disp = isochrones[isochrones["facility_id"].isin(facilities_f["facility_id"])] if not isochrones.empty else isochrones
+    if not iso_disp.empty:
+        fac_for_iso = st.selectbox(
+            "Ver isócronas de un establecimiento resolutivo",
+            ["(ninguno)"] + sorted(iso_disp["facility_id"].unique().tolist()),
+        )
+        if fac_for_iso != "(ninguno)":
+            sub = iso_disp[iso_disp["facility_id"] == fac_for_iso].sort_values("threshold_min", ascending=False)
+            iso_colors = {30: "rgba(49,163,84,0.35)", 60: "rgba(254,178,76,0.30)", 120: "rgba(222,45,38,0.25)"}
+            for _, row in sub.iterrows():
+                x, y = row.geometry.exterior.coords.xy
+                fig_map.add_trace(go.Scattermap(
+                    lon=list(x), lat=list(y), mode="lines", fill="toself",
+                    fillcolor=iso_colors.get(row["threshold_min"], "rgba(100,100,100,0.2)"),
+                    line=dict(width=1, color="rgba(80,80,80,0.6)"),
+                    name=f"{row['threshold_min']} min", showlegend=True,
+                ))
+
+    fig_map.update_layout(map_style="open-street-map", margin=dict(l=0, r=0, t=0, b=0))
+    st.plotly_chart(fig_map, width='stretch')
+
+with right:
+    st.subheader("Distribución de acceso")
+    seg_by = st.radio("Segmentar por", ["departamento", "es_urbano"], horizontal=True)
+    demanda_seg = demanda_f.copy()
+    if "es_urbano" not in demanda_seg.columns:
+        demanda_seg["es_urbano"] = demanda_seg["poblacion"] >= config.poblacion_minima_urbana()
+    fig_hist = px.histogram(
+        demanda_seg, x="t_min", color=seg_by, barmode="overlay", opacity=0.6,
+        color_discrete_sequence=CATEGORICAL, nbins=30,
+    )
+    st.plotly_chart(fig_hist, width='stretch')
+
+st.divider()
+
+# --------------------------------------------------------------------- #
+# 5) Tabla de distritos críticos, descargable
+# --------------------------------------------------------------------- #
+st.subheader("Distritos con peor acceso (ponderado por población)")
+critico = (
+    demanda_f.groupby("distrito")
+    .apply(lambda g: pd.Series({
+        "t_min_ponderado": (g["t_min"] * g["poblacion"]).sum() / g["poblacion"].sum(),
+        "poblacion": g["poblacion"].sum(),
+    }), include_groups=False)
+    .reset_index()
+    .sort_values("t_min_ponderado", ascending=False)
+)
+st.dataframe(critico, width='stretch')
+st.download_button(
+    "Descargar tabla (CSV)", critico.to_csv(index=False).encode("utf-8"),
+    file_name="distritos_criticos.csv", mime="text/csv",
+)
+
+st.divider()
+
+# --------------------------------------------------------------------- #
+# 6) Simulador de escenario — upgrade I-3/I-4 a resolutivas
+# --------------------------------------------------------------------- #
+st.subheader("Simulador: upgrade de establecimientos I-3/I-4 a resolutivos")
+st.caption("Recalcula t_min SOLO para puntos que mejoran, reutilizando la matriz origen×facility ya precomputada — sin llamar al motor de ruteo.")
+
+upgradables = facilities[facilities["categoria"].isin(["I-3", "I-4"])] if not facilities.empty else pd.DataFrame()
+matrix_all = load_matrix_all()
+
+if upgradables.empty or matrix_all.empty:
+    st.info("No hay establecimientos I-3/I-4 candidatos, o falta la matriz precomputada.")
+else:
+    sel_upgrade = st.multiselect(
+        "Establecimientos a mejorar a categoría resolutiva",
+        upgradables["facility_id"].tolist(),
+        format_func=lambda fid: f"{fid} — {upgradables.set_index('facility_id').loc[fid, 'nombre']}",
+    )
+    if sel_upgrade:
+        candidatos = matrix_all[matrix_all["facility_id"].isin(sel_upgrade)]
+        t_min_actual = demanda_f.set_index("cp_id")["t_min"]
+        mejora = candidatos.merge(t_min_actual.rename("t_min_actual"), left_on="cp_id", right_index=True, how="inner")
+        mejora = mejora.reset_index(drop=True)  # el merge deja el índice de t_min_actual (nombrado 'cp_id'), ambiguo con la columna homónima
+        mejora = mejora[mejora["t_min"] < mejora["t_min_actual"]]
+        mejor_por_punto = mejora.loc[mejora.groupby("cp_id")["t_min"].idxmin()]
+
+        pob_ganada = demanda_f.set_index("cp_id").loc[mejor_por_punto["cp_id"], "poblacion"].sum()
+        st.metric(
+            "Población que mejora su acceso",
+            f"{pob_ganada:,.0f}",
+            f"{len(mejor_por_punto)} centros poblados con nueva facility más cercana",
+        )
+        st.dataframe(
+            mejor_por_punto[["cp_id", "facility_id", "t_min_actual", "t_min"]].rename(
+                columns={"t_min_actual": "t_min_antes", "t_min": "t_min_despues"}
+            ),
+            width='stretch',
+        )
+    else:
+        st.caption("Selecciona uno o más establecimientos arriba para ver el efecto del upgrade.")
+
+st.divider()
+
+# --------------------------------------------------------------------- #
+# Comparativa de modos + 2SFCA (innovaciones)
+# --------------------------------------------------------------------- #
+col_a, col_b = st.columns(2)
+with col_a:
+    st.subheader("Auto vs. caminar vs. bicicleta")
+    if not mode_comparison.empty:
+        mc = mode_comparison[mode_comparison["cp_id"].isin(demanda_f["cp_id"])]
+        ratios = mc[[c for c in mc.columns if c.startswith("ratio_")]].melt(var_name="perfil", value_name="ratio")
+        fig_ratio = px.box(ratios, x="perfil", y="ratio", color="perfil", color_discrete_sequence=CATEGORICAL)
+        fig_ratio.update_layout(showlegend=False)
+        st.plotly_chart(fig_ratio, width='stretch')
+        st.caption("Ratio = tiempo_modo / tiempo_auto. Valores altos en 'walk' señalan desconexión de red vial (esperado en amazónico).")
+    else:
+        st.info("Sin datos de comparación de modos.")
+
+with col_b:
+    st.subheader("Accesibilidad 2SFCA (oferta por habitante)")
+    if not sfca.empty:
+        sfca_f = sfca[sfca["cp_id"].isin(demanda_f["cp_id"])]
+        fig_sfca = px.histogram(sfca_f, x="accesibilidad_2sfca", color_discrete_sequence=[CATEGORICAL[0]])
+        st.plotly_chart(fig_sfca, width='stretch')
+    else:
+        st.info("Sin datos de 2SFCA.")
+
+st.divider()
+
+# --------------------------------------------------------------------- #
+# 7) Panel de calidad de datos
+# --------------------------------------------------------------------- #
+st.subheader("Calidad de datos (Fase 1)")
+if quality_report:
+    for ds in quality_report.get("datasets", []):
+        with st.expander(f"{ds['dataset']} — {ds['n_registros_inicial']} → {ds['n_registros_final']} registros"):
+            st.dataframe(pd.DataFrame(ds["reglas"]), width='stretch')
+else:
+    st.info("No se encontró data/outputs/quality_report.json — corre run_pipeline.py primero.")
