@@ -19,7 +19,11 @@ streamlit run app.py
 # guion de exposición para el video (lee data/outputs/, no recalcula nada)
 jupyter notebook walkthrough.ipynb
 
-# alternativa con datos reales (RENIPRESS, centros poblados IGN, población RENIEC)
+# extracto OSM Perú (256MB, una vez) — con esto, --real usa red vial real vía pyrosm
+curl -A "Mozilla/5.0" -C - --retry 30 -o data/raw/peru-latest.osm.pbf \
+  "https://download.geofabrik.de/south-america/peru-latest.osm.pbf"
+
+# datos + red vial reales (RENIPRESS, centros poblados IGN, población RENIEC, OSM real)
 python run_pipeline.py --real
 
 # compilar report/main.pdf (motor LaTeX autocontenido, no requiere instalar MacTeX)
@@ -34,9 +38,10 @@ código.
 
 `walkthrough.ipynb` es un notebook único de exposición, no el pipeline: solo
 lee `data/outputs/` ya calculado y narra la historia (calidad de datos,
-decisiones de ruteo, métricas, isócronas, 2SFCA, y una nota honesta sobre por
-qué el ratio caminar/auto sale constante mientras el motor de ruteo cae al
-grafo sintético). Toda la lógica reusable sigue viviendo en `src/`.
+diagnóstico del corte de conexión de Overpass y la solución vía
+`peru-latest.osm.pbf`, métricas con red real, isócronas, 2SFCA, y el hallazgo
+central: Huancavelica —no Madre de Dios— es la geografía con peor acceso).
+Toda la lógica reusable sigue viviendo en `src/`.
 
 ## Estado actual
 
@@ -68,25 +73,42 @@ grafo sintético). Toda la lógica reusable sigue viviendo en `src/`.
       dashboard pinta un **choropleth real por distrito** en vez del proxy de
       puntos (`app.py` cae al proxy solo si no hay polígonos, p.ej. en modo
       sintético).
-- [ ] Motor de ruteo sobre red vial real: Overpass no respondió en ninguna
-      corrida reciente desde este entorno — el pipeline corre igual gracias
-      al fallback documentado, pero los tiempos de viaje siguen siendo sobre
-      el grafo sintético hasta correr esto desde una red sin ese bloqueo.
+- [x] Motor de ruteo sobre red vial real para los 3 departamentos $\times$ 3
+      perfiles (9/9). La API Overpass en vivo resultó no confiable para
+      áreas grandes: diagnostiqué que algo en la red de este entorno corta
+      las conexiones de larga duración a los ~60s, independiente del
+      timeout del cliente. Solución: descargar `peru-latest.osm.pbf`
+      (Geofabrik, 256MB, la fuente que el issue pide literalmente) y
+      procesarlo local con `pyrosm` (`routing._get_graph_from_pbf`) —
+      `get_graph()` prueba `.pbf` local → Overpass en vivo → sintético, en
+      ese orden, cada fuente registrada en `snap_report.json`.
+      `python run_pipeline.py --real` ya usa esta ruta automáticamente si
+      `data/raw/peru-latest.osm.pbf` existe.
 - [ ] Altitud — sin DEM integrado; `cross_analysis_altitud` reporta n=0
       honestamente en vez de inventar un valor. La sesión 7 del curso
       (`raster_aplicado.ipynb`) enseña la técnica concreta para cerrar esto
       —`rasterio` + `rasterstats.zonal_stats` sobre un DEM— pendiente de
       aplicar aquí con un raster de elevación real.
-- [x] Reporte LaTeX (`report/main.pdf`, 10 páginas): las 9 secciones
-      obligatorias con cifras reales, 4 figuras vectoriales generadas por el
-      pipeline (`run_pipeline.generate_report_figures`, no capturas de
-      pantalla), 4 tablas regeneradas en cada corrida, comparativa línea
-      recta vs. red real (`metrics.straight_line_vs_network`, issue #186
-      Fase 5) y sección de limitaciones. Compilado con
+- [x] Reporte LaTeX (`report/main.pdf`, 11 páginas): las 9 secciones
+      obligatorias con cifras reales de la corrida 100% real, 4 figuras
+      vectoriales generadas por el pipeline
+      (`run_pipeline.generate_report_figures`, no capturas de pantalla), 4
+      tablas regeneradas en cada corrida, comparativa línea recta vs. red
+      real (`metrics.straight_line_vs_network`, issue #186 Fase 5) y sección
+      de limitaciones. Compilado con
       [Tectonic](https://tectonic-typesetting.github.io/) (motor LaTeX
       autocontenido, no requiere instalar MacTeX/TeX Live) — este entorno no
       tenía `pdflatex` instalado, ver comando de compilación arriba.
 - [ ] Video de presentación.
+
+**Hallazgo central (con red vial real en los 3 departamentos):** la
+hipótesis de partida era que Madre de Dios (selva, red dispersa) tendría el
+peor acceso. El resultado la invierte: **Huancavelica (sierra) es el
+departamento con peor acceso ponderado** (50.9 min vs. 14.4 en Madre de Dios
+y 13.2 en Tumbes) — 9 de los 10 distritos más críticos del país están ahí.
+La comparación línea recta vs. red (`metrics.straight_line_vs_network`) lo
+explica mecánicamente: en Huancavelica, ignorar la red vial le cuesta a la
+población una mediana de ~14 minutos adicionales; en Tumbes, apenas ~2.
 
 ## Decisiones frente al material de clase (sesiones 6 y 7)
 

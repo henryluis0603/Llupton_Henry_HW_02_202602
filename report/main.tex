@@ -17,18 +17,20 @@ un análisis de ruteo vial en Tumbes, Huancavelica y Madre de Dios}
 \maketitle
 
 \begin{abstract}
-Este reporte cuantifica el acceso vial a establecimientos de salud con
-capacidad resolutiva (categoría II-1+) en Tumbes (costa), Huancavelica
-(andino) y Madre de Dios (amazónico), con datos reales de RENIPRESS,
-centros poblados del IGN y población de RENIEC sobre 2\,370 puntos de
-demanda (572\,542 habitantes). El 60.4\,\% accede en 30 minutos o menos,
-pero el 15.6\,\% supera 120 minutos, concentrado en Madre de Dios (138.5 min
-ponderado) frente a Tumbes (12.6 min). El Gini ponderado es 0.73. Madre de
-Dios tiene solo 2 establecimientos resolutivos activos en todo el
-departamento. El motor de ruteo no obtuvo la red vial real de OpenStreetMap
-para Huancavelica ni Madre de Dios en esta corrida (Overpass no respondió) y
-cayó a un grafo sintético documentado: sus tiempos de viaje validan el
-pipeline, no miden acceso real.
+Este reporte cuantifica el acceso vial a salud resolutiva (categoría
+II-1+) en Tumbes (costa), Huancavelica (andino) y Madre de Dios
+(amazónico), con datos y red vial 100\,\% reales --- RENIPRESS, IGN,
+RENIEC y el extracto \texttt{peru-latest.osm.pbf} --- sobre 2\,370 puntos
+de demanda (572\,542 habitantes). El 83.4\,\% accede en 30 minutos o
+menos; el 4.6\,\% supera 120. El resultado invierte la hipótesis de
+partida: \textbf{Huancavelica} (sierra) tiene el peor acceso ponderado
+(50.9 min), no Madre de Dios (14.4 min) ni Tumbes (13.2 min) --- la
+topografía andina penaliza más que la dispersión amazónica. El Gini
+ponderado es 0.75. Madre de Dios tiene solo 2 establecimientos resolutivos
+activos en todo el departamento. Se documenta un hallazgo metodológico
+propio: Overpass API corta las conexiones a los ${\sim}60$s en el entorno
+usado; la solución fue procesar \texttt{.osm.pbf} localmente con
+\texttt{pyrosm} en vez de la API en vivo.
 \end{abstract}
 
 \tableofcontents
@@ -48,9 +50,12 @@ el tiempo de traslado como variable crítica.
 Se analizan tres departamentos elegidos para maximizar el contraste
 geográfico: \textbf{Tumbes} (costa, red vial densa), \textbf{Huancavelica}
 (sierra, altitud variable) y \textbf{Madre de Dios} (selva, red vial
-dispersa). La hipótesis de trabajo es que el tipo de geografía condiciona el
-acceso mucho más que la simple distancia en línea recta, y que un análisis
-que ignore la red vial real subestima sistemáticamente esa desigualdad.
+dispersa). La hipótesis de trabajo era que el tipo de geografía condiciona
+el acceso mucho más que la simple distancia en línea recta, y que la
+dispersión de la red vial amazónica sería el caso más penalizado. Con red
+vial real para los tres departamentos, el resultado --- adelantado aquí y
+desarrollado en \S4 --- \textbf{no} confirma esa hipótesis en la forma
+esperada: es la sierra, no la selva, la geografía más penalizada.
 
 El resto del reporte sigue el pipeline de extremo a extremo: fuentes de
 datos (\S2), metodología de validación y ruteo (\S3), resultados (\S4),
@@ -100,13 +105,14 @@ se copió a mano.
   propio choropleth, descargado de forma reproducible vía
   \texttt{huggingface\_hub} en vez de copiado a mano.
 
-\item \textbf{OpenStreetMap Perú} (red vial, vía Overpass API/OSMnx). Se
-  intentó para los 3 departamentos $\times$ 3 perfiles (auto, caminar,
-  bicicleta) en cada corrida. \textbf{Limitación central de este reporte}:
-  Overpass respondió solo parcialmente para Tumbes (perfiles auto y
-  bicicleta; el perfil caminar cayó a un grafo sintético) y no respondió en
-  absoluto para Huancavelica ni Madre de Dios en esta corrida --- ver \S3.3
-  y \S6.
+\item \textbf{OpenStreetMap Perú}, extracto \texttt{peru-latest.osm.pbf}
+  (256\,MB, Geofabrik, licencia ODbL, snapshot del 8 de septiembre de 2026).
+  Fuente literal pedida por el issue. Se intentó primero la API Overpass en
+  vivo (vía OSMnx); tras diagnosticar que las consultas de área grande se
+  cortaban sistemáticamente (\S5.1), se adoptó el extracto completo
+  procesado localmente con \texttt{pyrosm}, sin más llamadas de red. Con
+  esto, los tres departamentos $\times$ tres perfiles (auto, caminar,
+  bicicleta) --- 9 de 9 combinaciones --- corren sobre red vial real.
 \end{itemize}
 
 \section{Metodología}
@@ -149,21 +155,38 @@ Seis reglas, cada una implementada como una función pura
 
 \subsection{Motor de ruteo y parámetros}
 
-Motor: OSMnx + NetworkX, un grafo \textbf{por departamento} (no nacional).
-Para tres departamentos pequeños, un grafo nacional es más lento de
-construir y cachear que tres grafos locales, y OSRM-Docker --- la opción
-recomendada por el issue --- exige infraestructura que no se justifica para
-este alcance.
+Motor: OSMnx/\texttt{pyrosm} + NetworkX, un grafo \textbf{por departamento}
+(no nacional). Para tres departamentos pequeños, un grafo nacional es más
+lento de construir y cachear que tres grafos locales, y OSRM-Docker --- la
+opción recomendada por el issue --- exige infraestructura que no se
+justifica para este alcance.
 
-\textbf{Fallback sintético.} Si Overpass no responde en 10 segundos (tiempo
-elegido para fallar rápido en vez de colgar minutos por
-departamento/perfil), el pipeline cae a un grafo geométrico aleatorio
-(250 nodos, 5 vecinos más cercanos por nodo) dentro del mismo \emph{bounding
-box}, en vez de detenerse. En esta corrida: Tumbes obtuvo la red real de
-OSM para los perfiles auto y bicicleta; Huancavelica y Madre de Dios cayeron
-por completo al grafo sintético (Tabla \ref{tab:graph_sources}). Esta es la
-limitación metodológica más importante del reporte y se discute en \S5 y
-\S6.
+\textbf{De Overpass en vivo al extracto local.} La primera implementación
+usaba \texttt{osmnx.graph\_from\_bbox} contra la API Overpass en vivo, con
+un grafo geométrico sintético como \emph{fallback} si la API no respondía.
+En la práctica, Overpass respondía de forma intermitente: departamentos
+pequeños (Tumbes) solían completarse, pero los de área grande ---
+Huancavelica es 13$\times$ el área máxima de consulta recomendada, Madre de
+Dios es 67$\times$ --- se subdividen en muchas subconsultas, y varias de
+esas subconsultas nunca llegaban a completarse. El diagnóstico, confirmado
+empíricamente subiendo el \emph{timeout} propio de 10 a 240 segundos sin
+que mejorara el resultado, es que \textbf{algo en la red del entorno de
+desarrollo corta las conexiones salientes de larga duración a los
+${\sim}60$ segundos}, independientemente del timeout configurado en el
+cliente --- un límite externo, no del servidor Overpass ni del código
+propio. La solución fue abandonar las consultas en vivo para las áreas
+grandes y usar en su lugar el extracto \texttt{peru-latest.osm.pbf}
+completo, recortado por \emph{bounding box} con \texttt{pyrosm} de forma
+enteramente local (\texttt{src/routing.\_get\_graph\_from\_pbf}) --- una
+sola descarga larga con reintento/resumen (\texttt{curl -C -}) en vez de
+decenas de peticiones cortas a una API remota. \texttt{get\_graph()}
+intenta el \texttt{.pbf} local primero; si no existe, cae a Overpass en
+vivo; si eso también falla, cae al grafo sintético --- las tres rutas
+quedan en el código, documentadas y con su fuente registrada
+(\texttt{osm-pbf} / \texttt{osm-overpass} / \texttt{synthetic}) en
+\texttt{data/outputs/snap\_report.json}. En esta corrida, las 9
+combinaciones departamento$\times$perfil usaron \texttt{osm-pbf}
+(Tabla \ref{tab:graph_sources}).
 
 \begin{table}[h]
 \centering
@@ -173,19 +196,29 @@ limitación metodológica más importante del reporte y se discute en \S5 y
 \toprule
 Departamento & Auto & Caminar & Bicicleta \\
 \midrule
-Tumbes (costa) & OSM real & sintético & OSM real \\
-Huancavelica (andino) & sintético & sintético & sintético \\
-Madre de Dios (amazónico) & sintético & sintético & sintético \\
+Tumbes (costa) & OSM (.pbf) & OSM (.pbf) & OSM (.pbf) \\
+Huancavelica (andino) & OSM (.pbf) & OSM (.pbf) & OSM (.pbf) \\
+Madre de Dios (amazónico) & OSM (.pbf) & OSM (.pbf) & OSM (.pbf) \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+Para el perfil auto, la velocidad por arista usa el tag \texttt{maxspeed}
+cuando existe (parseado de strings como \texttt{"50"} o \texttt{"30 mph"});
+si no existe --- la mayoría de vías en estos departamentos no lo tienen ---
+se usa una tabla de velocidad por tipo de vía (\texttt{highway}), la misma
+que usan routers open-source como OSRM. Caminar y bicicleta usan velocidad
+constante (5 y 15 km/h).
 
 \textbf{Snapping.} Cada punto de demanda/facility se asigna al nodo más
 cercano del grafo, con la distancia calculada en la zona UTM real del
 departamento (EPSG 32717/32718/32719 para Tumbes/Huancavelica/Madre de
 Dios respectivamente, vía \texttt{pyproj}) --- no con la aproximación
 ``1 grado $\approx$ 111\,km'', que ignora que un grado de longitud se
-encoge con el coseno de la latitud.
+encoge con el coseno de la latitud. Con red real, la distancia de snap
+promedio es de 2.7\,km en Huancavelica y 7.7\,km en Tumbes, pero
+131.8\,km en Madre de Dios (máximo: 245\,km) --- ver \S6, limitación de
+cobertura vial mapeada en OSM para la selva profunda.
 
 \textbf{Matriz origen$\times$facility.} Se invierte el problema: en vez de
 correr Dijkstra desde cada punto de demanda (más numerosos), se corre un
@@ -210,43 +243,47 @@ hardcodeada.
 
 \section{Resultados}
 
-Sobre 2\,370 puntos de demanda (572\,542 habitantes):
+Sobre 2\,370 puntos de demanda (572\,542 habitantes), con red vial real
+para los tres departamentos:
 
 \begin{itemize}
-\item El 60.4\,\% de la población accede a un establecimiento resolutivo en
-  30 minutos o menos; el 15.6\,\% supera 120 minutos (Tabla
+\item El 83.4\,\% de la población accede a un establecimiento resolutivo en
+  30 minutos o menos; el 4.6\,\% supera 120 minutos (Tabla
   \ref{tab:coverage_bands}, Figura \ref{fig:coverage}).
-\item El tiempo de acceso ponderado por departamento es radicalmente
-  distinto: 12.6 min en Tumbes, 55.0 min en Huancavelica, 138.5 min en Madre
-  de Dios.
-\item Los 10 distritos con peor acceso ponderado están dominados por Madre
-  de Dios: Iñapari (599 min), Manu (527 min), Fitzcarrald (444 min),
-  Huepetuhe (392 min) e Iberia (360 min) encabezan la lista (Tabla
-  \ref{tab:critical_districts}).
-\item El Gini ponderado del tiempo de acceso es \textbf{0.73} --- una
-  desigualdad sustancial, aunque debe leerse junto con la limitación de
-  \S6 sobre la fuente del grafo.
-\item El contraste urbano/rural es marcado: 28.2 min ponderado en centros
-  poblados urbanos (población $\geq$ 2\,000) frente a 108.0 min en rurales.
+\item El tiempo de acceso ponderado por departamento \textbf{invierte la
+  hipótesis de partida}: 50.9 min en Huancavelica (sierra), 14.4 min en
+  Madre de Dios (selva), 13.2 min en Tumbes (costa). La topografía andina
+  --- pendientes, curvas, red vial más escasa entre poblados dispersos en
+  las alturas --- penaliza más el acceso que la dispersión geográfica
+  amazónica, contra lo que se hipotetizó en \S1.
+\item Los 10 distritos con peor acceso ponderado están dominados por
+  Huancavelica: Ayavi (207 min), Tintay Puncu (193 min), Capillas (187
+  min), San Francisco de Sangayaico (187 min) y Quito-Arma, Santiago de
+  Chocorvos, San Isidro, Huamatambo, Santo Domingo de Capillas encabezan la
+  lista; Huepetuhe (Madre de Dios, 181 min) es la única excepción entre los
+  10 (Tabla \ref{tab:critical_districts}).
+\item El Gini ponderado del tiempo de acceso es \textbf{0.75}.
+\item El contraste urbano/rural es marcado: 9.7 min ponderado en centros
+  poblados urbanos (población $\geq$ 2\,000) frente a 30.3 min en rurales.
 \item \textbf{Madre de Dios tiene solo 2 establecimientos con capacidad
   resolutiva activos en todo el departamento} (Hospital I Víctor Alfredo
   Lazo Peralta y Hospital Santa Rosa, ambos categoría II-1) --- verificado
   de forma independiente contra el CSV crudo de RENIPRESS, no es un
   artefacto del pipeline.
 \item Comparación entre perfiles (Tabla \ref{tab:mode_comparison}, Figura
-  \ref{fig:ratio_modos}): el ratio caminar/auto es una constante exacta
-  (6.0) en Huancavelica y Madre de Dios --- una propiedad estructural del
-  grafo de respaldo sintético, no una señal real de conectividad (\S5). En
-  Tumbes, donde el perfil auto sí usa la red OSM real, el ratio mediano es
-  10.0, con una cola larga (máximo 263) --- pero esta comparación mezcla un
-  grafo real (auto) con uno sintético (caminar), así que tampoco es una
-  medición limpia (\S6).
+  \ref{fig:ratio_modos}), ahora sobre red real en los tres departamentos:
+  el ratio caminar/auto mediano varía entre 10.0 (Madre de Dios) y 11.6
+  (Tumbes), con Huancavelica en 10.8 --- ya no hay una constante artificial
+  (\S5.1 documenta por qué esto solo es posible con red real). La
+  diferencia entre departamentos es mucho menor de lo hipotetizado: la
+  penalización de caminar respecto a auto es similar en las tres
+  geografías, con Tumbes (no Madre de Dios) mostrando el ratio más alto.
 \item Innovación 1 (isócronas): la Figura \ref{fig:isocronas} muestra las
-  isócronas de 30/60/120 minutos de un establecimiento resolutivo de
-  Tumbes, calculadas sobre la red OSM real sin cómputo de ruteo adicional
+  isócronas de 30/60/120 minutos de un establecimiento resolutivo,
+  calculadas sobre la red OSM real sin cómputo de ruteo adicional
   (reutilizan la misma matriz).
 \item Innovación 2 (2SFCA): la accesibilidad ponderada por capacidad de
-  oferta tiene una mediana de 0 y un máximo de 0.0025 --- la mayoría de los
+  oferta tiene una mediana de 0 y un máximo de 0.0029 --- la mayoría de los
   puntos de demanda no tiene ninguna facility resolutiva dentro del umbral
   de 60 minutos configurado, consistente con la escasez de oferta
   encontrada directamente en Madre de Dios.
@@ -275,14 +312,14 @@ Sobre 2\,370 puntos de demanda (572\,542 habitantes):
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.6\textwidth]{figures/ratio_modos.pdf}
-\caption{Ratio mediano de tiempo (modo / auto), por departamento. La constante exacta en Huancavelica y Madre de Dios es un artefacto del grafo sintético (\S5), no un hallazgo geográfico.}
+\caption{Ratio mediano de tiempo (modo / auto), por departamento, sobre red vial real en los tres casos.}
 \label{fig:ratio_modos}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.55\textwidth]{figures/isocronas_ejemplo.pdf}
-\caption{Isócronas de 30/60/120 minutos de un establecimiento resolutivo de Tumbes, sobre la red vial real de OSM.}
+\caption{Isócronas de 30/60/120 minutos de un establecimiento resolutivo, sobre la red vial real de OSM.}
 \label{fig:isocronas}
 \end{figure}
 
@@ -295,35 +332,50 @@ Sobre 2\,370 puntos de demanda (572\,542 habitantes):
 Para cada punto de demanda se comparó la facility resolutiva más cercana
 \emph{en línea recta} (distancia euclidiana en la zona UTM del
 departamento) contra la facility óptima \emph{según la red} (mínimo
-\texttt{t\_min}). En Tumbes --- el único departamento con red vial real
-para el perfil auto --- la facility sugerida por línea recta difiere de la
-óptima real en el 36.8\,\% de los puntos, con una penalidad mediana de 1.3
-minutos adicionales entre esos casos. Es un efecto modesto porque Tumbes es
-un departamento costero pequeño con una red vial relativamente directa;
-la expectativa metodológica --- pendiente de confirmar con red real en
-Huancavelica y Madre de Dios --- es que esa penalidad crezca sustancialmente
-en geografías con más curvatura vial (sierra) o menos conectividad (selva).
-En Huancavelica y Madre de Dios, donde el ruteo cayó al grafo sintético, la
-penalidad mediana es 0.0: el grafo geométrico aleatorio no tiene los
-obstáculos, curvas ni asimetrías de una red vial real, así que la facility
-``óptima en red'' casi siempre coincide con la más cercana en línea recta.
-Este resultado no dice nada sobre la geografía real de esos departamentos
---- dice, precisamente, que el fallback sintético no puede sustituir a la
-red real para este tipo de comparación, y es la evidencia más directa de
-por qué la Fase 2 de este proyecto queda incompleta.
+\texttt{t\_min}), ahora con red real en los tres departamentos. El
+resultado confirma exactamente la hipótesis metodológica de la versión
+anterior de este reporte: la penalidad de ignorar la red vial \textbf{es
+mucho mayor en la sierra}. En Huancavelica, la facility sugerida por línea
+recta difiere de la óptima real en el 12.7\,\% de los puntos, pero con una
+penalidad mediana de \textbf{14.0 minutos} adicionales entre esos casos ---
+la curvatura y las pendientes de la red vial andina hacen que la facility
+geográficamente más cercana no sea, casi nunca, la más rápida de alcanzar.
+En Tumbes, la penalidad mediana es de solo 2.2 minutos (39.8\,\% de puntos
+con facility distinta) --- una red costera densa y relativamente directa.
+Madre de Dios muestra una penalidad mediana de 0.0 pese a que la facility
+sugerida difiere en el 87.5\,\% de los puntos; con solo 2 facilities
+resolutivas en todo el departamento, la comparación tiene poco margen para
+producir penalidades grandes incluso cuando la facility ``sugerida''
+cambia. Esta asimetría --- Huancavelica penaliza fuertemente ignorar la
+red, Tumbes poco, Madre de Dios casi nada --- es consistente con el
+hallazgo central de \S4: la geografía que más invalida un análisis en
+línea recta es la sierra, no la selva.
 
-\subsection{Por qué el fallback sintético, y qué costó}
+\subsection{Por qué Overpass en vivo no bastaba, y qué costó descubrirlo}
 
-La decisión de degradar a un grafo sintético en vez de detener el pipeline
-cuando Overpass no responde fue deliberada: un proyecto con datos reales de
+La primera versión de este pipeline usaba exclusivamente la API Overpass en
+vivo, con un grafo sintético como respaldo documentado si la API no
+respondía. Esa decisión fue deliberada: un proyecto con datos reales de
 población y establecimientos, pero sin motor de ruteo, no permite probar ni
-demostrar el resto de las 5 fases. La alternativa --- bloquear el pipeline
-hasta tener red real --- habría dejado sin verificar la Fase 3, la Fase 4 y
-buena parte de la Fase 5. El costo de esa decisión es explícito y medible:
-el hallazgo central planeado originalmente para este proyecto (que el ratio
-caminar/auto sea mayor en Madre de Dios que en Tumbes, evidencia de
-desconexión de red vial amazónica) no puede confirmarse ni refutarse con
-esta corrida, porque dos de los tres departamentos nunca tuvieron red real.
+demostrar el resto de las 5 fases mientras se diagnostica el problema de
+red. El diagnóstico llevó varias corridas: primero se sospechó que
+Overpass estaba simplemente caído (falso: \texttt{/api/status} respondía
+200 de forma consistente); luego que el \emph{timeout} propio de 10
+segundos era demasiado corto para departamentos grandes (parcialmente
+cierto: subirlo a 240s permitió que Huancavelica completara dos de tres
+perfiles en una corrida, pero no de forma confiable); finalmente, que las
+conexiones se estaban cortando externamente a un tiempo fijo
+(${\sim}$60s) independiente del \emph{timeout} configurado --- confirmado
+al ver fallos con el mensaje \texttt{Connection aborted / Connection reset
+by peer} ocurriendo a intervalos casi idénticos (60--63 segundos) sin
+importar cuánto se subiera el \emph{timeout} del cliente. Ese diagnóstico
+llevó a la solución correcta: dejar de depender de muchas peticiones cortas
+a una API remota y usar el extracto \texttt{.osm.pbf} completo, procesado
+enteramente local. El costo de este descubrimiento fue tiempo, no
+arquitectura: el pipeline ya soportaba un \emph{fallback}, así que agregar
+una tercera fuente (\texttt{osm-pbf}) antes de las otras dos fue un cambio
+contenido a \texttt{routing.get\_graph()}, sin tocar snapping, matriz,
+métricas ni dashboard.
 
 \subsection{Proyección de coordenadas (EPSG)}
 
@@ -348,15 +400,16 @@ procesa por separado.
 \section{Limitaciones}
 
 \begin{enumerate}
-\item \textbf{La limitación central: el motor de ruteo no usó red vial real
-  para 2 de 3 departamentos.} Huancavelica y Madre de Dios corrieron sobre
-  un grafo sintético (250 nodos aleatorios, sin topología vial real) en
-  esta corrida, porque Overpass no respondió. Todo t\_min, toda métrica
-  derivada y todo mapa de esos dos departamentos debe leerse como una
-  validación de que el pipeline funciona de punta a punta, \textbf{no} como
-  una medición de acceso real. Tumbes sí tiene red real para auto y
-  bicicleta, pero no para caminar --- así que ni siquiera dentro de Tumbes
-  la comparación entre perfiles es completamente limpia.
+\item \textbf{Cobertura vial de OSM en la selva profunda de Madre de
+  Dios.} La distancia de snap promedio en Madre de Dios es de 131.8\,km
+  (máxima: 245\,km) --- muy por encima de los 2.7--7.7\,km de Huancavelica
+  y Tumbes. No es un error del pipeline: refleja que amplias zonas de Madre
+  de Dios genuinamente no tienen vías mapeadas en OSM (comunidades
+  accesibles solo por río). Para esos puntos, \texttt{t\_min} está
+  dominado por la distancia hasta el nodo vial más cercano, no por un
+  trayecto real, y debe leerse con cautela --- una versión futura debería
+  excluir o marcar explícitamente los puntos con distancia de snap por
+  encima de un umbral (p.ej. 20\,km).
 \item \textbf{El 53\,\% de los centros poblados del IGN no tienen código
   oficial.} Se usa \texttt{OBJECTID} (identificador de fila del shapefile)
   como llave única en su lugar; es estable dentro de una misma versión del
@@ -385,36 +438,48 @@ procesa por separado.
   nombre}, y quedaron con población 0 o sin bandera de validación de
   polígono. El cruce se hizo por nombre normalizado (sin tildes), no por un
   código administrativo común entre las tres fuentes.
+\item \textbf{Snapshot único del extracto OSM (8 de septiembre de 2026).}
+  La cobertura vial de OpenStreetMap mejora con el tiempo por
+  contribuciones voluntarias; los resultados de Madre de Dios en particular
+  podrían cambiar en un extracto más reciente.
 \end{enumerate}
-
-Ninguna de estas limitaciones es un defecto de diseño: en cuanto se
-resuelva el acceso de red a Overpass (o se sustituya por un extracto OSM
-descargado en bloque) y se integre un DEM real, el mismo pipeline sin
-cambios de arquitectura produce resultados con validez plena.
 
 \section{Conclusiones y recomendaciones}
 
-Con los datos reales de facilities y población ya integrados, el patrón
-más contundente y menos dependiente del motor de ruteo es estructural, no
-temporal: \textbf{Madre de Dios tiene 2 hospitales resolutivos para todo el
-departamento}, frente a 3 en Tumbes (departamento con una décima parte del
-territorio) y 5 en Huancavelica. Esa escasez de oferta es la que domina el
-resultado del 2SFCA y, casi con certeza, seguirá dominando el resultado de
-tiempo de acceso una vez que la red vial real esté disponible para los tres
-departamentos --- porque ninguna mejora de red vial resuelve un problema de
-oferta insuficiente.
+Con red vial real para los tres departamentos, el hallazgo más importante
+de este reporte contradice la hipótesis con la que se diseñó el estudio:
+\textbf{la sierra (Huancavelica), no la selva (Madre de Dios), es la
+geografía con peor acceso vial a salud resolutiva} --- 50.9 minutos
+ponderados frente a 14.4, con 9 de los 10 distritos más críticos del país
+concentrados ahí. Es un resultado que la comparación línea recta vs.\ red
+(\S5.1) explica mecánicamente: la penalidad mediana de ignorar la red vial
+es 14 minutos en Huancavelica y apenas 2 en Tumbes, evidencia directa de
+que la topografía andina --- no la distancia bruta ni la dispersión
+amazónica --- es lo que más encarece el acceso real.
+
+Un segundo patrón, independiente del motor de ruteo, sigue siendo
+estructural: \textbf{Madre de Dios tiene 2 hospitales resolutivos para todo
+el departamento}, frente a 3 en Tumbes y 5 en Huancavelica. Esa escasez de
+oferta domina el resultado del 2SFCA y es un problema que ninguna mejora de
+red vial resuelve por sí sola.
 
 Recomendaciones concretas, en orden de costo/impacto:
 \begin{enumerate}
-\item Recorrer el pipeline (\texttt{python run\_pipeline.py --real --force})
-  desde una red sin el bloqueo a Overpass observado en este entorno de
-  desarrollo, para obtener red vial real en Huancavelica y Madre de Dios.
 \item Integrar un DEM real (\texttt{rasterio} + \texttt{zonal\_stats},
-  técnica ya identificada) para completar el cross-analysis de altitud.
+  técnica ya identificada) para confirmar si la altitud explica
+  estadísticamente la penalización encontrada en Huancavelica, más allá de
+  la evidencia mecánica de \S5.1.
+\item Marcar o excluir los puntos de demanda de Madre de Dios con distancia
+  de snap mayor a un umbral (p.ej. 20\,km), y evaluar fuentes
+  complementarias de red vial/fluvial para esa zona.
 \item Evaluar la ampliación de capacidad resolutiva en Madre de Dios como
-  intervención de política: el simulador de escenario del dashboard permite
-  cuantificar el efecto de mejorar establecimientos I-3/I-4 existentes en
-  vez de construir desde cero.
+  intervención de política independiente de la red vial: el simulador de
+  escenario del dashboard permite cuantificar el efecto de mejorar
+  establecimientos I-3/I-4 existentes en vez de construir desde cero.
+\item Priorizar intervención vial (no solo de salud) en los distritos
+  críticos de Huancavelica identificados en la Tabla \ref{tab:critical_districts},
+  dado que ahí el cuello de botella es demostrablemente la red, no
+  únicamente la oferta.
 \end{enumerate}
 
 \section{Referencias}
@@ -426,9 +491,11 @@ Recomendaciones concretas, en orden de costo/impacto:
 \item Instituto Nacional de Estadística e Informática (INEI). Límites
   distritales (vía material del curso Data Science con Python, sesión de
   análisis geoespacial).
-\item OpenStreetMap contributors, vía Overpass API y OSMnx (Boeing, G.
-  2017. \emph{OSMnx: New methods for acquiring, constructing, analyzing,
-  and visualizing complex street networks.})
+\item Geofabrik GmbH y OpenStreetMap contributors. \href{https://download.geofabrik.de/south-america/peru.html}{Perú, extracto OSM (peru-latest.osm.pbf)}. Licencia ODbL.
+\item Boeing, G. (2017). \emph{OSMnx: New methods for acquiring,
+  constructing, analyzing, and visualizing complex street networks.}
+\item Fink, C. y equipo pyrosm. \emph{pyrosm: Read OpenStreetMap data from
+  Protocolbuffer Binary Format (PBF) in Python.}
 \item Hagenauer, J. y Helbich, M. sobre curva de Lorenz y coeficiente de
   Gini ponderado aplicado a variables no monetarias.
 \item Luo, W. y Wang, F. (2003). \emph{Measures of spatial accessibility to

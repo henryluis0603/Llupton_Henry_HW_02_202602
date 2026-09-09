@@ -4,15 +4,15 @@
       "drive":{
         "demanda":{
           "n_puntos":329,
-          "snap_dist_m_promedio":7929.1283796558,
-          "snap_dist_m_max":45911.3360497346,
-          "n_sobre_umbral":205,
+          "snap_dist_m_promedio":7759.0193546225,
+          "snap_dist_m_max":45243.9166889037,
+          "n_sobre_umbral":177,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":3,
-          "snap_dist_m_promedio":49.6159305448,
-          "snap_dist_m_max":86.1024632512,
+          "snap_dist_m_promedio":46.4085200967,
+          "snap_dist_m_max":84.9522138095,
           "n_sobre_umbral":0,
           "umbral_metros":500
         }
@@ -20,31 +20,31 @@
       "walk":{
         "demanda":{
           "n_puntos":329,
-          "snap_dist_m_promedio":7845.0284789018,
-          "snap_dist_m_max":44186.9087175963,
-          "n_sobre_umbral":318,
+          "snap_dist_m_promedio":7636.1532448728,
+          "snap_dist_m_max":45243.9166889037,
+          "n_sobre_umbral":162,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":3,
-          "snap_dist_m_promedio":3954.1283613328,
-          "snap_dist_m_max":4707.4820407521,
-          "n_sobre_umbral":3,
+          "snap_dist_m_promedio":27.1441431086,
+          "snap_dist_m_max":46.3385917873,
+          "n_sobre_umbral":0,
           "umbral_metros":500
         }
       },
       "bike":{
         "demanda":{
           "n_puntos":329,
-          "snap_dist_m_promedio":7929.1283796558,
-          "snap_dist_m_max":45911.3360497346,
-          "n_sobre_umbral":205,
+          "snap_dist_m_promedio":7643.6144792563,
+          "snap_dist_m_max":45243.9166889037,
+          "n_sobre_umbral":163,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":3,
-          "snap_dist_m_promedio":49.6159305448,
-          "snap_dist_m_max":86.1024632512,
+          "snap_dist_m_promedio":27.1441431086,
+          "snap_dist_m_max":46.3385917873,
           "n_sobre_umbral":0,
           "umbral_metros":500
         }
@@ -54,48 +54,48 @@
       "drive":{
         "demanda":{
           "n_puntos":1673,
-          "snap_dist_m_promedio":7770.8122221416,
-          "snap_dist_m_max":41801.0503636763,
-          "n_sobre_umbral":1665,
+          "snap_dist_m_promedio":2745.3257153065,
+          "snap_dist_m_max":37176.6667227889,
+          "n_sobre_umbral":764,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":5,
-          "snap_dist_m_promedio":8602.3557974365,
-          "snap_dist_m_max":12713.5839115926,
-          "n_sobre_umbral":5,
+          "snap_dist_m_promedio":36.2224811394,
+          "snap_dist_m_max":63.6107223609,
+          "n_sobre_umbral":0,
           "umbral_metros":500
         }
       },
       "walk":{
         "demanda":{
           "n_puntos":1673,
-          "snap_dist_m_promedio":7770.8122221416,
-          "snap_dist_m_max":41801.0503636763,
-          "n_sobre_umbral":1665,
+          "snap_dist_m_promedio":2694.4658358375,
+          "snap_dist_m_max":37176.6667227889,
+          "n_sobre_umbral":738,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":5,
-          "snap_dist_m_promedio":8602.3557974365,
-          "snap_dist_m_max":12713.5839115926,
-          "n_sobre_umbral":5,
+          "snap_dist_m_promedio":36.2224811394,
+          "snap_dist_m_max":63.6107223609,
+          "n_sobre_umbral":0,
           "umbral_metros":500
         }
       },
       "bike":{
         "demanda":{
           "n_puntos":1673,
-          "snap_dist_m_promedio":7770.8122221416,
-          "snap_dist_m_max":41801.0503636763,
-          "n_sobre_umbral":1665,
+          "snap_dist_m_promedio":2699.0793987772,
+          "snap_dist_m_max":37176.6667227889,
+          "n_sobre_umbral":738,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":5,
-          "snap_dist_m_promedio":8602.3557974365,
-          "snap_dist_m_max":12713.5839115926,
-          "n_sobre_umbral":5,
+          "snap_dist_m_promedio":36.2224811394,
+          "snap_dist_m_max":63.6107223609,
+          "n_sobre_umbral":0,
           "umbral_metros":500
         }
       }
@@ -104,15 +104,15 @@
       "drive":{
         "demanda":{
           "n_puntos":368,
-          "snap_dist_m_promedio":13865.2419591162,
-          "snap_dist_m_max":32436.2412089718,
-          "n_sobre_umbral":366,
+          "snap_dist_m_promedio":131848.1833660283,
+          "snap_dist_m_max":245061.1639976636,
+          "n_sobre_umbral":350,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":2,
-          "snap_dist_m_promedio":24119.6155258835,
-          "snap_dist_m_max":25513.5345347133,
+          "snap_dist_m_promedio":188957.8343109337,
+          "snap_dist_m_max":189979.490302447,
           "n_sobre_umbral":2,
           "umbral_metros":500
         }
@@ -120,15 +120,15 @@
       "walk":{
         "demanda":{
           "n_puntos":368,
-          "snap_dist_m_promedio":13865.2419591162,
-          "snap_dist_m_max":32436.2412089718,
-          "n_sobre_umbral":366,
+          "snap_dist_m_promedio":131838.8863383399,
+          "snap_dist_m_max":245061.1639976636,
+          "n_sobre_umbral":350,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":2,
-          "snap_dist_m_promedio":24119.6155258835,
-          "snap_dist_m_max":25513.5345347133,
+          "snap_dist_m_promedio":188957.8343109337,
+          "snap_dist_m_max":189979.490302447,
           "n_sobre_umbral":2,
           "umbral_metros":500
         }
@@ -136,15 +136,15 @@
       "bike":{
         "demanda":{
           "n_puntos":368,
-          "snap_dist_m_promedio":13865.2419591162,
-          "snap_dist_m_max":32436.2412089718,
-          "n_sobre_umbral":366,
+          "snap_dist_m_promedio":131839.3471276773,
+          "snap_dist_m_max":245061.1639976636,
+          "n_sobre_umbral":350,
           "umbral_metros":500
         },
         "facilities":{
           "n_puntos":2,
-          "snap_dist_m_promedio":24119.6155258835,
-          "snap_dist_m_max":25513.5345347133,
+          "snap_dist_m_promedio":188957.8343109337,
+          "snap_dist_m_max":189979.490302447,
           "n_sobre_umbral":2,
           "umbral_metros":500
         }
@@ -153,19 +153,19 @@
   },
   "graph_sources":{
     "costa":{
-      "drive":"osm",
-      "walk":"synthetic",
-      "bike":"osm"
+      "drive":"osm-pbf",
+      "walk":"osm-pbf",
+      "bike":"osm-pbf"
     },
     "andino":{
-      "drive":"synthetic",
-      "walk":"synthetic",
-      "bike":"synthetic"
+      "drive":"osm-pbf",
+      "walk":"osm-pbf",
+      "bike":"osm-pbf"
     },
     "amazonico":{
-      "drive":"synthetic",
-      "walk":"synthetic",
-      "bike":"synthetic"
+      "drive":"osm-pbf",
+      "walk":"osm-pbf",
+      "bike":"osm-pbf"
     }
   }
 }

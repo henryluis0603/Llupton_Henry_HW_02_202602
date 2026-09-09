@@ -33,6 +33,34 @@ Profile = Literal["drive", "walk", "bike"]
 # Velocidades constantes (km/h) para perfiles sin tag maxspeed en OSM.
 _FALLBACK_SPEED_KMH = {"drive": 30.0, "walk": 5.0, "bike": 15.0}
 
+# Velocidad por tipo de vía (km/h) cuando no hay tag maxspeed — la mayoría de
+# vías en los departamentos analizados no lo tienen. Tabla estándar usada por
+# routers open-source (OSRM car.lua / OSMnx internamente), no inventada.
+_HIGHWAY_SPEED_KMH = {
+    "motorway": 100, "motorway_link": 60,
+    "trunk": 80, "trunk_link": 50,
+    "primary": 60, "primary_link": 40,
+    "secondary": 50, "secondary_link": 35,
+    "tertiary": 40, "tertiary_link": 30,
+    "unclassified": 30, "residential": 25, "living_street": 15,
+    "service": 20, "track": 20, "road": 30,
+}
+_DEFAULT_DRIVE_SPEED_KMH = 30.0
+
+
+def _parse_maxspeed_kmh(raw: object) -> float | None:
+    """'50', '50 km/h', '30 mph' -> km/h. None si no se puede parsear."""
+    import re
+
+    if raw is None or (isinstance(raw, float) and pd.isna(raw)):
+        return None
+    text = str(raw).strip().lower()
+    match = re.search(r"(\d+(?:\.\d+)?)", text)
+    if not match:
+        return None
+    value = float(match.group(1))
+    return value * 1.60934 if "mph" in text else value
+
 
 def _cache_dir(rol: str) -> Path:
     d = config.ruta("routing_cache_dir") / rol
@@ -75,6 +103,54 @@ def _build_synthetic_graph(bbox: dict, profile: Profile, seed: int = 42, n_nodes
     return G
 
 
+_PYROSM_NETWORK_TYPE = {"drive": "driving", "walk": "walking", "bike": "cycling"}
+
+
+def _get_graph_from_pbf(rol: str, profile: Profile, bbox: dict) -> nx.MultiDiGraph:
+    """Construye el grafo desde el extracto local `peru-latest.osm.pbf`
+    (issue #186: fuente OSM Perú literal) en vez de Overpass en vivo. Todo
+    el trabajo es local — sin llamadas de red — así que no puede toparse con
+    el corte de conexión a ~60s que sí afecta a Overpass para departamentos
+    grandes (ver README, sección de decisiones de clase)."""
+    from pyrosm import OSM
+
+    pbf_path = config.ruta("raw") / "peru-latest.osm.pbf"
+    if not pbf_path.exists():
+        raise FileNotFoundError(f"No existe {pbf_path} — descargar con curl (ver README) antes de usar --pbf")
+
+    network_type = _PYROSM_NETWORK_TYPE[profile]
+    osm = OSM(str(pbf_path), bounding_box=[bbox["west"], bbox["south"], bbox["east"], bbox["north"]])
+    nodes, edges = osm.get_network(network_type=network_type, nodes=True)
+    if edges is None or len(edges) == 0:
+        raise ValueError(f"pyrosm no encontró red vial tipo '{network_type}' en el bbox de {rol}")
+
+    G_raw = osm.to_graph(nodes, edges, graph_type="networkx", network_type=network_type, osmnx_compatible=True)
+
+    # Grafo limpio con solo los atributos que routing.py usa: pyrosm deja
+    # columnas OSM crudas (oneway, access, bridge, ...) con NaN cuando el tag
+    # no existe, y el (de)serializador GraphML de osmnx espera tipos fijos
+    # para esos nombres de atributo conocidos (p.ej. 'oneway' -> bool) — un
+    # NaN ahí rompe `ox.load_graphml` al recargar desde caché. Más simple y
+    # robusto no arrastrar esas columnas en vez de sanearlas una por una.
+    G = nx.MultiDiGraph(crs="EPSG:4326")
+    for n, data in G_raw.nodes(data=True):
+        G.add_node(n, x=data["x"], y=data["y"])
+
+    speed_mps_const = _FALLBACK_SPEED_KMH[profile] * 1000 / 3600
+    for u, v, data in G_raw.edges(data=True):
+        length_m = float(data.get("length", 0.0))
+        if profile == "drive":
+            speed_kmh = _parse_maxspeed_kmh(data.get("maxspeed"))
+            if speed_kmh is None:
+                speed_kmh = _HIGHWAY_SPEED_KMH.get(str(data.get("highway")), _DEFAULT_DRIVE_SPEED_KMH)
+            travel_time = length_m / (speed_kmh * 1000 / 3600)
+        else:
+            travel_time = length_m / speed_mps_const
+        G.add_edge(u, v, length=length_m, travel_time=travel_time)
+
+    return G
+
+
 def get_graph(rol: str, profile: Profile, force: bool = False) -> tuple[nx.MultiDiGraph, str]:
     """Devuelve (grafo, fuente) donde fuente es 'osm' o 'synthetic'. Cachea en
     data/processed/routing_cache/<rol>/<profile>.graphml."""
@@ -93,40 +169,63 @@ def get_graph(rol: str, profile: Profile, force: bool = False) -> tuple[nx.Multi
     bbox = dept["bbox"]
 
     network_type = "drive" if profile in ("drive", "bike") else profile
-    try:
-        import osmnx as ox
+    G = None
+    source = None
 
-        # Falla rápido si Overpass no responde (IP bloqueada, sin red) en vez
-        # de colgar minutos por departamento/perfil antes de caer a sintético.
-        ox.settings.requests_timeout = 10
-        # cache HTTP propio de osmnx dentro de data/processed, no en la raíz del repo
-        ox.settings.cache_folder = config.ruta("processed") / "osmnx_http_cache"
+    # 1) Extracto local peru-latest.osm.pbf (issue #186: fuente OSM Perú
+    # literal) si está descargado — todo el trabajo es local, así que no
+    # puede toparse con el corte de conexión a ~60s que sí afecta a
+    # Overpass en vivo para departamentos grandes (ver README).
+    pbf_path = config.ruta("raw") / "peru-latest.osm.pbf"
+    if pbf_path.exists():
+        try:
+            G = _get_graph_from_pbf(rol, profile, bbox)
+            source = "osm-pbf"
+        except Exception as exc:
+            log.warning("Falló parseo del .pbf para %s/%s (%s). Intentando Overpass en vivo.", rol, profile, exc)
 
-        # osmnx >= 2.0 espera bbox como (left, bottom, right, top) =
-        # (west, south, east, north), no (north, south, east, west) como en 1.x
-        G = ox.graph_from_bbox(
-            bbox=(bbox["west"], bbox["south"], bbox["east"], bbox["north"]),
-            network_type=network_type,
-        )
-        if profile == "drive":
-            G = ox.add_edge_speeds(G)
-            G = ox.add_edge_travel_times(G)
-        else:
-            speed_mps = _FALLBACK_SPEED_KMH[profile] * 1000 / 3600
-            for _, _, data in G.edges(data=True):
-                data["travel_time"] = data.get("length", 0.0) / speed_mps
-        source = "osm"
-        ox.save_graphml(G, cache_path)
-    except Exception as exc:  # red caída, Overpass bloqueado/timeout, etc.
-        log.warning("Falló descarga OSM para %s/%s (%s). Usando grafo sintético.", rol, profile, exc)
-        G = _build_synthetic_graph(bbox, profile)
-        source = "synthetic"
+    # 2) Overpass en vivo, si no hay .pbf o falló el parseo.
+    if G is None:
         try:
             import osmnx as ox
 
-            ox.save_graphml(G, cache_path)
-        except Exception:
-            nx.write_graphml(G, cache_path)
+            # 240s, no 10s: un timeout corto falla rápido cuando el servidor
+            # está inalcanzable (conexión rechazada/reset falla casi
+            # instantáneo pase lo que pase), pero mata subconsultas de
+            # departamentos grandes que están respondiendo, solo que lento
+            # — confirmado empíricamente: con 10s, Huancavelica (13x el área
+            # máxima de consulta, se subdivide en muchas subconsultas)
+            # perdía perfiles completos que sí terminaban en ~3 minutos
+            # cuando se les daba tiempo.
+            ox.settings.requests_timeout = 240
+            # cache HTTP propio de osmnx dentro de data/processed, no en la raíz del repo
+            ox.settings.cache_folder = config.ruta("processed") / "osmnx_http_cache"
+
+            # osmnx >= 2.0 espera bbox como (left, bottom, right, top) =
+            # (west, south, east, north), no (north, south, east, west) como en 1.x
+            G = ox.graph_from_bbox(
+                bbox=(bbox["west"], bbox["south"], bbox["east"], bbox["north"]),
+                network_type=network_type,
+            )
+            if profile == "drive":
+                G = ox.add_edge_speeds(G)
+                G = ox.add_edge_travel_times(G)
+            else:
+                speed_mps = _FALLBACK_SPEED_KMH[profile] * 1000 / 3600
+                for _, _, data in G.edges(data=True):
+                    data["travel_time"] = data.get("length", 0.0) / speed_mps
+            source = "osm-overpass"
+        except Exception as exc:  # red caída, Overpass bloqueado/timeout, etc.
+            log.warning("Falló descarga OSM para %s/%s (%s). Usando grafo sintético.", rol, profile, exc)
+            G = _build_synthetic_graph(bbox, profile)
+            source = "synthetic"
+
+    try:
+        import osmnx as ox
+
+        ox.save_graphml(G, cache_path)
+    except Exception:
+        nx.write_graphml(G, cache_path)
 
     source_marker.write_text(source)
     return G, source

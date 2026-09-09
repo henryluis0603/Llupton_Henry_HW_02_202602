@@ -5,6 +5,15 @@ __pycache__/
 .ipynb_checkpoints/
 .claude/
 data/processed/osmnx_http_cache/
+cache/
+
+# Grafos de ruteo (.graphml): con red vial real via pyrosm/peru-latest.osm.pbf
+# pesan hasta 384MB por departamento grande (Huancavelica/Madre de Dios) —
+# muy por encima del límite de 100MB de GitHub, y el dashboard no los
+# necesita (app.py solo lee las matrices matrix_*.parquet, ya committeadas y
+# muchísimo más chicas). Se regeneran con `python run_pipeline.py --real`
+# a partir del .pbf. El marcador .source (qué fuente se usó) sí se commitea.
+data/processed/routing_cache/*/*.graphml
 
 # Tectonic (motor LaTeX autocontenido, ~54MB) descargado localmente para
 # compilar el PDF del reporte — no es código del proyecto, se re-descarga
