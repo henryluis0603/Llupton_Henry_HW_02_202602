@@ -15,6 +15,11 @@ cache/
 # a partir del .pbf. El marcador .source (qué fuente se usó) sí se commitea.
 data/processed/routing_cache/*/*.graphml
 
+# Extracto .pbf intermedio por departamento (pyosmium, preextracción
+# determinista previa a pyrosm — ver comentario en src/routing.py). Cache
+# regenerable a partir de data/raw/peru-latest.osm.pbf.
+data/processed/routing_cache/*/extract.osm.pbf
+
 # Tectonic (motor LaTeX autocontenido, ~54MB) descargado localmente para
 # compilar el PDF del reporte — no es código del proyecto, se re-descarga
 # con el comando documentado en report/README o el Makefile.

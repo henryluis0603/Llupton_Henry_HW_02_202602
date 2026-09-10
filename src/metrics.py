@@ -24,14 +24,24 @@ from src import config
 def coverage_bands(
     df: pd.DataFrame, time_col: str = "t_min", weight_col: str = "poblacion", thresholds: list[int] | None = None
 ) -> pd.DataFrame:
+    """`pd.cut` deja NaN sin banda (no encaja en ningún intervalo) y
+    `groupby(observed=True)` los elimina en silencio del total — con red
+    real, un punto de demanda puede no tener NINGUNA facility alcanzable
+    (componente vial desconectado, ver [[routing.nearest_facility]]), y esa
+    población quedaría descontada de golpe del denominador de %. Se agrega
+    una banda explícita 'Sin ruta (red desconectada)' para esos casos en vez
+    de dejarlos fuera del reporte."""
     thresholds = thresholds or config.thresholds_minutos()
     edges = [0] + sorted(thresholds) + [np.inf]
     labels = [f"<= {edges[i+1]} min" if edges[i + 1] != np.inf else f"> {edges[-2]} min" for i in range(len(edges) - 1)]
-    band = pd.cut(df[time_col], bins=edges, labels=labels, right=True, include_lowest=True)
+    sin_ruta_label = "Sin ruta (red desconectada)"
+    band = pd.cut(df[time_col], bins=edges, labels=labels, right=True, include_lowest=True).astype("object")
+    band = band.where(df[time_col].notna(), sin_ruta_label)
     out = df.assign(_band=band).groupby("_band", observed=True)[weight_col].sum().reset_index()
     out.columns = ["banda", "poblacion"]
     out["pct_poblacion"] = out["poblacion"] / out["poblacion"].sum() * 100
-    return out
+    order = {label: i for i, label in enumerate(labels + [sin_ruta_label])}
+    return out.sort_values("banda", key=lambda s: s.map(order)).reset_index(drop=True)
 
 
 # ---------------------------------------------------------------------- #
@@ -40,12 +50,22 @@ def coverage_bands(
 def weighted_mean_access(
     df: pd.DataFrame, group_col: str, time_col: str = "t_min", weight_col: str = "poblacion"
 ) -> pd.DataFrame:
-    def _wmean(g: pd.DataFrame) -> float:
-        w = g[weight_col]
-        return float((g[time_col] * w).sum() / w.sum()) if w.sum() > 0 else np.nan
+    """Promedio ponderado SOLO entre población con ruta (t_min no-NaN):
+    sumar `g[time_col] * w` con NaN en `time_col` y luego dividir por
+    `w.sum()` de TODO el grupo mezclaría numerador (sin los NaN, por el
+    skipna por defecto de `.sum()`) con un denominador que sí los incluye
+    — subestimaría el tiempo promedio real al tratar a la población sin
+    ruta como si tardara 0 minutos. Se excluye esa población del promedio
+    y se reporta aparte en `pct_sin_ruta`."""
+    def _wmean(g: pd.DataFrame) -> pd.Series:
+        g_valid = g.dropna(subset=[time_col])
+        w = g_valid[weight_col]
+        t_pond = float((g_valid[time_col] * w).sum() / w.sum()) if w.sum() > 0 else np.nan
+        w_total = g[weight_col].sum()
+        pct_sin_ruta = float(100 * (w_total - w.sum()) / w_total) if w_total > 0 else np.nan
+        return pd.Series({"t_min_ponderado": t_pond, "pct_sin_ruta": pct_sin_ruta})
 
     out = df.groupby(group_col).apply(_wmean, include_groups=False).reset_index()
-    out.columns = [group_col, "t_min_ponderado"]
     return out.sort_values("t_min_ponderado", ascending=False).reset_index(drop=True)
 
 
@@ -222,7 +242,8 @@ def straight_line_vs_network(
     })
 
     net = matrix.reset_index()
-    network_best = net.loc[net.groupby(demand_id_col)["t_min"].idxmin()]
+    net_valid = net.dropna(subset=["t_min"])
+    network_best = net.loc[net_valid.groupby(demand_id_col)["t_min"].idxmin()]
     network_best = network_best.rename(columns={facility_id_col: "facility_red", "t_min": "t_min_red"})
     network_best = network_best[[demand_id_col, "facility_red", "t_min_red"]]
 

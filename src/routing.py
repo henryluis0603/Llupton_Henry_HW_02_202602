@@ -105,6 +105,76 @@ def _build_synthetic_graph(bbox: dict, profile: Profile, seed: int = 42, n_nodes
 
 _PYROSM_NETWORK_TYPE = {"drive": "driving", "walk": "walking", "bike": "cycling"}
 
+# Dos bugs distintos, encontrados y corregidos en cadena para Madre de Dios
+# (bbox ~400km de lado):
+#
+# 1) get_network(bounding_box=<bbox grande>) sobre el .pbf NACIONAL completo
+#    (256MB) devolvía una red cortada a media altura del departamento —
+#    parecía depender de la RAM libre del proceso (menos determinista
+#    corriendo dentro del pipeline completo que aislado). Fix: preextraer
+#    con `pyosmium` (streaming en C++, memoria acotada) un .pbf chico
+#    reference-complete SOLO para el bbox del departamento (~20MB), y que
+#    pyrosm parsee ese archivo chico en vez del país completo. Con esto
+#    get_network(network_type='all') sí trae los 665k nodos completos, de
+#    forma reproducible.
+#
+# 2) Con la cobertura de nodos ya completa, `to_graph(...)` seguía
+#    devolviendo solo 278k nodos (cortados en el mismo punto) — esta vez NO
+#    por bbox/memoria sino porque `to_graph` por defecto usa
+#    `retain_all=False`: se queda solo con el componente conexo más grande
+#    y descarta el resto. La red vial filtrada por `highway` resultó estar
+#    fragmentada en cientos de miles de componentes (confirmado con
+#    `nx.weakly_connected_components`) — el más grande cubre Puerto
+#    Maldonado hacia el sur/oeste, y hay componentes separados más al norte
+#    y este (hacia Iñapari/Iberia) que `to_graph` descartaba por completo.
+#    Esto — no la extracción — era la causa real de que las facilities/
+#    demanda del norte del departamento terminaran snapeadas a ~130km de
+#    distancia: no faltaba el nodo más cercano, pyrosm lo había podado.
+#    Fix: `retain_all=True` en `to_graph`, y dejar que sea el snapping +
+#    matriz de tiempos quien refleje honestamente cuándo dos puntos NO
+#    están conectados por red vial mapeada (tiempo infinito/NaN), en vez de
+#    que pyrosm decida en silencio qué componente "cuenta".
+_DRIVE_HIGHWAYS = {
+    "motorway", "motorway_link", "trunk", "trunk_link", "primary", "primary_link",
+    "secondary", "secondary_link", "tertiary", "tertiary_link", "unclassified",
+    "residential", "living_street", "service", "road",
+}
+_EXCLUDE_WALK_HIGHWAYS = {"motorway", "motorway_link"}
+_EXCLUDE_BIKE_HIGHWAYS = {"motorway", "motorway_link"}
+
+
+def _extract_pbf_for_bbox(rol: str, bbox: dict) -> Path:
+    """Preextrae, con pyosmium (streaming, memoria acotada), un .pbf chico
+    y reference-complete (vías con todos sus nodos, aunque algún nodo caiga
+    fuera del bbox) para el bbox del departamento. Cacheado en disco — se
+    reusa entre profiles (drive/walk/bike) del mismo rol. No confundir con
+    el .graphml cacheado por profile: este extracto es un insumo intermedio,
+    un nivel más abajo."""
+    import osmium
+
+    out_path = _cache_dir(rol) / "extract.osm.pbf"
+    if out_path.exists():
+        return out_path
+
+    pbf_path = config.ruta("raw") / "peru-latest.osm.pbf"
+    if not pbf_path.exists():
+        raise FileNotFoundError(f"No existe {pbf_path} — descargar con curl (ver README) antes de usar --pbf")
+
+    bounds = (bbox["west"], bbox["south"], bbox["east"], bbox["north"])
+    # tmp_path DEBE terminar en .pbf: osmium detecta el formato de salida por
+    # extensión, y un ".tmp" al final rompe esa detección (bug real, ya
+    # atrapado: hacía que todo el flujo cayera silenciosamente a sintético).
+    tmp_path = out_path.with_name(out_path.stem + ".tmp.pbf")
+    with osmium.ForwardReferenceWriter(
+        str(tmp_path), ref_src=str(pbf_path), overwrite=True, back_references=True, remove_tags=False
+    ) as writer:
+        fp = osmium.FileProcessor(str(pbf_path)).with_filter(osmium.filter.EntityFilter(osmium.osm.NODE))
+        for node in fp:
+            if bounds[0] <= node.location.lon <= bounds[2] and bounds[1] <= node.location.lat <= bounds[3]:
+                writer.add_node(node)
+    tmp_path.rename(out_path)
+    return out_path
+
 
 def _get_graph_from_pbf(rol: str, profile: Profile, bbox: dict) -> nx.MultiDiGraph:
     """Construye el grafo desde el extracto local `peru-latest.osm.pbf`
@@ -114,17 +184,26 @@ def _get_graph_from_pbf(rol: str, profile: Profile, bbox: dict) -> nx.MultiDiGra
     grandes (ver README, sección de decisiones de clase)."""
     from pyrosm import OSM
 
-    pbf_path = config.ruta("raw") / "peru-latest.osm.pbf"
-    if not pbf_path.exists():
-        raise FileNotFoundError(f"No existe {pbf_path} — descargar con curl (ver README) antes de usar --pbf")
+    extract_path = _extract_pbf_for_bbox(rol, bbox)
 
     network_type = _PYROSM_NETWORK_TYPE[profile]
-    osm = OSM(str(pbf_path), bounding_box=[bbox["west"], bbox["south"], bbox["east"], bbox["north"]])
-    nodes, edges = osm.get_network(network_type=network_type, nodes=True)
+    osm = OSM(str(extract_path), bounding_box=[bbox["west"], bbox["south"], bbox["east"], bbox["north"]])
+    nodes, edges = osm.get_network(network_type="all", nodes=True)
     if edges is None or len(edges) == 0:
-        raise ValueError(f"pyrosm no encontró red vial tipo '{network_type}' en el bbox de {rol}")
+        raise ValueError(f"pyrosm no encontró ninguna vía en el bbox de {rol}")
 
-    G_raw = osm.to_graph(nodes, edges, graph_type="networkx", network_type=network_type, osmnx_compatible=True)
+    if profile == "drive":
+        edges = edges[edges["highway"].isin(_DRIVE_HIGHWAYS)]
+    elif profile == "walk":
+        edges = edges[~edges["highway"].isin(_EXCLUDE_WALK_HIGHWAYS)]
+    elif profile == "bike":
+        edges = edges[~edges["highway"].isin(_EXCLUDE_BIKE_HIGHWAYS)]
+    if len(edges) == 0:
+        raise ValueError(f"Sin vías tipo '{profile}' tras filtrar por highway en el bbox de {rol}")
+
+    G_raw = osm.to_graph(
+        nodes, edges, graph_type="networkx", network_type=network_type, osmnx_compatible=True, retain_all=True
+    )
 
     # Grafo limpio con solo los atributos que routing.py usa: pyrosm deja
     # columnas OSM crudas (oneway, access, bridge, ...) con NaN cuando el tag
@@ -322,9 +401,15 @@ def travel_time_matrix(
 
 
 def nearest_facility(matrix: pd.DataFrame, demand_id_col: str, facility_id_col: str) -> pd.DataFrame:
-    """De la matriz completa, la facility más cercana por punto de demanda."""
+    """De la matriz completa, la facility más cercana por punto de demanda.
+    Puntos de demanda sin NINGUNA facility alcanzable por red (todo NaN —
+    p.ej. quedaron en un componente vial desconectado de las 3 facilities,
+    algo real y posible ahora que el grafo ya no se poda al componente más
+    grande, ver comentario sobre retain_all en _get_graph_from_pbf) se
+    excluyen del resultado en vez de hacer fallar idxmin."""
     df = matrix.reset_index()
-    idx = df.groupby(demand_id_col)["t_min"].idxmin()
+    valid = df.dropna(subset=["t_min"])
+    idx = valid.groupby(demand_id_col)["t_min"].idxmin()
     return df.loc[idx].reset_index(drop=True)
 
 
