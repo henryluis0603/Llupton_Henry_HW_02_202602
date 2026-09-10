@@ -380,89 +380,59 @@ ruta, que es la falla dominante ahí (\S4).
 
 \subsection{Por qué Overpass en vivo no bastaba, y qué costó descubrirlo}
 
-La primera versión de este pipeline usaba exclusivamente la API Overpass en
-vivo, con un grafo sintético como respaldo documentado si la API no
-respondía. Esa decisión fue deliberada: un proyecto con datos reales de
-población y establecimientos, pero sin motor de ruteo, no permite probar ni
-demostrar el resto de las 5 fases mientras se diagnostica el problema de
-red. El diagnóstico llevó varias corridas: primero se sospechó que
-Overpass estaba simplemente caído (falso: \texttt{/api/status} respondía
-200 de forma consistente); luego que el \emph{timeout} propio de 10
-segundos era demasiado corto para departamentos grandes (parcialmente
-cierto: subirlo a 240s permitió que Huancavelica completara dos de tres
-perfiles en una corrida, pero no de forma confiable); finalmente, que las
-conexiones se estaban cortando externamente a un tiempo fijo
-(${\sim}$60s) independiente del \emph{timeout} configurado --- confirmado
-al ver fallos con el mensaje \texttt{Connection aborted / Connection reset
-by peer} ocurriendo a intervalos casi idénticos (60--63 segundos) sin
-importar cuánto se subiera el \emph{timeout} del cliente. Ese diagnóstico
-llevó a la solución correcta: dejar de depender de muchas peticiones cortas
-a una API remota y usar el extracto \texttt{.osm.pbf} completo, procesado
-enteramente local. El costo de este descubrimiento fue tiempo, no
-arquitectura: el pipeline ya soportaba un \emph{fallback}, así que agregar
-una tercera fuente (\texttt{osm-pbf}) antes de las otras dos fue un cambio
-contenido a \texttt{routing.get\_graph()}, sin tocar snapping, matriz,
-métricas ni dashboard.
+La primera versión usaba exclusivamente la API Overpass en vivo, con un
+grafo sintético como respaldo si la API no respondía. El diagnóstico llevó
+varias corridas: Overpass no estaba caído (\texttt{/api/status} respondía
+200); subir el \emph{timeout} de 10 a 240s no resolvía el problema de forma
+confiable; finalmente se confirmó que \textbf{algo en la red del entorno de
+desarrollo corta las conexiones salientes de larga duración a los
+${\sim}$60s}, independiente del \emph{timeout} del cliente --- visto en
+fallos \texttt{Connection reset by peer} a intervalos casi idénticos. La
+solución: dejar de depender de muchas peticiones cortas a una API remota y
+usar el extracto \texttt{.osm.pbf} completo, procesado enteramente local
+--- un cambio contenido a \texttt{routing.get\_graph()}, sin tocar
+snapping, matriz, métricas ni dashboard.
 
 \subsection{La poda de componentes que \texttt{pyrosm} aplica por defecto}
 
 El extracto \texttt{.osm.pbf} resolvió el corte de Overpass, pero introdujo
---- y escondió --- un segundo problema, distinto y más difícil de
-detectar porque no lanzaba ningún error: para Madre de Dios, la distancia
-de snap promedio salía en 131.8\,km, con facilities aparentemente a
-189\,km de la demanda más cercana. La primera hipótesis, razonable, fue
-que \texttt{pyrosm} estaba perdiendo cobertura vial al filtrar por
-\emph{bounding box} sobre el \texttt{.pbf} nacional completo (256\,MB): en
-efecto, \texttt{get\_network(bounding\_box=\ldots)} devolvía un grafo
-cortado a mitad del departamento, y el comportamiento no era reproducible
-corriendo el mismo query en aislado vs.\ dentro del pipeline completo ---
-un patrón consistente con presión de memoria del proceso que parsea el
-archivo grande. El fix correspondiente --- preextraer con
+un segundo problema, más difícil de detectar porque no lanzaba error: para
+Madre de Dios, el snap promedio salía en 131.8\,km. La primera hipótesis
+fue que \texttt{pyrosm} perdía cobertura al filtrar por \emph{bounding box}
+sobre el \texttt{.pbf} nacional (256\,MB) --- el comportamiento no era
+reproducible aislado vs.\ dentro del pipeline completo, un patrón
+consistente con presión de memoria. El fix --- preextraer con
 \texttt{pyosmium} (streaming en C++, memoria acotada) un \texttt{.pbf}
-chico y \emph{reference-complete} solo para el bbox del departamento
-(${\sim}$20\,MB en vez de 256\,MB) --- sí hizo reproducible la extracción:
-\texttt{get\_network()} sobre el archivo chico trae, de forma consistente,
-los 665\,424 nodos que corresponden al bbox declarado.
+chico por departamento (${\sim}$20\,MB) --- sí hizo reproducible la
+extracción (665\,424 nodos, cobertura completa), pero el snap seguía mal.
 
-Pero el snap seguía saliendo mal. Instrumentando \texttt{\_get\_graph\_
-from\_pbf} paso a paso se aisló la causa real: \texttt{get\_network()} ya
-devolvía la cobertura completa; el recorte ocurría un paso después, en
-\texttt{osm.to\_graph(\ldots)}. Esa función tiene un parámetro
-\texttt{retain\_all} que por defecto es \texttt{False}: \emph{``if True,
-return the entire graph even if it is not connected. otherwise, retain
-only the connected edges''} --- es decir, por defecto \texttt{to\_graph()}
-descarta todo componente vial que no sea el más grande. Con
-\texttt{nx.weakly\_connected\_components} sobre el grafo filtrado por
-\texttt{highway} se confirmó que la red drivable de Madre de Dios está
-fragmentada en \textbf{313\,529 componentes}: el mayor (278\,325 nodos)
-cubre Puerto Maldonado hacia el sur/oeste; hay un segundo componente
-sustancial (50\,176 nodos) más al este, y cientos de miles de fragmentos
-menores. \texttt{to\_graph(retain\_all=False)} se quedaba solo con el
-primero, y todo punto de demanda o facility fuera de él se snapeaba al
-nodo más cercano \emph{dentro} del componente retenido --- a veces a más
-de 200\,km, cruzando el departamento. No era que faltaran vías mapeadas:
-era que el grafo cargado en memoria ya no las tenía, aunque el
-\texttt{.pbf} sí.
+Instrumentando paso a paso se aisló la causa real: \texttt{get\_network()}
+ya devolvía la cobertura completa; el recorte ocurría en
+\texttt{to\_graph(\ldots)}, cuyo parámetro \texttt{retain\_all} es
+\texttt{False} por defecto --- descarta todo componente vial que no sea el
+más grande. La red drivable de Madre de Dios está fragmentada en
+\textbf{313\,529 componentes} (el mayor, 278\,325 nodos, cubre Puerto
+Maldonado; hay un segundo componente de 50\,176 nodos más al este, y
+cientos de miles de fragmentos menores). \texttt{to\_graph(retain\_all=
+False)} se quedaba solo con el primero, y todo punto fuera de él se
+snapeaba al nodo más cercano \emph{dentro} del componente retenido ---
+a veces a 200\,km. No faltaban vías mapeadas: el grafo cargado en memoria
+ya no las tenía.
 
-El fix fue \texttt{retain\_all=True} en \texttt{to\_graph()}, más un ajuste
-correspondiente en \texttt{routing.nearest\_facility} y
-\texttt{metrics.straight\_line\_vs\_network}: con el grafo completo, un
-punto de demanda en un componente sin ninguna facility puede legítimamente
-no tener \texttt{t\_min} (antes, \texttt{idxmin()} sobre un grupo
-enteramente \texttt{NaN} lanzaba \texttt{ValueError} --- un error que
-literalmente no podía ocurrir con la poda de componentes activada, porque
-esa poda garantizaba que \emph{alguna} facility, aunque lejana, quedara
-siempre en el mismo componente). \texttt{coverage\_bands()} y
-\texttt{weighted\_mean\_access()} se ajustaron en la misma dirección: la
-primera versión de esas funciones dividía por la población total del grupo
-pero solo sumaba en el numerador la población con ruta, lo que --- una vez
-que \texttt{t\_min} pudo ser genuinamente \texttt{NaN} --- habría
-subestimado el tiempo promedio tratando implícitamente a la población sin
-ruta como si tardara 0 minutos. El resultado final es la banda ``Sin ruta''
-explícita de la Tabla \ref{tab:coverage_bands} y la columna
-\texttt{pct\_sin\_ruta} de la Tabla \ref{tab:critical_districts}, en vez de
-un promedio que escondería la desconexión detrás de un número que parece
-razonable.
+El fix fue \texttt{retain\_all=True}, más un ajuste correspondiente en
+\texttt{nearest\_facility} y \texttt{straight\_line\_vs\_network}: con el
+grafo completo, un punto sin ninguna facility en su componente puede
+legítimamente no tener \texttt{t\_min} (antes, \texttt{idxmin()} sobre un
+grupo enteramente \texttt{NaN} lanzaba \texttt{ValueError} --- imposible
+con la poda activada, porque esa poda garantizaba que \emph{alguna}
+facility quedara siempre en el mismo componente). \texttt{coverage\_bands}
+y \texttt{weighted\_mean\_access} se ajustaron igual: dividir por la
+población total del grupo pero sumar en el numerador solo la población con
+ruta habría subestimado el tiempo promedio, tratando a la población sin
+ruta como si tardara 0 minutos. El resultado es la banda ``Sin ruta''
+explícita (Tabla \ref{tab:coverage_bands}) y la columna
+\texttt{pct\_sin\_ruta} (Tabla \ref{tab:critical_districts}), en vez de un
+promedio que esconda la desconexión.
 
 \subsection{Proyección de coordenadas (EPSG)}
 

@@ -25,11 +25,16 @@ CATEGORICAL = px.colors.qualitative.Set2
 
 
 def _wmean_safe(g: pd.DataFrame) -> float:
-    """t_min ponderado por población, NaN (no división por cero) si el
-    grupo tiene población total 0 — pasa con centros poblados reales sin
-    match de distrito en RENIEC, ver acquisition.distribute_population."""
-    w = g["poblacion"].sum()
-    return float((g["t_min"] * g["poblacion"]).sum() / w) if w > 0 else float("nan")
+    """t_min ponderado por población, SOLO entre puntos con ruta. `t_min`
+    puede ser NaN cuando un punto queda en un componente vial desconectado
+    de toda facility resolutiva (ver src/routing.nearest_facility) — sumar
+    `t_min * poblacion` con NaN en el numerador (`.sum()` los ignora por
+    defecto) pero dividir por la población TOTAL del grupo subestimaría el
+    tiempo, tratando a la población sin ruta como si tardara 0 minutos.
+    NaN (no división por cero) si nadie en el grupo tiene ruta."""
+    g_valid = g.dropna(subset=["t_min"])
+    w = g_valid["poblacion"].sum()
+    return float((g_valid["t_min"] * g_valid["poblacion"]).sum() / w) if w > 0 else float("nan")
 
 
 # --------------------------------------------------------------------- #
@@ -178,16 +183,22 @@ st.caption("Tumbes (costa) · Huancavelica (andino) · Madre de Dios (amazónico
 
 pob_total = demanda_f["poblacion"].sum()
 pob_cubierta = demanda_f.loc[demanda_f["t_min"] <= threshold, "poblacion"].sum()
-pob_mas_60 = demanda_f.loc[demanda_f["t_min"] > 60, "poblacion"].sum()
+# t_min NaN (sin ninguna ruta vial mapeada a una facility, ver
+# routing.nearest_facility) cuenta como "> 60 min" — es estrictamente peor
+# que cualquier tiempo finito, no "no aplica". `t_min > 60` por sí solo
+# evalúa a False en NaN y los excluiría en silencio.
+pob_mas_60 = demanda_f.loc[(demanda_f["t_min"] > 60) | demanda_f["t_min"].isna(), "poblacion"].sum()
+pob_sin_ruta = demanda_f.loc[demanda_f["t_min"].isna(), "poblacion"].sum()
 _acceso_por_distrito = demanda_f.groupby("distrito").apply(_wmean_safe, include_groups=False).dropna()
 peor_distrito = _acceso_por_distrito.idxmax() if not _acceso_por_distrito.empty else "—"
 mediana_acceso = demanda_f["t_min"].median()
 
-c1, c2, c3, c4 = st.columns(4)
+c1, c2, c3, c4, c5 = st.columns(5)
 c1.metric(f"Población cubierta (≤{threshold} min)", f"{pob_cubierta:,.0f}", f"{pob_cubierta / pob_total * 100:.1f}% del total")
 c2.metric("Población a > 60 min", f"{pob_mas_60:,.0f}", f"{pob_mas_60 / pob_total * 100:.1f}% del total")
-c3.metric("Distrito con peor acceso", str(peor_distrito))
-c4.metric("Mediana de acceso", f"{mediana_acceso:.1f} min")
+c3.metric("Sin ninguna ruta vial mapeada", f"{pob_sin_ruta:,.0f}", f"{pob_sin_ruta / pob_total * 100:.1f}% del total" if pob_total else None)
+c4.metric("Distrito con peor acceso", str(peor_distrito))
+c5.metric("Mediana de acceso (con ruta)", f"{mediana_acceso:.1f} min")
 
 st.divider()
 
@@ -290,12 +301,19 @@ st.divider()
 # 5) Tabla de distritos críticos, descargable
 # --------------------------------------------------------------------- #
 st.subheader("Distritos con peor acceso (ponderado por población)")
+def _distrito_row(g: pd.DataFrame) -> pd.Series:
+    pob_total_g = g["poblacion"].sum()
+    pob_sin_ruta_g = g.loc[g["t_min"].isna(), "poblacion"].sum()
+    return pd.Series({
+        "t_min_ponderado": _wmean_safe(g),
+        "poblacion": pob_total_g,
+        "pct_sin_ruta": 100 * pob_sin_ruta_g / pob_total_g if pob_total_g > 0 else float("nan"),
+    })
+
+
 critico = (
     demanda_f.groupby("distrito")
-    .apply(lambda g: pd.Series({
-        "t_min_ponderado": _wmean_safe(g),
-        "poblacion": g["poblacion"].sum(),
-    }), include_groups=False)
+    .apply(_distrito_row, include_groups=False)
     .reset_index()
     .sort_values("t_min_ponderado", ascending=False)
 )

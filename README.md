@@ -37,11 +37,12 @@ resolutivas, thresholds, rutas y motor de ruteo se declaran ahí, no en el
 código.
 
 `walkthrough.ipynb` es un notebook único de exposición, no el pipeline: solo
-lee `data/outputs/` ya calculado y narra la historia (calidad de datos,
-diagnóstico del corte de conexión de Overpass y la solución vía
-`peru-latest.osm.pbf`, métricas con red real, isócronas, 2SFCA, y el hallazgo
-central: Huancavelica —no Madre de Dios— es la geografía con peor acceso).
-Toda la lógica reusable sigue viviendo en `src/`.
+lee `data/outputs/` ya calculado y narra la historia (calidad de datos, los
+dos diagnósticos metodológicos —corte de conexión de Overpass y la poda
+silenciosa de componentes viales de `pyrosm`—, métricas con red real,
+isócronas, 2SFCA, y el hallazgo central: Huancavelica y Madre de Dios fallan
+por mecanismos distintos, no en distinto grado del mismo). Toda la lógica
+reusable sigue viviendo en `src/`.
 
 ## Estado actual
 
@@ -74,41 +75,52 @@ Toda la lógica reusable sigue viviendo en `src/`.
       puntos (`app.py` cae al proxy solo si no hay polígonos, p.ej. en modo
       sintético).
 - [x] Motor de ruteo sobre red vial real para los 3 departamentos $\times$ 3
-      perfiles (9/9). La API Overpass en vivo resultó no confiable para
-      áreas grandes: diagnostiqué que algo en la red de este entorno corta
-      las conexiones de larga duración a los ~60s, independiente del
-      timeout del cliente. Solución: descargar `peru-latest.osm.pbf`
-      (Geofabrik, 256MB, la fuente que el issue pide literalmente) y
-      procesarlo local con `pyrosm` (`routing._get_graph_from_pbf`) —
-      `get_graph()` prueba `.pbf` local → Overpass en vivo → sintético, en
-      ese orden, cada fuente registrada en `snap_report.json`.
-      `python run_pipeline.py --real` ya usa esta ruta automáticamente si
-      `data/raw/peru-latest.osm.pbf` existe.
+      perfiles (9/9). Dos problemas encadenados, diagnosticados y resueltos
+      en cadena: (1) la API Overpass en vivo no era confiable para áreas
+      grandes (algo en la red de este entorno corta las conexiones de larga
+      duración a los ~60s, independiente del timeout del cliente) — resuelto
+      descargando `peru-latest.osm.pbf` (Geofabrik, 256MB, la fuente que el
+      issue pide literalmente) y preextrayendo con `pyosmium` un `.pbf`
+      chico por departamento antes de pasarlo a `pyrosm`
+      (`routing._get_graph_from_pbf`); (2) `pyrosm.to_graph()` descarta por
+      defecto (`retain_all=False`) todo componente vial que no sea el más
+      grande — con la red drivable de Madre de Dios fragmentada en 313,529
+      componentes, eso hacía que facilities y demanda del norte del
+      departamento se snapearan a >100km de distancia. Con `retain_all=True`
+      el snap baja a ~3.4km, del mismo orden que los otros dos
+      departamentos. `get_graph()` prueba `.pbf` local → Overpass en vivo →
+      sintético, en ese orden, cada fuente registrada en
+      `snap_report.json`. `python run_pipeline.py --real` ya usa esta ruta
+      automáticamente si `data/raw/peru-latest.osm.pbf` existe.
 - [ ] Altitud — sin DEM integrado; `cross_analysis_altitud` reporta n=0
       honestamente en vez de inventar un valor. La sesión 7 del curso
       (`raster_aplicado.ipynb`) enseña la técnica concreta para cerrar esto
       —`rasterio` + `rasterstats.zonal_stats` sobre un DEM— pendiente de
       aplicar aquí con un raster de elevación real.
-- [x] Reporte LaTeX (`report/main.pdf`, 11 páginas): las 9 secciones
+- [x] Reporte LaTeX (`report/main.pdf`, 13 páginas): las 9 secciones
       obligatorias con cifras reales de la corrida 100% real, 4 figuras
       vectoriales generadas por el pipeline
       (`run_pipeline.generate_report_figures`, no capturas de pantalla), 4
       tablas regeneradas en cada corrida, comparativa línea recta vs. red
-      real (`metrics.straight_line_vs_network`, issue #186 Fase 5) y sección
-      de limitaciones. Compilado con
+      real (`metrics.straight_line_vs_network`, issue #186 Fase 5), el
+      diagnóstico completo de los dos bugs de `pyrosm` (§5.2) y sección de
+      limitaciones. Compilado con
       [Tectonic](https://tectonic-typesetting.github.io/) (motor LaTeX
       autocontenido, no requiere instalar MacTeX/TeX Live) — este entorno no
       tenía `pdflatex` instalado, ver comando de compilación arriba.
 - [ ] Video de presentación.
 
-**Hallazgo central (con red vial real en los 3 departamentos):** la
-hipótesis de partida era que Madre de Dios (selva, red dispersa) tendría el
-peor acceso. El resultado la invierte: **Huancavelica (sierra) es el
-departamento con peor acceso ponderado** (50.9 min vs. 14.4 en Madre de Dios
-y 13.2 en Tumbes) — 9 de los 10 distritos más críticos del país están ahí.
-La comparación línea recta vs. red (`metrics.straight_line_vs_network`) lo
-explica mecánicamente: en Huancavelica, ignorar la red vial le cuesta a la
-población una mediana de ~14 minutos adicionales; en Tumbes, apenas ~2.
+**Hallazgo central (con red vial real y completa en los 3 departamentos):**
+la hipótesis de partida era que Madre de Dios (selva, red dispersa)
+penalizaría más que Huancavelica (sierra). Se confirma, pero no en
+velocidad: entre población *con ruta*, el tiempo ponderado es parecido
+(51.3 min en Huancavelica, 48.4 en Madre de Dios). La diferencia real es
+que **35.7\% de Madre de Dios no tiene ninguna ruta vial mapeada** a una
+facility resolutiva, casi 4$\times$ la tasa de Huancavelica (9.2\%) — una
+falla de **conexión**, no de velocidad. La comparación línea recta vs. red
+(`metrics.straight_line_vs_network`) explica el mecanismo de velocidad: en
+Huancavelica, ignorar la red vial le cuesta a la población conectada una
+mediana de ~13.4 minutos adicionales; en Tumbes y Madre de Dios, 1-2.5.
 
 ## Decisiones frente al material de clase (sesiones 6 y 7)
 
