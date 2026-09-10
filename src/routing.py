@@ -451,7 +451,14 @@ def isochrone_polygons(
     import alphashape
 
     thresholds_min = thresholds_min or config.thresholds_minutos()
-    times = nx.single_source_dijkstra_path_length(G, facility_node, weight="travel_time")
+    # Dijkstra sobre el grafo REVERSADO, igual que travel_time_matrix: el
+    # tiempo que importa para una isócrona de acceso a salud es demanda ->
+    # facility, no facility -> demanda. Bajo calles de un solo sentido esas
+    # dos direcciones no son intercambiables — correr Dijkstra sobre G
+    # directo (sin reversar) mediría "qué tan lejos se puede LLEGAR DESDE la
+    # facility", no "quién puede ALCANZAR la facility", que es lo que la
+    # isócrona debe mostrar.
+    times = nx.single_source_dijkstra_path_length(G.reverse(copy=False), facility_node, weight="travel_time")
 
     polygons = {}
     for t in sorted(thresholds_min):

@@ -389,7 +389,7 @@ with col_a:
         fig_ratio = px.box(ratios, x="perfil", y="ratio", color="perfil", color_discrete_sequence=CATEGORICAL)
         fig_ratio.update_layout(showlegend=False)
         st.plotly_chart(fig_ratio, width='stretch')
-        st.caption("Ratio = tiempo_modo / tiempo_auto. Valores altos en 'walk' señalan desconexión de red vial (esperado en amazónico).")
+        st.caption("Ratio = tiempo_modo / tiempo_auto. Solo puntos con ruta real por ese perfil (el fallback de §3.3 no aplica por modo). La diferencia entre departamentos es menor de lo esperado: Madre de Dios tiene el ratio walk/drive más bajo de los tres (~9.4), no el más alto.")
     else:
         st.info("Sin datos de comparación de modos.")
 

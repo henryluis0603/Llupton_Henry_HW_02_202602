@@ -99,12 +99,17 @@ def check_point_in_declared_polygon(
             "nota": "sin capa de polígonos disponible — regla no evaluada",
         }
 
-    merged = gdf.merge(
-        polygon_gdf[[polygon_district_col, "geometry"]].rename(columns={"geometry": "_poly"}),
-        left_on=point_district_col,
-        right_on=polygon_district_col,
-        how="left",
-    )
+    # drop_duplicates defensivo: si el shapefile trajera más de una fila por
+    # distrito (p.ej. un polígono multi-parte no disuelto), un merge normal
+    # multiplicaría filas de `gdf` y el `gdf["flag..."] = flags` de abajo
+    # quedaría desalineado en silencio (asume len(merged) == len(gdf)). No
+    # ocurre con los shapefiles usados aquí (verificado: 0 ubigeo
+    # duplicados en los 3 departamentos), pero el join queda protegido.
+    polygons = polygon_gdf[[polygon_district_col, "geometry"]].drop_duplicates(
+        subset=polygon_district_col
+    ).rename(columns={"geometry": "_poly"})
+    merged = gdf.merge(polygons, left_on=point_district_col, right_on=polygon_district_col, how="left")
+    assert len(merged) == len(gdf), "merge de polígono distrital multiplicó filas inesperadamente"
     flags = [
         (row["_poly"] is not None and not row["_poly"].contains(row["geometry"]))
         for _, row in merged.iterrows()

@@ -1146,3 +1146,50 @@
 2026-09-09 22:12:23,181 [INFO] Figuras exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/report/figures
 2026-09-09 22:12:23,217 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
 2026-09-09 22:12:23,218 [INFO] Pipeline completo.
+2026-09-09 22:37:47,800 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/renipress.csv
+2026-09-09 22:37:47,803 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign.zip
+2026-09-09 22:37:47,803 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/poblacion_reniec.csv
+2026-09-09 22:37:47,804 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/distritos_inei/DISTRITOS.shp
+2026-09-09 22:37:47,804 [INFO] === Departamento: costa ===
+2026-09-09 22:37:47,804 [INFO] SKIP (real ya cargado) para costa
+2026-09-09 22:37:48,003 [INFO] costa: 329 demanda validos, 110 facilities validas, 3 resolutivas activas
+2026-09-09 22:37:49,645 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (osm-pbf)
+2026-09-09 22:37:49,767 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_drive.parquet
+2026-09-09 22:37:49,771 [INFO] costa/drive: grafo=osm-pbf, matriz=987 filas
+2026-09-09 22:37:51,456 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (osm-pbf)
+2026-09-09 22:37:51,567 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_walk.parquet
+2026-09-09 22:37:51,569 [INFO] costa/walk: grafo=osm-pbf, matriz=987 filas
+2026-09-09 22:37:52,996 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (osm-pbf)
+2026-09-09 22:37:53,111 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_bike.parquet
+2026-09-09 22:37:53,113 [INFO] costa/bike: grafo=osm-pbf, matriz=987 filas
+2026-09-09 22:37:56,471 [INFO] costa: 117/329 puntos sin ruta real -> t_min estimado (factor de desvío = 0.80)
+2026-09-09 22:37:56,471 [INFO] === Departamento: andino ===
+2026-09-09 22:37:56,472 [INFO] SKIP (real ya cargado) para andino
+2026-09-09 22:37:56,588 [INFO] andino: 1673 demanda validos, 473 facilities validas, 5 resolutivas activas
+2026-09-09 22:38:33,133 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/drive.graphml (osm-pbf)
+2026-09-09 22:38:38,928 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_drive.parquet
+2026-09-09 22:38:39,007 [INFO] andino/drive: grafo=osm-pbf, matriz=8365 filas
+2026-09-09 22:39:16,453 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/walk.graphml (osm-pbf)
+2026-09-09 22:39:22,234 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_walk.parquet
+2026-09-09 22:39:22,250 [INFO] andino/walk: grafo=osm-pbf, matriz=8365 filas
+2026-09-09 22:40:03,640 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/bike.graphml (osm-pbf)
+2026-09-09 22:40:09,720 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_bike.parquet
+2026-09-09 22:40:09,727 [INFO] andino/bike: grafo=osm-pbf, matriz=8365 filas
+2026-09-09 22:40:34,451 [INFO] andino: 185/1673 puntos sin ruta real -> t_min estimado (factor de desvío = 1.07)
+2026-09-09 22:40:34,451 [INFO] === Departamento: amazonico ===
+2026-09-09 22:40:34,452 [INFO] SKIP (real ya cargado) para amazonico
+2026-09-09 22:40:34,537 [INFO] amazonico: 368 demanda validos, 217 facilities validas, 2 resolutivas activas
+2026-09-09 22:40:45,424 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/drive.graphml (osm-pbf)
+2026-09-09 22:40:46,493 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_drive.parquet
+2026-09-09 22:40:46,497 [INFO] amazonico/drive: grafo=osm-pbf, matriz=736 filas
+2026-09-09 22:41:15,799 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/walk.graphml (osm-pbf)
+2026-09-09 22:41:16,947 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_walk.parquet
+2026-09-09 22:41:16,962 [INFO] amazonico/walk: grafo=osm-pbf, matriz=736 filas
+2026-09-09 22:41:37,221 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/bike.graphml (osm-pbf)
+2026-09-09 22:41:38,496 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_bike.parquet
+2026-09-09 22:41:38,501 [INFO] amazonico/bike: grafo=osm-pbf, matriz=736 filas
+2026-09-09 22:41:39,315 [INFO] amazonico: 202/368 puntos sin ruta real -> t_min estimado (factor de desvío = 0.77)
+2026-09-09 22:41:39,316 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-09 22:41:40,638 [INFO] Figuras exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/report/figures
+2026-09-09 22:41:40,667 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-09 22:41:40,667 [INFO] Pipeline completo.
