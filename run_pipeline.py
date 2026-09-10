@@ -106,10 +106,39 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
 
     mode_comparison = routing.compare_modes(matrices, "cp_id", "facility_id")
 
-    # Discusión (issue #186, Fase 5): línea recta vs. red vial real.
+    # Discusión (issue #186, Fase 5): línea recta vs. red vial real. Se
+    # calcula ANTES del fallback de abajo porque el factor de desvío se
+    # deriva empíricamente de los puntos que sí tienen ruta.
     straight_vs_network = metrics.straight_line_vs_network(
         matrices["drive"], demanda, facilities_resolutivas, "cp_id", "facility_id"
     )
+
+    # Fallback para puntos no ruteables (issue #186, Fase 2: "fallback
+    # documentado" + "factor de desvío empíricamente justificado") — en vez
+    # de dejar t_min indefinido para un punto en un componente vial
+    # desconectado de toda facility, se estima vía distancia recta x factor
+    # de desvío mediano observado en los puntos SÍ ruteados de este mismo
+    # departamento (la curvatura de la red varía demasiado por geografía
+    # para usar un factor nacional único, ver \S5.1 del reporte).
+    factor_desvio = metrics.circuity_factor(straight_vs_network)
+    demanda_metrics["t_min_estimado"] = demanda_metrics["t_min"].isna()
+    n_faltantes = int(demanda_metrics["t_min_estimado"].sum())
+    if n_faltantes > 0:
+        faltantes = demanda_metrics[demanda_metrics["t_min_estimado"]]
+        fallback = metrics.estimate_fallback_time(
+            faltantes, facilities_resolutivas, "cp_id", "facility_id", factor_desvio
+        )
+        demanda_metrics = demanda_metrics.merge(
+            fallback[["cp_id", "facility_id_fallback", "t_min_fallback"]], on="cp_id", how="left"
+        )
+        mask = demanda_metrics["t_min_estimado"]
+        demanda_metrics.loc[mask, "t_min"] = demanda_metrics.loc[mask, "t_min_fallback"]
+        demanda_metrics.loc[mask, "facility_mas_cercana"] = demanda_metrics.loc[mask, "facility_id_fallback"]
+        demanda_metrics = demanda_metrics.drop(columns=["facility_id_fallback", "t_min_fallback"])
+        log.info(
+            "%s: %d/%d puntos sin ruta real -> t_min estimado (factor de desvío = %.2f)",
+            rol, n_faltantes, len(demanda_metrics), factor_desvio,
+        )
 
     return {
         "rol": rol,
@@ -120,6 +149,7 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
         "matrices": matrices,
         "mode_comparison": mode_comparison,
         "straight_vs_network": straight_vs_network,
+        "factor_desvio": factor_desvio,
         "isochrones": isochrones,
         "snap_reports": snap_reports,
         "graph_sources": graph_sources,
@@ -260,11 +290,16 @@ def compute_and_export_metrics(dep_results: list[dict], real: bool = False) -> N
 
     altitude_cross = metrics.altitude_access_cross(all_demanda_metrics)
 
+    n_estimado = int(all_demanda_metrics["t_min_estimado"].sum()) if "t_min_estimado" in all_demanda_metrics.columns else 0
+    factor_desvio_por_depto = {r["rol"]: r["factor_desvio"] for r in dep_results if "factor_desvio" in r}
+
     summary = {
         "fuente": "real" if real else "synthetic",
         "gini_t_min_ponderado": gini,
         "n_demanda_total": int(len(all_demanda_metrics)),
         "poblacion_total": int(all_demanda_metrics["poblacion"].sum()),
+        "n_t_min_estimado_por_factor_desvio": n_estimado,
+        "factor_desvio_por_departamento": factor_desvio_por_depto,
         "cross_analysis_altitud": altitude_cross,
     }
     pd.Series(summary).to_json(out_dir / "summary.json", indent=2, force_ascii=False)

@@ -22,24 +22,41 @@ from src import config
 # 2) Bandas de cobertura
 # ---------------------------------------------------------------------- #
 def coverage_bands(
-    df: pd.DataFrame, time_col: str = "t_min", weight_col: str = "poblacion", thresholds: list[int] | None = None
+    df: pd.DataFrame,
+    time_col: str = "t_min",
+    weight_col: str = "poblacion",
+    estimated_col: str = "t_min_estimado",
+    thresholds: list[int] | None = None,
 ) -> pd.DataFrame:
-    """`pd.cut` deja NaN sin banda (no encaja en ningún intervalo) y
-    `groupby(observed=True)` los elimina en silencio del total — con red
-    real, un punto de demanda puede no tener NINGUNA facility alcanzable
-    (componente vial desconectado, ver [[routing.nearest_facility]]), y esa
-    población quedaría descontada de golpe del denominador de %. Se agrega
-    una banda explícita 'Sin ruta (red desconectada)' para esos casos en vez
-    de dejarlos fuera del reporte."""
+    """Bandas sobre `time_col`, que ya viene completo: los puntos sin ruta
+    real cargan un t_min ESTIMADO vía factor de desvío (issue #186 Fase 2:
+    fallback documentado; ver `estimate_fallback_time`) en vez de NaN. Se
+    reporta aparte, por banda, qué fracción de esa población pesa sobre un
+    estimado y no una ruta medida (`pct_estimado_por_desvio`) — la banda en
+    sí no distingue origen, pero el issue exige poder auditarlo. Si
+    `time_col` aún trae NaN (p.ej. un departamento sin ninguna facility, sin
+    fallback posible), esos casos se agrupan en una banda 'Sin ruta'
+    explícita en vez de perderse del denominador de %."""
     thresholds = thresholds or config.thresholds_minutos()
     edges = [0] + sorted(thresholds) + [np.inf]
     labels = [f"<= {edges[i+1]} min" if edges[i + 1] != np.inf else f"> {edges[-2]} min" for i in range(len(edges) - 1)]
-    sin_ruta_label = "Sin ruta (red desconectada)"
+    sin_ruta_label = "Sin ruta (sin facility en el departamento)"
     band = pd.cut(df[time_col], bins=edges, labels=labels, right=True, include_lowest=True).astype("object")
     band = band.where(df[time_col].notna(), sin_ruta_label)
-    out = df.assign(_band=band).groupby("_band", observed=True)[weight_col].sum().reset_index()
+    dfb = df.assign(_band=band)
+    out = dfb.groupby("_band", observed=True)[weight_col].sum().reset_index()
     out.columns = ["banda", "poblacion"]
     out["pct_poblacion"] = out["poblacion"] / out["poblacion"].sum() * 100
+
+    if estimated_col in df.columns:
+        def _pct_estimado(g: pd.DataFrame) -> float:
+            w_total = g[weight_col].sum()
+            w_est = g.loc[g[estimated_col].fillna(False), weight_col].sum()
+            return float(100 * w_est / w_total) if w_total > 0 else np.nan
+
+        pct_est = dfb.groupby("_band", observed=True).apply(_pct_estimado, include_groups=False)
+        out["pct_estimado_por_desvio"] = out["banda"].map(pct_est)
+
     order = {label: i for i, label in enumerate(labels + [sin_ruta_label])}
     return out.sort_values("banda", key=lambda s: s.map(order)).reset_index(drop=True)
 
@@ -48,22 +65,30 @@ def coverage_bands(
 # 3) Tiempo promedio de acceso ponderado por población, por nivel geográfico
 # ---------------------------------------------------------------------- #
 def weighted_mean_access(
-    df: pd.DataFrame, group_col: str, time_col: str = "t_min", weight_col: str = "poblacion"
+    df: pd.DataFrame,
+    group_col: str,
+    time_col: str = "t_min",
+    weight_col: str = "poblacion",
+    estimated_col: str = "t_min_estimado",
 ) -> pd.DataFrame:
-    """Promedio ponderado SOLO entre población con ruta (t_min no-NaN):
-    sumar `g[time_col] * w` con NaN en `time_col` y luego dividir por
-    `w.sum()` de TODO el grupo mezclaría numerador (sin los NaN, por el
-    skipna por defecto de `.sum()`) con un denominador que sí los incluye
-    — subestimaría el tiempo promedio real al tratar a la población sin
-    ruta como si tardara 0 minutos. Se excluye esa población del promedio
-    y se reporta aparte en `pct_sin_ruta`."""
+    """Promedio ponderado por población sobre `time_col` (ya completo: sin
+    ruta real -> t_min estimado vía factor de desvío, no NaN). Se reporta
+    aparte `pct_estimado`: qué fracción de la población del grupo pesa
+    sobre un t_min estimado y no medido por la red, para que ese origen
+    distinto no quede escondido detrás de un solo promedio. Si `time_col`
+    trae NaN igual (sin fallback posible, ver coverage_bands), esas filas
+    se excluyen del promedio en vez de contarse como 0 minutos."""
     def _wmean(g: pd.DataFrame) -> pd.Series:
         g_valid = g.dropna(subset=[time_col])
         w = g_valid[weight_col]
         t_pond = float((g_valid[time_col] * w).sum() / w.sum()) if w.sum() > 0 else np.nan
-        w_total = g[weight_col].sum()
-        pct_sin_ruta = float(100 * (w_total - w.sum()) / w_total) if w_total > 0 else np.nan
-        return pd.Series({"t_min_ponderado": t_pond, "pct_sin_ruta": pct_sin_ruta})
+        if estimated_col in g.columns:
+            w_total = g[weight_col].sum()
+            w_est = g.loc[g[estimated_col].fillna(False), weight_col].sum()
+            pct_estimado = float(100 * w_est / w_total) if w_total > 0 else np.nan
+        else:
+            pct_estimado = np.nan
+        return pd.Series({"t_min_ponderado": t_pond, "pct_estimado": pct_estimado})
 
     out = df.groupby(group_col).apply(_wmean, include_groups=False).reset_index()
     return out.sort_values("t_min_ponderado", ascending=False).reset_index(drop=True)
@@ -256,3 +281,65 @@ def straight_line_vs_network(
     ]
     comp["penalidad_min"] = comp["t_min_si_recta"] - comp["t_min_red"]
     return comp
+
+
+# ---------------------------------------------------------------------- #
+# Fallback para puntos no ruteables (issue #186, Fase 2): "fallback
+# documentado" + "factor de desvío empíricamente justificado" en vez de
+# dejar t_min indefinido cuando un punto queda en un componente vial
+# desconectado de toda facility (ver src/routing.nearest_facility).
+# ---------------------------------------------------------------------- #
+_FACTOR_DESVIO_DEFAULT = 1.3  # circuidad típica de red vial cuando no hay
+# suficientes puntos ruteados en el departamento para estimar un factor
+# propio (ver circuity_factor) — valor de referencia estándar en literatura
+# de transporte (Levinson & El-Geneidy 2009 reportan medianas ~1.2-1.6).
+
+
+def circuity_factor(straight_vs_network: pd.DataFrame, speed_kmh: float = 30.0) -> float:
+    """Factor de desvío empírico = mediana de (tiempo real de red /
+    tiempo que tomaría la distancia en línea recta a `speed_kmh`), sobre
+    los puntos que YA tienen ruta. Se calcula por departamento (no un único
+    factor nacional) porque la curvatura de la red vial varía mucho por
+    geografía (ver \\S5.1 del reporte: penalidad mediana de ignorar la red
+    va de 1 a 13 minutos según departamento) — un factor único subestimaría
+    la sierra y sobreestimaría la costa."""
+    speed_m_per_min = speed_kmh * 1000 / 60
+    t_min_recta_ref = straight_vs_network["dist_recta_m"] / speed_m_per_min
+    ratio = straight_vs_network["t_min_red"] / t_min_recta_ref.replace(0, np.nan)
+    ratio = ratio.replace([np.inf, -np.inf], np.nan).dropna()
+    return float(ratio.median()) if len(ratio) else _FACTOR_DESVIO_DEFAULT
+
+
+def estimate_fallback_time(
+    demand_gdf: gpd.GeoDataFrame,
+    facility_gdf: gpd.GeoDataFrame,
+    demand_id_col: str,
+    facility_id_col: str,
+    factor_desvio: float,
+    speed_kmh: float = 30.0,
+) -> pd.DataFrame:
+    """t_min estimado = (distancia recta a la facility más cercana /
+    velocidad de referencia) x factor de desvío empírico. Solo para puntos
+    que `routing.nearest_facility` no pudo rutear (componente vial
+    desconectado de toda facility resolutiva) — un `t_min` estimado y
+    marcado como tal es lo que pide el issue, en vez de dejarlo indefinido
+    o (peor) promediarlo como si fuera 0."""
+    lon = pd.concat([demand_gdf.geometry.x, facility_gdf.geometry.x])
+    lat = pd.concat([demand_gdf.geometry.y, facility_gdf.geometry.y])
+    utm_epsg = config.utm_epsg_for_lonlat(float(lon.mean()), float(lat.mean()))
+    transformer = pyproj.Transformer.from_crs("EPSG:4326", utm_epsg, always_xy=True)
+
+    dx, dy = transformer.transform(demand_gdf.geometry.x.to_numpy(), demand_gdf.geometry.y.to_numpy())
+    fx, fy = transformer.transform(facility_gdf.geometry.x.to_numpy(), facility_gdf.geometry.y.to_numpy())
+
+    dist_m = np.hypot(dx[:, None] - fx[None, :], dy[:, None] - fy[None, :])
+    nearest_idx = dist_m.argmin(axis=1)
+    nearest_dist_m = dist_m[np.arange(len(demand_gdf)), nearest_idx]
+    speed_m_per_min = speed_kmh * 1000 / 60
+
+    return pd.DataFrame({
+        demand_id_col: demand_gdf[demand_id_col].to_numpy(),
+        "facility_id_fallback": facility_gdf[facility_id_col].to_numpy()[nearest_idx],
+        "dist_recta_m_fallback": nearest_dist_m,
+        "t_min_fallback": nearest_dist_m / speed_m_per_min * factor_desvio,
+    })

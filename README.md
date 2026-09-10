@@ -92,6 +92,18 @@ reusable sigue viviendo en `src/`.
       sintético, en ese orden, cada fuente registrada en
       `snap_report.json`. `python run_pipeline.py --real` ya usa esta ruta
       automáticamente si `data/raw/peru-latest.osm.pbf` existe.
+- [x] Fallback + factor de desvío para puntos no ruteables (issue #186,
+      Fase 2). Un punto en un componente vial desconectado de toda facility
+      no tiene `t_min` de Dijkstra — en vez de dejarlo indefinido,
+      `metrics.circuity_factor` calcula, por departamento, la mediana de
+      (tiempo real de red) / (tiempo de la distancia recta a 30km/h) entre
+      los puntos que sí tienen ruta, y `metrics.estimate_fallback_time` lo
+      aplica a la distancia recta del punto sin ruta. Factor por
+      departamento: 0.80 (Tumbes), 1.07 (Huancavelica), 0.77 (Madre de
+      Dios) — por debajo de 1 en costa/selva porque la velocidad real de
+      vías troncales supera la referencia de 30km/h, no por un error. Cada
+      punto queda marcado (`t_min_estimado`) para que ningún cálculo
+      downstream lo confunda con una ruta medida.
 - [ ] Altitud — sin DEM integrado; `cross_analysis_altitud` reporta n=0
       honestamente en vez de inventar un valor. La sesión 7 del curso
       (`raster_aplicado.ipynb`) enseña la técnica concreta para cerrar esto
@@ -110,17 +122,24 @@ reusable sigue viviendo en `src/`.
       tenía `pdflatex` instalado, ver comando de compilación arriba.
 - [ ] Video de presentación.
 
-**Hallazgo central (con red vial real y completa en los 3 departamentos):**
-la hipótesis de partida era que Madre de Dios (selva, red dispersa)
-penalizaría más que Huancavelica (sierra). Se confirma, pero no en
-velocidad: entre población *con ruta*, el tiempo ponderado es parecido
-(51.3 min en Huancavelica, 48.4 en Madre de Dios). La diferencia real es
-que **35.7\% de Madre de Dios no tiene ninguna ruta vial mapeada** a una
-facility resolutiva, casi 4$\times$ la tasa de Huancavelica (9.2\%) — una
-falla de **conexión**, no de velocidad. La comparación línea recta vs. red
-(`metrics.straight_line_vs_network`) explica el mecanismo de velocidad: en
-Huancavelica, ignorar la red vial le cuesta a la población conectada una
-mediana de ~13.4 minutos adicionales; en Tumbes y Madre de Dios, 1-2.5.
+**Hallazgo central (con red vial real y completa en los 3 departamentos, más
+el fallback por factor de desvío de Fase 2):** la hipótesis de partida era
+que Madre de Dios (selva, red dispersa) penalizaría más que Huancavelica
+(sierra). **Se confirma: Madre de Dios tiene el peor acceso ponderado de
+los tres (87.3 min, frente a 51.4 en Huancavelica y 14.4 en Tumbes).** Pero
+el mecanismo no es el obvio: entre población *con ruta real*, el tiempo
+ponderado es parecido en ambas geografías peor conectadas (51.4 min
+Huancavelica, ~48 Madre de Dios) — lo que domina el resultado de Madre de
+Dios es que **35.7\% de su población no tiene ninguna ruta vial mapeada**
+(frente a 9.2\% en Huancavelica), y ese `t_min` se estima vía un factor de
+desvío empírico por departamento (`metrics.circuity_factor` +
+`estimate_fallback_time`, issue #186 Fase 2: "fallback documentado" +
+"factor de desvío empíricamente justificado") en vez de quedar indefinido
+o promediarse como 0. La comparación línea recta vs. red
+(`metrics.straight_line_vs_network`, solo sobre puntos con ruta real) aísla
+el mecanismo de velocidad: en Huancavelica, ignorar la red vial le cuesta a
+la población conectada una mediana de ~13.4 minutos adicionales; en Tumbes
+y Madre de Dios, 1-2.5.
 
 ## Decisiones frente al material de clase (sesiones 6 y 7)
 

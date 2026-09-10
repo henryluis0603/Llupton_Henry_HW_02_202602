@@ -1,8 +1,14 @@
 {
   "fuente":"real",
-  "gini_t_min_ponderado":0.6773985162,
+  "gini_t_min_ponderado":0.6736228201,
   "n_demanda_total":2370,
   "poblacion_total":572542,
+  "n_t_min_estimado_por_factor_desvio":504,
+  "factor_desvio_por_departamento":{
+    "costa":0.797780941,
+    "andino":1.0681778354,
+    "amazonico":0.7660902601
+  },
   "cross_analysis_altitud":{
     "r_ponderado":null,
     "pendiente_min_por_metro":null,

@@ -186,9 +186,16 @@ pob_cubierta = demanda_f.loc[demanda_f["t_min"] <= threshold, "poblacion"].sum()
 # t_min NaN (sin ninguna ruta vial mapeada a una facility, ver
 # routing.nearest_facility) cuenta como "> 60 min" — es estrictamente peor
 # que cualquier tiempo finito, no "no aplica". `t_min > 60` por sí solo
-# evalúa a False en NaN y los excluiría en silencio.
+# evalúa a False en NaN y los excluiría en silencio. En una corrida normal
+# esto ya casi no dispara: esos puntos llevan un t_min ESTIMADO vía factor
+# de desvío (t_min_estimado=True, ver run_pipeline.run_department, issue
+# #186 Fase 2) en vez de NaN — el fallback de acá cubre el caso residual
+# (p.ej. un departamento sin ninguna facility resolutiva).
 pob_mas_60 = demanda_f.loc[(demanda_f["t_min"] > 60) | demanda_f["t_min"].isna(), "poblacion"].sum()
-pob_sin_ruta = demanda_f.loc[demanda_f["t_min"].isna(), "poblacion"].sum()
+col_estimado = "t_min_estimado" if "t_min_estimado" in demanda_f.columns else None
+pob_estimada = (
+    demanda_f.loc[demanda_f[col_estimado].fillna(False), "poblacion"].sum() if col_estimado else 0
+) + demanda_f.loc[demanda_f["t_min"].isna(), "poblacion"].sum()
 _acceso_por_distrito = demanda_f.groupby("distrito").apply(_wmean_safe, include_groups=False).dropna()
 peor_distrito = _acceso_por_distrito.idxmax() if not _acceso_por_distrito.empty else "—"
 mediana_acceso = demanda_f["t_min"].median()
@@ -196,9 +203,9 @@ mediana_acceso = demanda_f["t_min"].median()
 c1, c2, c3, c4, c5 = st.columns(5)
 c1.metric(f"Población cubierta (≤{threshold} min)", f"{pob_cubierta:,.0f}", f"{pob_cubierta / pob_total * 100:.1f}% del total")
 c2.metric("Población a > 60 min", f"{pob_mas_60:,.0f}", f"{pob_mas_60 / pob_total * 100:.1f}% del total")
-c3.metric("Sin ninguna ruta vial mapeada", f"{pob_sin_ruta:,.0f}", f"{pob_sin_ruta / pob_total * 100:.1f}% del total" if pob_total else None)
+c3.metric("t_min estimado (sin ruta real, factor de desvío)", f"{pob_estimada:,.0f}", f"{pob_estimada / pob_total * 100:.1f}% del total" if pob_total else None)
 c4.metric("Distrito con peor acceso", str(peor_distrito))
-c5.metric("Mediana de acceso (con ruta)", f"{mediana_acceso:.1f} min")
+c5.metric("Mediana de acceso", f"{mediana_acceso:.1f} min")
 
 st.divider()
 
@@ -303,11 +310,14 @@ st.divider()
 st.subheader("Distritos con peor acceso (ponderado por población)")
 def _distrito_row(g: pd.DataFrame) -> pd.Series:
     pob_total_g = g["poblacion"].sum()
-    pob_sin_ruta_g = g.loc[g["t_min"].isna(), "poblacion"].sum()
+    if "t_min_estimado" in g.columns:
+        pob_estimada_g = g.loc[g["t_min_estimado"].fillna(False), "poblacion"].sum()
+    else:
+        pob_estimada_g = g.loc[g["t_min"].isna(), "poblacion"].sum()
     return pd.Series({
         "t_min_ponderado": _wmean_safe(g),
         "poblacion": pob_total_g,
-        "pct_sin_ruta": 100 * pob_sin_ruta_g / pob_total_g if pob_total_g > 0 else float("nan"),
+        "pct_estimado_por_desvio": 100 * pob_estimada_g / pob_total_g if pob_total_g > 0 else float("nan"),
     })
 
 
