@@ -19,7 +19,7 @@ un análisis de ruteo vial en Tumbes, Huancavelica y Madre de Dios}
 \begin{abstract}
 Este reporte cuantifica el acceso vial a salud resolutiva en Tumbes,
 Huancavelica y Madre de Dios, con red vial real sobre 2\,370 puntos de
-demanda (572\,542 habitantes). El 62.9\,\% accede en $\le$30 min; 21.3\,\%
+demanda (572\,542 habitantes). El 62.9\,\% accede en $\le$30 min; 14.4\,\%
 supera 120. Confirmando la hipótesis de partida, \textbf{Madre
 de Dios (selva) tiene el peor acceso ponderado} (87.3 min), sobre
 Huancavelica (51.4) y Tumbes (14.4) --- el 35.7\,\% no tiene ninguna ruta
@@ -280,7 +280,7 @@ para puntos sin ruta:
 
 \begin{itemize}
 \item El 62.9\,\% de la población accede a un establecimiento resolutivo en
-  30 minutos o menos; el 21.3\,\% supera 120 minutos (Tabla
+  30 minutos o menos; el 14.4\,\% supera 120 minutos (Tabla
   \ref{tab:coverage_bands}, Figura \ref{fig:coverage}). De esa cola de
   >120\,min, el 56.7\,\% de la población depende del fallback por factor de
   desvío (columna \texttt{pct\_estimado\_por\_desvio}) --- la banda más
@@ -295,15 +295,17 @@ para puntos sin ruta:
   penaliza principalmente por \textbf{ausencia de conexión}, no por
   lentitud de un trayecto que sí existe.
 \item Los 10 distritos con peor acceso ponderado (Tabla
-  \ref{tab:critical_districts}) se dividen 5 y 5: Manu (362 min) y
-  Fitzcarrald (329 min) --- 100\,\% de su población depende del fallback,
-  es decir, ningún punto de esos distritos tiene ruta vial mapeada a
-  ninguna facility --- además de Iñapari, Huepetuhe y el distrito Madre de
-  Dios (207--282 min, 90--100\,\% estimado), los 5 de Madre de Dios. Los
-  otros 5 son de Huancavelica (San Isidro, Ayavi, Ocoyo, Querco, Santiago
-  de Chocorvos, 194--221 min), con \texttt{pct\_estimado} bastante más bajo
-  (17--54\,\%): ahí el problema es mayoritariamente de velocidad de
-  trayecto, no de conexión.
+  \ref{tab:critical_districts}) se dividen 5 y 5: los 5 de Madre de Dios
+  --- Manu y Fitzcarrald con 100\,\% de su población dependiendo del
+  fallback (ningún punto tiene ruta vial mapeada), más Iñapari, Huepetuhe y
+  el distrito Madre de Dios (90--100\,\% estimado) --- y 5 de Huancavelica
+  (San Isidro, Ayavi, Ocoyo, Querco, Santiago de Chocorvos, 194--221 min).
+  La distinción conexión/velocidad separa bien a los departamentos
+  \emph{en promedio} (\S4), pero no dentro de Huancavelica: Querco depende
+  del fallback en 76.7\,\% de su población --- más que Iñapari --- y San
+  Isidro y Ocoyo en ${\sim}$54\,\%; solo Ayavi (16.7\,\%) y Santiago de
+  Chocorvos (33.3\,\%) son mayoritariamente un problema de velocidad y no
+  de conexión.
 \item El Gini ponderado del tiempo de acceso es \textbf{0.67}.
 \item El contraste urbano/rural es marcado en ambas dimensiones: 21.0 min
   ponderado y 7.5\,\% estimado en centros poblados urbanos (población
@@ -598,10 +600,8 @@ Recomendaciones concretas, en orden de costo/impacto:
 \item Geofabrik GmbH y OpenStreetMap contributors. \href{https://download.geofabrik.de/south-america/peru.html}{Perú, extracto OSM (peru-latest.osm.pbf)}. Licencia ODbL.
 \item Boeing, G. (2017). \emph{OSMnx: New methods for acquiring,
   constructing, analyzing, and visualizing complex street networks.}
-\item Fink, C. y equipo pyrosm. \emph{pyrosm: Read OpenStreetMap data from
-  Protocolbuffer Binary Format (PBF) in Python.}
-\item Hagenauer, J. y Helbich, M. sobre curva de Lorenz y coeficiente de
-  Gini ponderado aplicado a variables no monetarias.
+\item Tenkanen, H. \emph{pyrosm: Read OpenStreetMap data from
+  Protocolbuffer Binary Format (PBF) in Python.} \url{https://pyrosm.readthedocs.io/}
 \item Luo, W. y Wang, F. (2003). \emph{Measures of spatial accessibility to
   health care in a GIS environment.} --- método 2SFCA (Two-Step Floating
   Catchment Area).

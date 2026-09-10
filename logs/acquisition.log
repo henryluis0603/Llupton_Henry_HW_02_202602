@@ -1083,3 +1083,66 @@
 2026-09-09 20:18:12,708 [INFO] Figuras exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/report/figures
 2026-09-09 20:18:12,731 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
 2026-09-09 20:18:12,731 [INFO] Pipeline completo.
+2026-09-09 22:08:04,703 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/renipress.csv
+2026-09-09 22:08:04,704 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/centros_poblados_ign.zip
+2026-09-09 22:08:04,704 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/poblacion_reniec.csv
+2026-09-09 22:08:04,704 [INFO] SKIP (ya existe): /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/raw/distritos_inei/DISTRITOS.shp
+2026-09-09 22:08:04,704 [INFO] === Departamento: costa ===
+2026-09-09 22:08:04,960 [INFO] RENIPRESS real cargado para costa: 118 facilities
+2026-09-09 22:08:05,996 [INFO] Centros poblados IGN cargados para costa: 329 puntos
+2026-09-09 22:08:06,046 [INFO] Distritos INEI cargados para costa: 13 polígonos
+2026-09-09 22:08:06,063 [WARNING] 40/329 centros poblados sin UBIGEO de distrito asignado (nombre no coincide)
+2026-09-09 22:08:07,317 [WARNING] 40/329 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-09 22:08:07,370 [INFO] Real cargado para costa: 329 demanda ({'muestreado': False, 'n_original': 329, 'n_final': 329}), 118 facilities, 13 distritos
+2026-09-09 22:08:07,497 [INFO] costa: 329 demanda validos, 110 facilities validas, 3 resolutivas activas
+2026-09-09 22:08:09,295 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/drive.graphml (osm-pbf)
+2026-09-09 22:08:09,427 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_drive.parquet
+2026-09-09 22:08:09,432 [INFO] costa/drive: grafo=osm-pbf, matriz=987 filas
+2026-09-09 22:08:11,724 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/walk.graphml (osm-pbf)
+2026-09-09 22:08:11,842 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_walk.parquet
+2026-09-09 22:08:11,844 [INFO] costa/walk: grafo=osm-pbf, matriz=987 filas
+2026-09-09 22:08:13,661 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/bike.graphml (osm-pbf)
+2026-09-09 22:08:13,779 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_bike.parquet
+2026-09-09 22:08:13,783 [INFO] costa/bike: grafo=osm-pbf, matriz=987 filas
+2026-09-09 22:08:17,308 [INFO] costa: 117/329 puntos sin ruta real -> t_min estimado (factor de desvío = 0.80)
+2026-09-09 22:08:17,309 [INFO] === Departamento: andino ===
+2026-09-09 22:08:17,559 [INFO] RENIPRESS real cargado para andino: 497 facilities
+2026-09-09 22:08:18,555 [INFO] Centros poblados IGN cargados para andino: 8207 puntos
+2026-09-09 22:08:18,628 [INFO] Distritos INEI cargados para andino: 100 polígonos
+2026-09-09 22:08:18,660 [WARNING] 146/8207 centros poblados sin UBIGEO de distrito asignado (nombre no coincide)
+2026-09-09 22:08:19,987 [WARNING] 146/8207 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-09 22:08:20,031 [INFO] Muestreo aplicado: 8207 -> 1673 puntos (estratificado por distrito, fracción 0.203, seed 42)
+2026-09-09 22:08:20,050 [INFO] Real cargado para andino: 1673 demanda ({'muestreado': True, 'n_original': 8207, 'n_final': 1673, 'estrategia': 'estratificado por distrito, fracción 0.203, seed 42'}), 497 facilities, 100 distritos
+2026-09-09 22:08:20,180 [INFO] andino: 1673 demanda validos, 473 facilities validas, 5 resolutivas activas
+2026-09-09 22:09:03,633 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/drive.graphml (osm-pbf)
+2026-09-09 22:09:11,299 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_drive.parquet
+2026-09-09 22:09:11,311 [INFO] andino/drive: grafo=osm-pbf, matriz=8365 filas
+2026-09-09 22:09:59,110 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/walk.graphml (osm-pbf)
+2026-09-09 22:10:04,815 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_walk.parquet
+2026-09-09 22:10:04,821 [INFO] andino/walk: grafo=osm-pbf, matriz=8365 filas
+2026-09-09 22:10:40,962 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/bike.graphml (osm-pbf)
+2026-09-09 22:10:46,569 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_bike.parquet
+2026-09-09 22:10:46,576 [INFO] andino/bike: grafo=osm-pbf, matriz=8365 filas
+2026-09-09 22:11:07,707 [INFO] andino: 185/1673 puntos sin ruta real -> t_min estimado (factor de desvío = 1.07)
+2026-09-09 22:11:07,708 [INFO] === Departamento: amazonico ===
+2026-09-09 22:11:07,915 [INFO] RENIPRESS real cargado para amazonico: 241 facilities
+2026-09-09 22:11:08,713 [INFO] Centros poblados IGN cargados para amazonico: 368 puntos
+2026-09-09 22:11:08,770 [INFO] Distritos INEI cargados para amazonico: 11 polígonos
+2026-09-09 22:11:08,775 [WARNING] 17/368 centros poblados sin UBIGEO de distrito asignado (nombre no coincide)
+2026-09-09 22:11:10,035 [WARNING] 17/368 centros poblados sin match de distrito en RENIEC (nombre no coincide) -> poblacion=0
+2026-09-09 22:11:10,046 [INFO] Real cargado para amazonico: 368 demanda ({'muestreado': False, 'n_original': 368, 'n_final': 368}), 241 facilities, 11 distritos
+2026-09-09 22:11:10,123 [INFO] amazonico: 368 demanda validos, 217 facilities validas, 2 resolutivas activas
+2026-09-09 22:11:29,227 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/drive.graphml (osm-pbf)
+2026-09-09 22:11:30,559 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_drive.parquet
+2026-09-09 22:11:30,565 [INFO] amazonico/drive: grafo=osm-pbf, matriz=736 filas
+2026-09-09 22:11:57,542 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/walk.graphml (osm-pbf)
+2026-09-09 22:11:58,801 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_walk.parquet
+2026-09-09 22:11:58,806 [INFO] amazonico/walk: grafo=osm-pbf, matriz=736 filas
+2026-09-09 22:12:19,503 [INFO] Grafo cacheado cargado: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/bike.graphml (osm-pbf)
+2026-09-09 22:12:20,725 [INFO] Matriz cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_bike.parquet
+2026-09-09 22:12:20,730 [INFO] amazonico/bike: grafo=osm-pbf, matriz=736 filas
+2026-09-09 22:12:21,640 [INFO] amazonico: 202/368 puntos sin ruta real -> t_min estimado (factor de desvío = 0.77)
+2026-09-09 22:12:21,643 [INFO] Quality report: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs/quality_report.json
+2026-09-09 22:12:23,181 [INFO] Figuras exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/report/figures
+2026-09-09 22:12:23,217 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
+2026-09-09 22:12:23,218 [INFO] Pipeline completo.

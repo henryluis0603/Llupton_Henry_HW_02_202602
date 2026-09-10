@@ -1,9 +1,9 @@
 {
-  "generado_utc": "2026-09-10T01:18:11.300308+00:00",
+  "generado_utc": "2026-09-10T03:12:21.641006+00:00",
   "datasets": [
     {
       "dataset": "costa_demanda",
-      "timestamp_utc": "2026-09-10T01:14:57.112480+00:00",
+      "timestamp_utc": "2026-09-10T03:08:07.488951+00:00",
       "n_registros_inicial": 329,
       "n_registros_final": 329,
       "reglas": [
@@ -41,7 +41,7 @@
     },
     {
       "dataset": "costa_facilities",
-      "timestamp_utc": "2026-09-10T01:14:57.116932+00:00",
+      "timestamp_utc": "2026-09-10T03:08:07.494057+00:00",
       "n_registros_inicial": 118,
       "n_registros_final": 110,
       "reglas": [
@@ -80,7 +80,7 @@
     },
     {
       "dataset": "andino_demanda",
-      "timestamp_utc": "2026-09-10T01:15:04.762274+00:00",
+      "timestamp_utc": "2026-09-10T03:08:20.168098+00:00",
       "n_registros_inicial": 1673,
       "n_registros_final": 1673,
       "reglas": [
@@ -118,7 +118,7 @@
     },
     {
       "dataset": "andino_facilities",
-      "timestamp_utc": "2026-09-10T01:15:04.770688+00:00",
+      "timestamp_utc": "2026-09-10T03:08:20.178821+00:00",
       "n_registros_inicial": 497,
       "n_registros_final": 473,
       "reglas": [
@@ -157,7 +157,7 @@
     },
     {
       "dataset": "amazonico_demanda",
-      "timestamp_utc": "2026-09-10T01:17:13.330696+00:00",
+      "timestamp_utc": "2026-09-10T03:11:10.115590+00:00",
       "n_registros_inicial": 368,
       "n_registros_final": 368,
       "reglas": [
@@ -195,7 +195,7 @@
     },
     {
       "dataset": "amazonico_facilities",
-      "timestamp_utc": "2026-09-10T01:17:13.336235+00:00",
+      "timestamp_utc": "2026-09-10T03:11:10.121766+00:00",
       "n_registros_inicial": 241,
       "n_registros_final": 217,
       "reglas": [

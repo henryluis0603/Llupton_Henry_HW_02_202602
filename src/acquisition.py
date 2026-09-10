@@ -294,7 +294,15 @@ def attach_ubigeo(centros: gpd.GeoDataFrame, distritos: gpd.GeoDataFrame) -> gpd
     (provincia + distrito normalizados) — el shapefile IGN de centros
     poblados no trae UBIGEO propio. Necesario para la regla de validación
     4 (punto fuera de su polígono distrital declarado) y para el choropleth
-    del dashboard."""
+    del dashboard.
+
+    De paso, reemplaza `provincia`/`distrito` del centro poblado por el
+    texto del shapefile INEI (una sola fuente, internamente consistente) en
+    vez de dejar el del IGN: el campo `PROV` crudo del IGN trae la MISMA
+    provincia real escrita con tildes inconsistentes entre filas distintas
+    (confirmado: 'HUAYTARA' y 'HUAYTARÁ' conviven para centros poblados del
+    mismo distrito) — sin esto, cualquier `groupby('provincia')` (p.ej.
+    `access_by_provincia.csv`) parte una provincia real en dos filas."""
     centros = centros.copy()
     dist = distritos[["ubigeo", "provincia", "distrito"]].copy()
     dist["_prov_n"] = dist["provincia"].apply(_norm_name)
@@ -303,8 +311,14 @@ def attach_ubigeo(centros: gpd.GeoDataFrame, distritos: gpd.GeoDataFrame) -> gpd
     centros["_dist_n"] = centros["distrito"].apply(_norm_name)
 
     merged = centros.merge(
-        dist[["_prov_n", "_dist_n", "ubigeo"]], on=["_prov_n", "_dist_n"], how="left"
+        dist[["_prov_n", "_dist_n", "ubigeo", "provincia", "distrito"]],
+        on=["_prov_n", "_dist_n"], how="left", suffixes=("_ign", ""),
     ).drop(columns=["_prov_n", "_dist_n"])
+    # Sin match (nombre no cruzó): se conserva el texto original del IGN en
+    # vez de perderlo como NaN.
+    merged["provincia"] = merged["provincia"].fillna(merged["provincia_ign"])
+    merged["distrito"] = merged["distrito"].fillna(merged["distrito_ign"])
+    merged = merged.drop(columns=["provincia_ign", "distrito_ign"])
     n_sin_match = merged["ubigeo"].isna().sum()
     if n_sin_match:
         log.warning("%d/%d centros poblados sin UBIGEO de distrito asignado (nombre no coincide)", n_sin_match, len(merged))

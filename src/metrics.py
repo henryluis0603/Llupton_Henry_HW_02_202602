@@ -289,10 +289,10 @@ def straight_line_vs_network(
 # dejar t_min indefinido cuando un punto queda en un componente vial
 # desconectado de toda facility (ver src/routing.nearest_facility).
 # ---------------------------------------------------------------------- #
-_FACTOR_DESVIO_DEFAULT = 1.3  # circuidad típica de red vial cuando no hay
-# suficientes puntos ruteados en el departamento para estimar un factor
-# propio (ver circuity_factor) — valor de referencia estándar en literatura
-# de transporte (Levinson & El-Geneidy 2009 reportan medianas ~1.2-1.6).
+_FACTOR_DESVIO_DEFAULT = 1.3  # solo se usa si el departamento no tiene NI
+# UN punto ruteado del que derivar un factor propio (no ocurre en esta
+# corrida: los tres departamentos tienen de sobra, ver circuity_factor) —
+# un valor conservador de reserva, no una cifra de literatura verificada.
 
 
 def circuity_factor(straight_vs_network: pd.DataFrame, speed_kmh: float = 30.0) -> float:
