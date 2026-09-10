@@ -59,6 +59,13 @@ def load_matrix_all() -> pd.DataFrame:
     departamentos — la usa el simulador de escenario para recalcular sin
     tocar el motor de ruteo.
 
+    Incluye tanto `matrix_drive.parquet` (facilities YA resolutivas, usada
+    para el resto del dashboard) como `matrix_drive_candidatas.parquet`
+    (facilities I-3/I-4 activas, calculada solo para que el simulador de
+    upgrade de §6 tenga t_min hacia ellas — si no se concatenara, cualquier
+    establecimiento candidato a mejorar quedaría fuera de la matriz y el
+    simulador siempre mostraría 0 puntos mejorados).
+
     La matriz cacheada vive en un subdirectorio por fuente (real/synthetic)
     porque sus índices son los IDs de esa fuente — leer la fuente equivocada
     mezclaría IDs de demanda/facility sin dar error. `summary.json` dice cuál
@@ -71,11 +78,12 @@ def load_matrix_all() -> pd.DataFrame:
 
     frames = []
     for rol in config.departamentos():
-        p = config.ruta("routing_cache_dir") / rol / fuente / "matrix_drive.parquet"
-        if p.exists():
-            m = pd.read_parquet(p).reset_index()
-            m["departamento_rol"] = rol
-            frames.append(m)
+        for fname in ("matrix_drive.parquet", "matrix_drive_candidatas.parquet"):
+            p = config.ruta("routing_cache_dir") / rol / fuente / fname
+            if p.exists():
+                m = pd.read_parquet(p).reset_index()
+                m["departamento_rol"] = rol
+                frames.append(m)
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 

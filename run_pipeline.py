@@ -54,9 +54,15 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
     facilities = validation.normalize_categoria(facilities)
 
     facilities_resolutivas = facilities[(facilities["resolutivo"]) & (facilities["activo"])].copy()
+    # No-resolutivas activas (I-1/I-2/I-3/I-4): el simulador de escenario
+    # (app.py, §6) necesita t_min demanda->candidata para evaluar un upgrade
+    # a resolutivo, así que se les calcula matriz aparte (solo perfil drive,
+    # que es el único que usa el simulador) sin tocarlas en ningún cálculo
+    # de cobertura/2SFCA existente.
+    facilities_candidatas = facilities[(~facilities["resolutivo"]) & (facilities["activo"])].copy()
     log.info(
-        "%s: %d demanda validos, %d facilities validas, %d resolutivas activas",
-        rol, len(demanda), len(facilities), len(facilities_resolutivas),
+        "%s: %d demanda validos, %d facilities validas, %d resolutivas activas, %d candidatas a upgrade",
+        rol, len(demanda), len(facilities), len(facilities_resolutivas), len(facilities_candidatas),
     )
 
     if facilities_resolutivas.empty:
@@ -71,6 +77,7 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
     graph_sources: dict[str, str] = {}
     G_drive = None
     fac_snapped_drive = None
+    dem_snapped_drive = None
 
     for profile in PROFILES:
         G, source = routing.get_graph(rol, profile, force=force)
@@ -94,7 +101,19 @@ def run_department(rol: str, force: bool = False, real: bool = False) -> dict:
         log.info("%s/%s: grafo=%s, matriz=%d filas", rol, profile, source, len(matrix))
 
         if profile == "drive":
-            G_drive, fac_snapped_drive = G, fac_snapped
+            G_drive, fac_snapped_drive, dem_snapped_drive = G, fac_snapped, dem_snapped
+
+    matrix_candidatas = pd.DataFrame()
+    if not facilities_candidatas.empty:
+        fac_cand_snapped, fac_cand_snap_report = routing.snap_points(facilities_candidatas, G_drive, "facility_id")
+        snap_reports["drive"]["facilities_candidatas"] = fac_cand_snap_report
+        cand_cache_path = (
+            config.ruta("routing_cache_dir") / rol / ("real" if real else "synthetic") / "matrix_drive_candidatas.parquet"
+        )
+        matrix_candidatas = routing.travel_time_matrix(
+            G_drive, dem_snapped_drive, fac_cand_snapped, "cp_id", "facility_id", cand_cache_path, force=force
+        )
+        log.info("%s/drive: %d facilities candidatas a upgrade, matriz=%d filas", rol, len(facilities_candidatas), len(matrix_candidatas))
 
     isochrones = routing.department_isochrones(G_drive, fac_snapped_drive, "facility_id")
 

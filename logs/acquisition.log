@@ -1193,3 +1193,20 @@
 2026-09-09 22:41:40,638 [INFO] Figuras exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/report/figures
 2026-09-09 22:41:40,667 [INFO] Métricas exportadas a /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/outputs
 2026-09-09 22:41:40,667 [INFO] Pipeline completo.
+2026-09-09 23:54:02,804 [INFO] SKIP (real ya cargado) para costa
+2026-09-09 23:54:03,314 [WARNING] Falló parseo del .pbf para costa/drive (No module named 'osmium'). Intentando Overpass en vivo.
+2026-09-09 23:54:10,045 [INFO] costa: grafo drive reconstruido (fuente=osm-overpass)
+2026-09-09 23:54:12,186 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/costa/real/matrix_drive_candidatas.parquet (35203 filas)
+2026-09-09 23:54:12,187 [INFO] costa: matrix_drive_candidatas.parquet -> 35203 filas, 107 facilities candidatas
+2026-09-09 23:54:12,187 [INFO] SKIP (real ya cargado) para andino
+2026-09-09 23:54:12,247 [WARNING] Falló parseo del .pbf para andino/drive (No module named 'osmium'). Intentando Overpass en vivo.
+2026-09-09 23:58:46,849 [WARNING] Falló descarga OSM para andino/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Read timed out.). Usando grafo sintético.
+2026-09-09 23:58:47,069 [INFO] andino: grafo drive reconstruido (fuente=synthetic)
+2026-09-09 23:58:48,879 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/andino/real/matrix_drive_candidatas.parquet (782964 filas)
+2026-09-09 23:58:48,906 [INFO] andino: matrix_drive_candidatas.parquet -> 782964 filas, 468 facilities candidatas
+2026-09-09 23:58:48,907 [INFO] SKIP (real ya cargado) para amazonico
+2026-09-09 23:58:48,950 [WARNING] Falló parseo del .pbf para amazonico/drive (No module named 'osmium'). Intentando Overpass en vivo.
+2026-09-09 23:59:52,651 [WARNING] Falló descarga OSM para amazonico/drive (HTTPSConnectionPool(host='overpass-api.de', port=443): Max retries exceeded with url: /api/interpreter (Caused by NewConnectionError("HTTPSConnection(host='overpass-api.de', port=443): Failed to establish a new connection: [Errno 61] Connection refused"))). Usando grafo sintético.
+2026-09-09 23:59:52,692 [INFO] amazonico: grafo drive reconstruido (fuente=synthetic)
+2026-09-09 23:59:53,014 [INFO] Matriz calculada y cacheada: /Users/henrylluptoncapunay/Documents/GitHub/Llupton_Henry_HW_02_202602/data/processed/routing_cache/amazonico/real/matrix_drive_candidatas.parquet (79120 filas)
+2026-09-09 23:59:53,017 [INFO] amazonico: matrix_drive_candidatas.parquet -> 79120 filas, 215 facilities candidatas
